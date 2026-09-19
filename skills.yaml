@@ -1,0 +1,1740 @@
+# Monster Hunter Wilds -- All Skills
+# Sources:
+#  Weapon/Armor: https://game8.co/games/Monster-Hunter-Wilds/archives/482545
+#  Set Bonus:    https://game8.co/games/Monster-Hunter-Wilds/archives/482548
+#  Group:        https://game8.co/games/Monster-Hunter-Wilds/archives/482547
+#  Food:         https://game8.co/games/Monster-Hunter-Wilds/archives/482549
+#
+# 'scaling' describes how the skill's numeric effect grows across its
+# levels, inferred from the primary number in each level's effect text:
+#  Linear      - constant increase per level (e.g. +10/+15/+20/+25/+30)
+#  Geometric   - constant multiplier per level (e.g. x2/x4/x8)
+#  Logarithmic - increases per level shrink (diminishing returns)
+#  Exponential - increases per level grow (accelerating)
+#  Unknown     - has multiple levels but no clear/consistent numeric
+#                pattern could be found (often a purely qualitative
+#                effect, e.g. 'negates heat' -> 'negates all weather')
+#  N/A         - only a single level exists, so scaling doesn't apply
+# Set Bonus skills use their 2-piece/4-piece tiers as levels 1/2. Group
+# and Food skills are on/off (no levels), so they are always N/A.
+# 'weight' and 'level_weight' are placeholders, left at 0.
+- name: Adaptability
+  type: Armor
+  description: Grants protection against environmental damage, such as from heat or cold.
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501654
+- name: Adrenaline Rush
+  type: Armor
+  description: Temporarily increases attack power after executing a perfectly-timed evade just as a monster attacks.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502018
+- name: Agitator
+  type: Armor
+  description: Increases attack power and affinity when large monsters become enraged.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501657
+- name: Ambush
+  type: Armor
+  description: Temporarily increases the damage to large monsters with a successful Sneak Attack.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501629
+- name: Antivirus
+  type: Armor
+  description: Once infected, makes it easier to overcome the Frenzy and increases affinity if cured.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502023
+- name: Aquatic/Oilsilt Mobility
+  type: Armor
+  description: Grants resistance against impairments to mobility while in water, oilsilt, or streams.
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501637
+- name: Bind Resistance
+  type: Armor
+  description: Grants protection against webbed status and frostblight.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501630
+- name: Blast Resistance
+  type: Armor
+  description: Grants protection against blastblight.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501650
+- name: Bleeding Resistance
+  type: Armor
+  description: Grants protection against bleeding.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501645
+- name: Blight Resistance
+  type: Armor
+  description: Grants protection against all elemental blights.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501648
+- name: Blindsider
+  type: Armor
+  description: Improves the effectiveness of flash attacks and items.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501656
+- name: Bombardier
+  type: Armor
+  description: Increases the damage of explosive items.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501602
+- name: Botanist
+  type: Armor
+  description: Increases the quantity of herbs and other consumable items you gather
+  max_level: 4
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501615
+- name: Burst
+  type: Armor
+  description: Continuously landing hits gradually increases attack and elemental attack. (Amount increased depends on weapon.)
+  max_level: 5
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501644
+- name: Cliffhanger
+  type: Armor
+  description: Decrease stamina depletion when climbing on vines.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501634
+- name: Coalescence
+  type: Armor
+  description: Temporarily increases elemental attack power and status effects after recovering from blights or abnormal status.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501948
+- name: Constitution
+  type: Armor
+  description: Reduces stamina depletion when evading, blocking, or doing certain other actions.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501639
+- name: Convert Element
+  type: Armor
+  description: After taking elemental damage, temporarily grants you dragon element effects. (Cooldown after effect ends.)
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502022
+- name: Counterstrike
+  type: Armor
+  description: Temporarily increases attack power after being knocked back.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502017
+- name: Defense Boost
+  type: Armor
+  description: Increases defense. Also improves resistances at higher levels.
+  max_level: 5
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501649
+- name: Divine Blessing
+  type: Armor
+  description: Has a predetermined chance of reducing the damage you take.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501599
+- name: Dragon Resistance
+  type: Armor
+  description: Increases dragon resistance. Also improves defense at higher levels.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501652
+- name: Earplugs
+  type: Armor
+  description: Grants protection from large monsters' roars.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501658
+- name: Elemental Absorption
+  type: Armor
+  description: After taking elemental damage, temporarily grants you element effects. (Cooldown after effect ends)
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502021
+- name: Entomologist
+  type: Armor
+  description: The bodies of small insect monsters won't be destroyed, allowing them to be carved.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501619
+- name: Evade Extender
+  type: Armor
+  description: Increases evade distance.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501624
+- name: Evade Window
+  type: Armor
+  description: Extends the invulnerability period when evading.
+  max_level: 5
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501631
+- name: Fire Resistance
+  type: Armor
+  description: Increases fire resistance. Also improves defense at higher levels.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501607
+- name: Flayer
+  type: Armor
+  description: Makes it easier to inflict wounds. Can also deal extra non-elemental damage upon buildup. (Excludes some attacks.)
+  max_level: 5
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501647
+- name: Flinch Free
+  type: Armor
+  description: Prevents knockbacks and other reactions to small damage.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501608
+- name: Foray
+  type: Armor
+  description: Increases attack power and affinity against large monsters affected by poison or paralysis.
+  max_level: 5
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501653
+- name: Free Meal
+  type: Armor
+  description: Gives you a predetermined chance of consuming a food or drink item for free.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501601
+- name: Geologist
+  type: Armor
+  description: Increases the number of times you gain at gathering points.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501617
+- name: Heroics
+  type: Armor
+  description: Increases attack power and defense when health drops to 35% or lower.
+  max_level: 5
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501640
+- name: Hunger Resistance
+  type: Armor
+  description: Reduces maximum stamina depetion over time.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501616
+- name: Ice Resistance
+  type: Armor
+  description: Increases ice resistance. Also improves defense at higher levels.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501632
+- name: Intimidator
+  type: Armor
+  description: Reduces the chance small monsters will attack after spotting you. (Has no effect on certain monsters.)
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501643
+- name: Iron Skin
+  type: Armor
+  description: Grants protection against defense down.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501641
+- name: Item Prolonger
+  type: Armor
+  description: Extends the duration of some item effects.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501621
+- name: Jump Master
+  type: Armor
+  description: Prevents attacks from knocking you back during a jump.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501614
+- name: Latent Power
+  type: Armor
+  description: Temporarily increases affinity and reduces stamina depletion when certain conditions are met.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501638
+- name: Leap of Faith
+  type: Armor
+  description: Allows you to do a dive-evade when facing towards large monsters and extends the dive-evade distance.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501620
+- name: Marathon Runner
+  type: Armor
+  description: Slows down stamina depletion for actions that continuously drain stamina (such as dashing).
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501618
+- name: Maximum Might
+  type: Armor
+  description: Increases affinity if stamina is kept full for a period of time.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501646
+- name: Mushroomancer
+  type: Armor
+  description: Lets you digest mushrooms that would otherwise be inedible and gain their advantageous effects.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501605
+- name: Outdoorsman
+  type: Armor
+  description: Improves fishing, grilling, and transporting abilities.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502019
+- name: Palico Rally
+  type: Armor
+  description: Powers up Palicoes.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502020
+- name: Paralysis Resistance
+  type: Armor
+  description: Reduces the duration of paralysis.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501610
+- name: Partbreaker
+  type: Armor
+  description: Makes it easier to break large monster parts, and increases damage dealt when destroying a wound with a Focus Strike.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501633
+- name: Peak Performance
+  type: Armor
+  description: Increases attack when your health is full.
+  max_level: 5
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501635
+- name: Poison Resistance
+  type: Armor
+  description: Reduces damage while poisoned.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501628
+- name: Quick Sheathe
+  type: Armor
+  description: Speeds up weapon sheathing.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501612
+- name: Recovery Speed
+  type: Armor
+  description: Speeds healing of recoverable damage (the red portion of the Health Gauge).
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501604
+- name: Recovery Up
+  type: Armor
+  description: Increases the amount recovered when restoring health.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501609
+- name: Resentment
+  type: Armor
+  description: Increases attack when you have recoverable damage (the red portion of your Health Gauge).
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501613
+- name: Rice Ball
+  type: Armor
+  description: Increases the attack power of Akuma actions and stun damage.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523984
+- name: Self-Improvement
+  type: Armor
+  description: Attack and defense increase as time passes while on a quest. (The maximum is reached after 30 minutes.)
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501949
+- name: Shock Absorber
+  type: Armor
+  description: Disables damage reactions when you hit a friend or when a friend hits you.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501655
+- name: Sleep Resistance
+  type: Armor
+  description: Reduces the duration of sleep.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501627
+- name: Speed Eating
+  type: Armor
+  description: Increases meat-eating and item-consumption speed.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501603
+- name: Stamina Surge
+  type: Armor
+  description: Speeds up stamina recovery.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501600
+- name: Stench Resistance
+  type: Armor
+  description: Grants protection against stench.
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501606
+- name: Stun Resistance
+  type: Armor
+  description: Reduces stun duration.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/494565
+- name: Survival Expert
+  type: Armor
+  description: Extra health is recovered from environmental interactables.
+  max_level: 3
+  scaling: Logarithmic
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501623
+- name: Thunder Resistance
+  type: Armor
+  description: Increases thunder resistance. Also improves defense at higher levels.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501651
+- name: Tool Specialist
+  type: Armor
+  description: Reduces the recharge time for specialized tools.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501636
+- name: Tremor Resistance
+  type: Armor
+  description: Grants protection against ground tremors.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501611
+- name: Water Resistance
+  type: Armor
+  description: Increases water resistance. Also improves defense at higher levels.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501622
+- name: Weakness Exploit
+  type: Armor
+  description: Increases the affinity of attacks that exploit a monster's weak points and wounds.
+  max_level: 5
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501642
+- name: Wide-Range
+  type: Armor
+  description: Allows the effects of certain items to also affect nearby allies.
+  max_level: 5
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501626
+- name: Windproof
+  type: Armor
+  description: Grants protection against wind pressure.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501625
+- name: Balanced Meal
+  type: Food
+  description: Prevents you from getting knocked down.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/505104
+- name: Black Belt Meal (Hi)
+  type: Food
+  description: Greatly reduces stamina depletion when performing stamina-draining moves such as evading, etc.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501666
+- name: Black Belt Meal (Lo)
+  type: Food
+  description: Reduces stamina depletion when performing stamina-draining moves such as evading, etc.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/482668
+- name: Break-time Meal
+  type: Food
+  description: Use the Sit gesture to increase attack by 15 for 30 seconds.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504814
+- name: Bulldozer Meal
+  type: Food
+  description: Increases attack power right after an attack is deflected.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504915
+- name: Caprice Meal (Hi)
+  type: Food
+  description: Repeatedly activates a large temporary attack boost at random intervals.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503414
+- name: Caprice Meal (Lo)
+  type: Food
+  description: Repeatedly activates a temporary attack boost at random intervals
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503382
+- name: Capture Pro Meal
+  type: Food
+  description: Increases capture rewards.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504769
+- name: Carver Meal
+  type: Food
+  description: Chance of getting 1 to 3 extra Carves.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504766
+- name: Defender Meal (Hi)
+  type: Food
+  description: Often decreases damage taken.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501665
+- name: Defender Meal (Lo)
+  type: Food
+  description: Sometimes decreases damage taken.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501664
+- name: Escape Artist Meal
+  type: Food
+  description: Reduces stamina consumption when running away from monsters.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/505048
+- name: Exploiter Meal
+  type: Food
+  description: Chance to get an extra drop from destroying wounds.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504787
+- name: Extra Noodles Meal
+  type: Food
+  description: The first two food or drink items used in a quest can be used an extra time.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: null
+- name: Fisher Meal
+  type: Food
+  description: Increases the likelihood that fish will bite when fishing.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/505107
+- name: Fortune Hunter Meal
+  type: Food
+  description: Increases the amount of zenny you receive at the end of a quest.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/505111
+- name: Gatherer Meal
+  type: Food
+  description: Sometimes increases the number of resources per gather of bones, ore, and other gatherable items.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501668
+- name: Hardy Meal
+  type: Food
+  description: Nullifies damage taken from environmental hazards such as lava.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/506989
+- name: Immunizer Meal
+  type: Food
+  description: Lessens the effects of a variety of ailments.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501660
+- name: Insurance Meal
+  type: Food
+  description: Nullifies one faint.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504760
+- name: Iron Carver Meal
+  type: Food
+  description: Prevents knockbacks while carving.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/505035
+- name: Lucky Meal
+  type: Food
+  description: Sometimes increases the number of reward items received at the end of a quest.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504886
+- name: Medic Meal
+  type: Food
+  description: Increases the amount of health recovered when healing.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501661
+- name: Moxie Meal (Hi)
+  type: Food
+  description: Prevents fainting one time and heals you when damage taken exceeds your remaining health.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503394
+- name: Moxie Meal (Lo)
+  type: Food
+  description: Prevents fainting one time when damage taken exceeds your remaining health.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503381
+- name: Piping-Hot Meal
+  type: Food
+  description: Greatly increases attack when under very low HP.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504821
+- name: Rider Meal
+  type: Food
+  description: Makes it easier to mount monsters.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/505008
+- name: Riser Meal
+  type: Food
+  description: Increase invulnerable period while getting up.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504791
+- name: Sizzling Meal
+  type: Food
+  description: Negates the effects of hot or cold climates and increases defense while in such areas.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501663
+- name: Specialist Meal
+  type: Food
+  description: Increases potency of abnormal status attacks.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503393
+- name: Spicy Red Meal (Attack)
+  type: Food
+  description: Using a food or drink item temporarily boosts Focus Strike wound destruction damage and part damage.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: null
+- name: Swimmer Meal
+  type: Food
+  description: Increases attack when wet.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503395
+- name: Top Cat Meal
+  type: Food
+  description: Increases Palico's attack and defense.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/506995
+- name: Trainer Meal
+  type: Food
+  description: Increase Palico exp received from quests.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/504808
+- name: Tumbler Meal (Hi)
+  type: Food
+  description: Extends the invulnerability period when evading
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501667
+- name: Tumbler Meal (Lo)
+  type: Food
+  description: Slightly extends the invulnerability period when evading.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/482671
+- name: Alluring Pelt
+  type: Group
+  description: Increases the attention drawn to you when attacking a monster.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501986
+- name: Buttery Leathercraft
+  type: Group
+  description: Increases your affinity temporarily when sliding on terrain.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501984
+- name: Festival Spirit
+  type: Group
+  description: Lets you carve one additional time from carcasses during quests.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514831
+- name: Flexible Leathercraft
+  type: Group
+  description: Increases gathering speed, and prevents knock back when gathering or carving.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501800
+- name: Fortifying Pelt
+  type: Group
+  description: Increases attack and defense after fainting during a quest. (Can be used twice.)
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501799
+- name: Glory's Favor
+  type: Group
+  description: Increases quest target rewards
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512886
+- name: Guardian's Protection
+  type: Group
+  description: Reduces elemental and unique damage while in the Ruins of Wyveria.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501983
+- name: Guardian's Pulse
+  type: Group
+  description: Increases recovery speed of stamina and red gauge when near Wylkrystals.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501803
+- name: Imparted Wisdom
+  type: Group
+  description: Increases the chance of finding rare gathering points.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502221
+- name: Lord's Favor
+  type: Group
+  description: Temporarily increases attack power when using effects like Melody Effects that affect companions in range.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501801
+- name: Lord's Fury
+  type: Group
+  description: Increases attack when inflicted with ailments.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502181
+- name: Lord's Soul
+  type: Group
+  description: Boosts attack and lowers defense but lets you survive one lethal hit. Afterwards, boosts defense and res.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514833
+- name: Master of the Fist
+  type: Group
+  description: Increases power of special actions. Drive Impacts can trigger offset attacks. Further increases power of offset attacks.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523976
+- name: Neopteron Alert
+  type: Group
+  description: Increases the amount of honey you gain from gathering points.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501802
+- name: Neopteron Camouflage
+  type: Group
+  description: Increases movement speed while crouching, and makes it easier to escape large monsters' detection.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501959
+- name: Scale Layering
+  type: Group
+  description: Temporarily reduces stamina depletion when health is at 40% or lower.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501985
+- name: Scaling Prowess
+  type: Group
+  description: Makes it easier to mount monsters and to wound them once mounted.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501798
+- name: Arkveld's Hunger
+  type: Set Bonus
+  description: '2 pieces: Regenerates a small amount of your health as you continually attack a monster. Recovery varies by weapon. 4 pieces: Regenerates your health as you continually attack a monster. Recovery varies by weapon.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502180
+- name: Blangonga's Spirit
+  type: Set Bonus
+  description: '2 pieces: Using the “To Victory!” gesture moderately increases attack temporarily to nearby allies. Greatly effects Palicoes and Support Hunters. 4 pieces: Using the “To Victory!” gesture increases attack temporarily to nearby allies. Greatly effects Palicoes and Support Hunters.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502178
+- name: Blossomdance Prayer
+  type: Set Bonus
+  description: '2 pieces: During Blossomdance, adds special items to quest rewards. 4 pieces: During Blossomdance, adds special items to quest rewards, and greatly boosts attack and defense.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514832
+- name: Doshaguma's Might
+  type: Set Bonus
+  description: '2 pieces: Temporarily increases attack +10 after a successful Power Clash or Offset attack 4 pieces: Temporarily increases attack +25 after a successful Power Clash or Offset attack'
+  max_level: 2
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501678
+- name: Dreamspell Prayer
+  type: Set Bonus
+  description: '2 pieces: During Dreamspell, adds special items to quest rewards. (No effect when joining mid-quest.) 4 pieces: During Dreamspell, adds special items to quest rewards, and greatly boosts attack and defense.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559839
+- name: Ebony Odogaron's Power
+  type: Set Bonus
+  description: '2 pieces: Extends the duration of the Burst skill and grants attack +8 while Burst is active. 4 pieces: Further extends the duration of the Burst skill and grants attack +18 while Burst is active.'
+  max_level: 2
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501683
+- name: Flamefete Prayer
+  type: Set Bonus
+  description: '2 pieces: During Flamefete, adds special items to quest rewards. (No effect when joining mid-quest.) 4 pieces: During Flamefete, adds special items to quest rewards, and greatly boosts attack and defense.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536430
+- name: Fulgur Anjanath's Will
+  type: Set Bonus
+  description: '2 pieces: Grants an additional Stamina Gauge. 4 pieces: Grants an additional long Stamina Gauge.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501957
+- name: Gogmapocalypse
+  type: Set Bonus
+  description: '2 pieces: Increases elemental attack when large monsters become enraged. 4 pieces: Level I effect is increased, and you gain a temporary damage barrier. (Barrier reactivates after cooldown.)'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/571423
+- name: Gore Magala's Tyranny
+  type: Set Bonus
+  description: '2 pieces: Infects you with Frenzy when against large monsters. 4 pieces: Infects you with Frenzy and raises attack when against large monsters. Attack power increases upon recovery.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502179
+- name: Gravios's Protection
+  type: Set Bonus
+  description: '2 pieces: Reduces the damage you take by 20% when your health is full. 4 pieces: Reduces the damage you take by 35% when your health is full.'
+  max_level: 2
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502177
+- name: Guardian Arkveld's Vitality
+  type: Set Bonus
+  description: '2 pieces: Restores a moderate amount of health when destroying a wound on a large monster. 4 pieces: Restores health when destroying a wound on a large monster.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501684
+- name: Jin Dahaad's Revolt
+  type: Set Bonus
+  description: '2 pieces: Increases attack after recovering from webbed status, frostblight, being pinned, or a Power Clash. 4 pieces: Greatly increases attack after recovering from webbed status, frostblight, being pinned, or a Power Clash.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502176
+- name: Leviathan's Fury
+  type: Set Bonus
+  description: '2 pieces: Temporarily increases affinity and can deal extra thunder damage upon buildup. (Excludes some attacks.) 4 pieces: Further increases additional thunder damage and moderately extends the duration affinity is increased.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532644
+- name: Lumenhymn Prayer
+  type: Set Bonus
+  description: '2 pieces: During Lumenhymn, adds special items to quest rewards. (No effect when joining mid-quest.) 4 pieces: During Lumenhymn, adds special items to quest rewards, and greatly boosts attack and defense.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572040
+- name: Mizutsune's Prowess
+  type: Set Bonus
+  description: '2 pieces: Prevents major bubbleblight and grants you minor bubbleblight after evading several times. 4 pieces: In addition to previous effects, also increases evasion while afflicted with bubbleblight.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512845
+- name: Nu Udra's Mutiny
+  type: Set Bonus
+  description: '2 pieces: Deals moderate additional damage while the Resentment skill is active. 4 pieces: Deals additional damage while the Resentment skill is active.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501681
+- name: Omega Resonance
+  type: Set Bonus
+  description: '2 pieces: (When quest starts) Local and Remote Resonance alternate, increasing attack or affinity when conditions are met. 4 pieces: Increases the effects of Resonance I, and the effect of the weapon skill Synthetic Shield or the effect of Synergy.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553791
+- name: Rathalos's Flare
+  type: Set Bonus
+  description: '2 pieces: Chance to deal additional fire damage after landing an attack. 4 pieces: Increases additional fire damage after landing an attack.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501682
+- name: Rey Dau's Voltage
+  type: Set Bonus
+  description: '2 pieces: Moderately extends the activation time of the Latent Power skill. 4 pieces: Extends the activation time of the Latent Power skill.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501679
+- name: Seregios's Tenacity
+  type: Set Bonus
+  description: '2 pieces: Extends the duration of Adrenaline Rush. If triggered again while the skill is active, extends the effect duration once. 4 pieces: Additionally, if triggered again while the skill is active, further increases attack.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532651
+- name: Soul of the Dark Knight
+  type: Set Bonus
+  description: '2 pieces: Having recoverable damage increases elemental attack, and some great sword Lv 3 charged slashes are strengthened. 4 pieces: Allows you to perform the special action: The Blackest Night.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553790
+- name: Uth Duna's Cover
+  type: Set Bonus
+  description: '2 pieces: Increases defense temporarily when using a specialized tool. 4 pieces: Greatly increases defense and resistance temporarily when using a specialized tool.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501680
+- name: Xu Wu's Vigor
+  type: Set Bonus
+  description: '2 pieces: Temporarily grants attack +15 after eating items such as well-done steak. 4 pieces: Temporarily grants attack +30 after eating items such as well-done steak.'
+  max_level: 2
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501958
+- name: Zoh Shia's Pulse
+  type: Set Bonus
+  description: '2 pieces: Allows the Health Gauge to continue to slowly recover up to the max value, even if there is no red portion. 4 pieces: Allows the Health Gauge to continue to recover up to the max value, even if there is no red portion.'
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512846
+- name: Airborne
+  type: Weapon
+  description: Increases the damage caused by jumping attacks.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501580
+- name: Artillery
+  type: Weapon
+  description: Strengthens explosive attacks like shells, Wyvern's Fire, charge blade phial attacks, and Sticky Ammo.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501585
+- name: Attack Boost
+  type: Weapon
+  description: Increases attack power.
+  max_level: 5
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501575
+- name: Ballistics
+  type: Weapon
+  description: Extends the range in which ammo and arrows have maximum power.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501559
+- name: Bladescale Honing
+  type: Weapon
+  description: Narrowly evading a monster's attack while your weapon is drawn grants special sharpness.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532748
+- name: Bladescale Loading
+  type: Weapon
+  description: Narrowly evading a monster's attack while your weapon is drawn grants special loaded ammo or applied coatings.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532749
+- name: Blast Attack
+  type: Weapon
+  description: Increases the rate of blast buildup. (Blast buildup has a maximum limit.)
+  max_level: 3
+  scaling: Geometric
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501591
+- name: Blast Functionality
+  type: Weapon
+  description: Allows you to apply blast coatings.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503087
+- name: Bludgeoner
+  type: Weapon
+  description: Increases attack power when your weapon sharpness is low.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501595
+- name: Catburglar
+  type: Weapon
+  description: Grants a small chance of obtaining various items when landing critical hits.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/576489
+- name: Charge Master
+  type: Weapon
+  description: Increases element power and status buildup for charged attacks.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501578
+- name: Charge Up
+  type: Weapon
+  description: Increases your power to induce stun when you hit a monster with a hammer's charged attack.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501566
+- name: Convert Thunder Resistance
+  type: Weapon
+  description: Increase to your weapon's elemental attack proportional to your thunder resistance.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532751
+- name: Convert Water Resistance
+  type: Weapon
+  description: Increase to your weapon's elemental attack proportional to your water resistance.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/584602
+- name: Crackling Cornpopper
+  type: Weapon
+  description: Increases shelling power and fire attack while overheated.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536803
+- name: Critical Boost
+  type: Weapon
+  description: Increases the damage of critical hits.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501570
+- name: Critical Draw
+  type: Weapon
+  description: Increases affinity when performing draw attacks. (Not effective while riding.)
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501565
+- name: Critical Element
+  type: Weapon
+  description: Increases elemental damage (fire, water, thunder, ice, dragon) when landing critical hits.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501573
+- name: Critical Eye
+  type: Weapon
+  description: Increases affinity.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501560
+- name: Critical Status
+  type: Weapon
+  description: Increases abnormal status effects (paralysis, poison, sleep, blast) when landing critical hits.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501577
+- name: Darkside
+  type: Weapon
+  description: Performing certain Lvl 2 or higher charged slashes temporarily increases attack but also deals self-damage.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553787
+- name: Dragon Attack
+  type: Weapon
+  description: Increases dragon element attack power. (Elemental attack power has a maximum limit.)
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503078
+- name: Evading Reload
+  type: Weapon
+  description: Evading loads the currently selected ammo automatically.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532750
+- name: Exhaust Functionality
+  type: Weapon
+  description: Allows you to apply exhaust coatings.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503077
+- name: Fire Attack
+  type: Weapon
+  description: Increases fire element attack power. (Elemental attack power has a maximum limit.)
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501586
+- name: Focus
+  type: Weapon
+  description: Increases the fill rate for weapons with gauges and the charge rate for weapons with charge attacks.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501564
+- name: Grillmaster
+  type: Weapon
+  description: Grill meat to sharpen your weapon and temporarily increase your attack. (Duration and effect vary based on results.)
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/568611
+- name: Guard
+  type: Weapon
+  description: Reduces knockbacks and stamina depletion when guarding.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501568
+- name: Guard Up
+  type: Weapon
+  description: Allows you to guard against ordinarily unblockable attacks.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501582
+- name: Handicraft
+  type: Weapon
+  description: Extends the weapon sharpness gauge. However, it will not increase the gauge past its maximum.
+  max_level: 5
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501593
+- name: Horn Maestro
+  type: Weapon
+  description: Increases the effect duration of hunting horn melodies. (Effect lost when you change weapons)
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501572
+- name: Ice Attack
+  type: Weapon
+  description: Increases ice element attack power. (Elemental attack power has a maximum limit.)
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501589
+- name: Load Shells
+  type: Weapon
+  description: Improves reloading, and increases the gunlance's shell capacity and charge blade's phial capacity.
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501569
+- name: Master's Touch
+  type: Weapon
+  description: Prevents your weapon from losing sharpness during critical hits.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501574
+- name: Mind's Eye
+  type: Weapon
+  description: Your attacks are deflected less and deal more damage to hard targets.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501592
+- name: Normal Shots
+  type: Weapon
+  description: Increases the attack power of Normal Ammo, normal arrows, and Flying Swallow Shot.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503080
+- name: Offensive Guard
+  type: Weapon
+  description: Temporarily increases attack power after executing a perfectly-timed guard.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501561
+- name: Opening Shot
+  type: Weapon
+  description: Increases the bowgun's reload speed and increases the power of bullets when fully loaded
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501583
+- name: Para Functionality
+  type: Weapon
+  description: Allows you to apply paralysis coatings.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503085
+- name: Paralysis Attack
+  type: Weapon
+  description: Increases the rate of paralysis buildup. (Paralysis buildup has a maximum limit.)
+  max_level: 3
+  scaling: Geometric
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501590
+- name: Piercing Shots
+  type: Weapon
+  description: Increases the attack of the bowgun's Pierce Ammo, and the bow's Dragon Piercer and Thousand Dragons.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503081
+- name: Poison Attack
+  type: Weapon
+  description: Increases the rate of poison buildup. (Poison buildup has a maximum limit.)
+  max_level: 3
+  scaling: Geometric
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503079
+- name: Poison Duration Up
+  type: Weapon
+  description: Extends the duration of your poison's effect on monsters.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501597
+- name: Poison Functionality
+  type: Weapon
+  description: Allows you to apply poison coatings.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503084
+- name: Power Prolonger
+  type: Weapon
+  description: Allows long swords, dual blades, insect glaives, switch axes, and charge blades stay powered up longer.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501563
+- name: Power Stone
+  type: Weapon
+  description: Temporarily increases attack upon mining materials.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/545871
+- name: Protective Polish
+  type: Weapon
+  description: Weapon sharpness does not decrease for a set time after sharpening.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501576
+- name: Punishing Draw
+  type: Weapon
+  description: Adds a stun effect to draw attacks and slightly increases attack power. (Not effective while riding.)
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501562
+- name: Rapid Fire Up
+  type: Weapon
+  description: Improves light bowgun rapid fire.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503083
+- name: Rapid Morph
+  type: Weapon
+  description: Increases switch speed and power for switch axes and charge blades.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501571
+- name: Razor Sharp
+  type: Weapon
+  description: Prevents your weapon from losing sharpness.
+  max_level: 3
+  scaling: Exponential
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501594
+- name: Shattering Reflection
+  type: Weapon
+  description: Level 3 charged slashes deal area-of-effect damage upon hitting then ground.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580990
+- name: Sleep Attack
+  type: Weapon
+  description: Increases the rate of sleep buildup. (Sleep buildup has a maximum limit.)
+  max_level: 3
+  scaling: Geometric
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501596
+- name: Sleep Functionality
+  type: Weapon
+  description: Allows you to apply sleep coatings.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503086
+- name: Slicked Blade
+  type: Weapon
+  description: Temporarily increases affinity when wet or when inflicted with bubbleblight. (Wet and bubbleblight effects stack.)
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512815
+- name: Slugger
+  type: Weapon
+  description: Makes it easier to stun monsters.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501579
+- name: Special Ammo Boost
+  type: Weapon
+  description: Increases the power of the bowgun's special ammo, and the bow's Dragon Piercer, Thousand Dragons, and Tracer
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501584
+- name: Speed Sharpening
+  type: Weapon
+  description: Speeds up weapon sharpening when using a whetstone.
+  max_level: 2
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/494564
+- name: Spread/Power Shots
+  type: Weapon
+  description: Increases the attack of the bowgun's Spread Ammo and the bow's Power Shots and Quick Shots.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503082
+- name: Stamina Thief
+  type: Weapon
+  description: Increases certain attacks' ability to exhaust monsters.
+  max_level: 3
+  scaling: Linear
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501567
+- name: Synergy
+  type: Weapon
+  description: Temporarily increases your affinity and the affinity of those around you after using a Rising Spiral Slash.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553789
+- name: Synthetic Shield
+  type: Weapon
+  description: Temporarily increases your defense and the defense of those around you after a successful Perfect Guard.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553788
+- name: Tetrad Shot
+  type: Weapon
+  description: Increases the affinity of bowgun ammo/coatings from the fourth shot and attack of the fourth and sixth shots.
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501581
+- name: Thunder Attack
+  type: Weapon
+  description: Increases thunder element attack power. (Elemental attack power has a maximum limit.)
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501588
+- name: Water Attack
+  type: Weapon
+  description: Increases water element attack power. (Elemental attack power has a maximum limit.)
+  max_level: 3
+  scaling: Unknown
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501587
+- name: Whiteflame Torrent
+  type: Weapon
+  description: Chance to deal additional damage after landing an attack.
+  max_level: 1
+  scaling: N/A
+  weight: 0
+  level_weight: 0
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512816

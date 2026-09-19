@@ -1,0 +1,3242 @@
+# Monster Hunter Wilds -- Decorations (Gems)
+# Sources:
+#  Weapon: https://game8.co/games/Monster-Hunter-Wilds/archives/500472
+#  Armor:  https://game8.co/games/Monster-Hunter-Wilds/archives/500473
+# 'slot_level' is the decoration's own size/level (1-3) -- the size of
+# gem slot it requires. Most decorations grant a single skill; some
+# weapon decorations (named 'X/Y Jwl') grant two different skills at
+# once, one usually at a lower level than the other.
+- name: Adapt Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Adaptability
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502445
+- name: Ambush Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Ambush
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502484
+- name: Antiblast Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Blast Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502443
+- name: Antidote Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Poison Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502491
+- name: Antipara Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Paralysis Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502441
+- name: Bomber Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Bombardier
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502503
+- name: Botany Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Botanist
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502452
+- name: Brace Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Flinch Free
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502474
+- name: Chain Jewel【3】
+  type: armor
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Burst
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502460
+- name: Challenger Jewel【3】
+  type: armor
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Agitator
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502459
+- name: Climber Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Cliffhanger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502502
+- name: Counter Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Counterstrike
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502485
+- name: Counterattack Jewel【3】
+  type: armor
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Adrenaline Rush
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502486
+- name: Def Lock Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Iron Skin
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502493
+- name: Defense Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Defense Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502490
+- name: Destroyer Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Partbreaker
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502461
+- name: Dive Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Leap of Faith
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502449
+- name: Dragon Res Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Dragon Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502454
+- name: Earplugs Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Earplugs
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502465
+- name: Enduring Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Item Prolonger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502479
+- name: Escape Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Bind Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502470
+- name: Evasion Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Evade Window
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502462
+- name: Fire Res Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Fire Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502467
+- name: Flash Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Blindsider
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502451
+- name: Flawless Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Peak Performance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502487
+- name: Flayer Jewel【3】
+  type: armor
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Flayer
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502496
+- name: Footing Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Tremor Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502499
+- name: Foray Jewel【3】
+  type: armor
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Foray
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502495
+- name: Friendship Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Wide-Range
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502450
+- name: Fungiform Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Mushroomancer
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502478
+- name: Furor Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Resentment
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502440
+- name: Geology Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Geologist
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502481
+- name: Gobbler Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Speed Eating
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502500
+- name: Growth Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Self-Improvement
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502472
+- name: Hungerless Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Hunger Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502456
+- name: Ice Res Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Ice Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/500887
+- name: Intimidator Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Intimidator
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502475
+- name: Jumping Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Evade Extender
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502464
+- name: Leap Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Jump Master
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502476
+- name: Maintenance Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Tool Specialist
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502477
+- name: Medicine Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Recovery Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502457
+- name: Mighty Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Maximum Might
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502489
+- name: Mirewalker Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Aquatic/Oilsilt Mobility
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502501
+- name: Pep Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Sleep Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502492
+- name: Perfume Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Stench Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502444
+- name: Phoenix Jewel【2】
+  type: armor
+  rarity: 7
+  slot_level: 2
+  skills:
+  - name: Coalescence
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502497
+- name: Physique Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Constitution
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502455
+- name: Potential Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Heroics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502463
+- name: Protection Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Divine Blessing
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502453
+- name: Ranger Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Outdoorsman
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502504
+- name: Recovery Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Recovery Speed
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502446
+- name: Refresh Jewel【2】
+  type: armor
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Stamina Surge
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502471
+- name: Sane Jewel【1】
+  type: armor
+  rarity: 5
+  slot_level: 1
+  skills:
+  - name: Antivirus
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502498
+- name: Satiated Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Free Meal
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502480
+- name: Sheath Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Quick Sheathe
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502483
+- name: Shockproof Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Shock Absorber
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502448
+- name: Specimen Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Entomologist
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502482
+- name: Sprinter Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Marathon Runner
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502458
+- name: Steadfast Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Stun Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502466
+- name: Survival Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Survival Expert
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502447
+- name: Suture Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Bleeding Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502442
+- name: Tenderizer Jewel【3】
+  type: armor
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Weakness Exploit
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502488
+- name: Throttle Jewel【3】
+  type: armor
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Latent Power
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502494
+- name: Thunder Res Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Thunder Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502469
+- name: Water Res Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Water Resistance
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502468
+- name: Wind Resist Jewel【1】
+  type: armor
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Windproof
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502473
+- name: Artillery Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Artillery
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502750
+- name: Artillery Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Artillery
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502546
+- name: Artillery Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Artillery
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502519
+- name: Attack Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Attack Boost
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502574
+- name: Attack Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Attack Boost
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502573
+- name: Attack Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Attack Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502521
+- name: Bandolier Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Tetrad Shot
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502711
+- name: Bandolier Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Tetrad Shot
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502710
+- name: Bandolier Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Tetrad Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502516
+- name: Bandolier/Blaze Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Tetrad Shot
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502712
+- name: Bandolier/Bolt Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 1
+  - name: Tetrad Shot
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502715
+- name: Bandolier/Dragon Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Tetrad Shot
+    level: 3
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502716
+- name: Bandolier/Frost Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Tetrad Shot
+    level: 3
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502714
+- name: Bandolier/Ironwall Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Tetrad Shot
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502718
+- name: Bandolier/Precise Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Ballistics
+    level: 1
+  - name: Tetrad Shot
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502717
+- name: Bandolier/Stream Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 1
+  - name: Tetrad Shot
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502713
+- name: Blast Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Blast Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502658
+- name: Blast Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Blast Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502537
+- name: Blast Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Blast Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502513
+- name: Blastcoat Jewel【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Blast Functionality
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502724
+- name: Blaze Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502588
+- name: Blaze Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Fire Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502558
+- name: Blaze Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/500885
+- name: Blaze/Bandolier Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Tetrad Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502595
+- name: Blaze/Crit Elem Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 1
+  - name: Fire Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502590
+- name: Blaze/Enhancer Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Power Prolonger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502597
+- name: Blaze/Focus Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Focus
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502596
+- name: Blaze/Guardian Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Offensive Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502589
+- name: Blaze/Handicraft Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502591
+- name: Blaze/Ironwall Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502600
+- name: Blaze/KO Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502598
+- name: Blaze/Opener Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Opening Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502594
+- name: Blaze/Precise Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502593
+- name: Blaze/Quickswitch Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Rapid Morph
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502599
+- name: Blaze/Rzr Sharp Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Razor Sharp
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502592
+- name: Blaze/Shield Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Fire Attack
+    level: 3
+  - name: Guard Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502564
+- name: Blunt Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Bludgeoner
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502694
+- name: Blunt Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Bludgeoner
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502693
+- name: Blunt Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Bludgeoner
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502526
+- name: Bolt Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502614
+- name: Bolt Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Thunder Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502613
+- name: Bolt Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Thunder Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502511
+- name: Bolt/Bandolier Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Tetrad Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502621
+- name: Bolt/Crit Elem Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Critical Element
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502616
+- name: Bolt/Enhancer Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Power Prolonger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502623
+- name: Bolt/Focus Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Focus
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502622
+- name: Bolt/Guardian Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Offensive Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502615
+- name: Bolt/Handicraft Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502617
+- name: Bolt/Ironwall Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502626
+- name: Bolt/KO Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502624
+- name: Bolt/Opener Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Opening Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502620
+- name: Bolt/Precise Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502619
+- name: Bolt/Quickswitch Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Rapid Morph
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502625
+- name: Bolt/Rzr Sharp Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Razor Sharp
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502618
+- name: Bolt/Shield Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 3
+  - name: Guard Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502627
+- name: Charge Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Charge Master
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502676
+- name: Charge Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Charge Master
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502675
+- name: Charge Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Charge Master
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502538
+- name: Charge Up Jewel【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Charge Up
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502548
+- name: Charge Up/Attack Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Charge Up
+    level: 1
+  - name: Attack Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502765
+- name: Charge Up/Draw Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Charge Up
+    level: 1
+  - name: Critical Draw
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502766
+- name: Charge Up/Expert Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Eye
+    level: 1
+  - name: Charge Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502764
+- name: Charge Up/Handicraft Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Charge Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502767
+- name: Charge Up/KO Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Charge Up
+    level: 1
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502768
+- name: Charge/Handicraft Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Charge Master
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502677
+- name: Charge/KO Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Charge Master
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502678
+- name: Crit Elem Jwl III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502571
+- name: Crit Elem/Blaze Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502660
+- name: Crit Elem/Bolt Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 3
+  - name: Thunder Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502663
+- name: Crit Elem/Dragon Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 3
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502664
+- name: Crit Elem/Frost Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 3
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502662
+- name: Crit Elem/Handicraft Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502665
+- name: Crit Elem/Ironwall Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Guard
+    level: 1
+  - name: Critical Element
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502668
+- name: Crit Elem/KO Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502667
+- name: Crit Elem/Stream Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Critical Element
+    level: 3
+  - name: Water Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502661
+- name: Crit Element Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Critical Element
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502552
+- name: Crit Element Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Critical Element
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502659
+- name: Crit Element/Precise Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Ballistics
+    level: 1
+  - name: Critical Element
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502666
+- name: Crit Stat Jwl III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Status
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502670
+- name: Crit Stat/Handicraft Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Critical Status
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502671
+- name: Crit Stat/Ironwall Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Critical Status
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502674
+- name: Crit Stat/Precise Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Critical Status
+    level: 3
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502672
+- name: Crit Status Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Critical Status
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502669
+- name: Crit Status Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Critical Status
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502523
+- name: Crit Status/KO Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Critical Status
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502673
+- name: Critical Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Boost
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502527
+- name: Critical Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Critical Boost
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502555
+- name: Critical Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Critical Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502551
+- name: Dragon Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502643
+- name: Dragon Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Dragon Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502642
+- name: Dragon Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502641
+- name: Dragon/Bandolier Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Tetrad Shot
+    level: 1
+  - name: Dragon Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502649
+- name: Dragon/Crit Elem Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Critical Element
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502644
+- name: Dragon/Enhancer Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Power Prolonger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502651
+- name: Dragon/Focus Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Focus
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502650
+- name: Dragon/Guardian Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Offensive Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502568
+- name: Dragon/Handicraft Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502645
+- name: Dragon/Ironwall Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502569
+- name: Dragon/KO Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502652
+- name: Dragon/Opener Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Opening Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502648
+- name: Dragon/Precise Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502647
+- name: Dragon/Quickswitch Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Rapid Morph
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502653
+- name: Dragon/Rzr Sharp Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Razor Sharp
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502646
+- name: Dragon/Shield Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 3
+  - name: Guard Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502654
+- name: Drain Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Stamina Thief
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502749
+- name: Drain Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Stamina Thief
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502545
+- name: Drain Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Stamina Thief
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502544
+- name: Draincoat Jewel【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Exhaust Functionality
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502723
+- name: Draw Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Draw
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502587
+- name: Draw Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Critical Draw
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502586
+- name: Draw Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Critical Draw
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502522
+- name: Enhancer Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Power Prolonger
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502735
+- name: Enhancer Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Power Prolonger
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502734
+- name: Enhancer Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Power Prolonger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502518
+- name: Enhancer/Blaze Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Power Prolonger
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502736
+- name: Enhancer/Bolt Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 1
+  - name: Power Prolonger
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502739
+- name: Enhancer/Dragon Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Power Prolonger
+    level: 3
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502740
+- name: Enhancer/Frost Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Power Prolonger
+    level: 3
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502738
+- name: Enhancer/Handicraft Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Power Prolonger
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502741
+- name: Enhancer/Stream Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 1
+  - name: Power Prolonger
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502737
+- name: Expert Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Eye
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502585
+- name: Expert Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Critical Eye
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502584
+- name: Expert Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Critical Eye
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502531
+- name: Flight Jewel【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Airborne
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502769
+- name: Flight/Attack Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Airborne
+    level: 1
+  - name: Attack Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502770
+- name: Flight/Draw Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Airborne
+    level: 1
+  - name: Critical Draw
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502772
+- name: Flight/Expert Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Eye
+    level: 1
+  - name: Airborne
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502771
+- name: Flight/Handicraft Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Airborne
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502773
+- name: Focus Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Focus
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502725
+- name: Focus Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Focus
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502542
+- name: Focus Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Focus
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502517
+- name: Focus/Blaze Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Focus
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502726
+- name: Focus/Bolt Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 1
+  - name: Focus
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502729
+- name: Focus/Dragon Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Focus
+    level: 3
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502730
+- name: Focus/Frost Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Focus
+    level: 3
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502728
+- name: Focus/Handicraft Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Focus
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502731
+- name: Focus/KO Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Slugger
+    level: 1
+  - name: Focus
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502733
+- name: Focus/Precise Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Focus
+    level: 3
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502732
+- name: Focus/Stream Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 1
+  - name: Focus
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502727
+- name: Forceshot Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Normal Shots
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502696
+- name: Frost Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502567
+- name: Frost Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Ice Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502529
+- name: Frost Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502628
+- name: Frost/Bandolier Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Tetrad Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502634
+- name: Frost/Crit Elem Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Critical Element
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502630
+- name: Frost/Enhancer Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Power Prolonger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502636
+- name: Frost/Focus Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Focus
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502635
+- name: Frost/Guardian Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Offensive Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502629
+- name: Frost/Handicraft Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502560
+- name: Frost/Ironwall Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502639
+- name: Frost/KO Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502637
+- name: Frost/Opener Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Opening Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502633
+- name: Frost/Precise Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502632
+- name: Frost/Quickswitch Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Rapid Morph
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502638
+- name: Frost/Rzr Sharp Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 3
+  - name: Razor Sharp
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502631
+- name: Frost/Shield Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Guard Up
+    level: 1
+  - name: Ice Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502640
+- name: Gambit Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Punishing Draw
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502743
+- name: Gambit Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Punishing Draw
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502742
+- name: Gambit Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Punishing Draw
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502543
+- name: Gambit/Handicraft Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Punishing Draw
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502744
+- name: Gambit/Ironwall Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Punishing Draw
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502746
+- name: Gambit/KO Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Punishing Draw
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502745
+- name: Grinder Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Speed Sharpening
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502557
+- name: Grinder Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Speed Sharpening
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502549
+- name: Grinder/Attack Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Speed Sharpening
+    level: 2
+  - name: Attack Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502799
+- name: Grinder/Draw Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Draw
+    level: 1
+  - name: Speed Sharpening
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502801
+- name: Grinder/Expert Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Eye
+    level: 1
+  - name: Speed Sharpening
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502800
+- name: Grinder/Handicraft Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Speed Sharpening
+    level: 2
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502562
+- name: Grinder/Ironwall Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Speed Sharpening
+    level: 2
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502803
+- name: Grinder/KO Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Speed Sharpening
+    level: 2
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502802
+- name: Guardian Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Offensive Guard
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502576
+- name: Guardian Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Offensive Guard
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502575
+- name: Guardian Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Offensive Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502550
+- name: Guardian/Blaze Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Offensive Guard
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502577
+- name: Guardian/Bolt Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Offensive Guard
+    level: 3
+  - name: Thunder Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502579
+- name: Guardian/Dragon Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Offensive Guard
+    level: 3
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502581
+- name: Guardian/Frost Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Offensive Guard
+    level: 3
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502580
+- name: Guardian/Handicraft Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Offensive Guard
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502582
+- name: Guardian/Ironwall Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Offensive Guard
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502583
+- name: Guardian/Stream Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Offensive Guard
+    level: 3
+  - name: Water Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502578
+- name: Handicraft Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Handicraft
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502553
+- name: Handicraft Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502524
+- name: Handicraft Jwl III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502679
+- name: Ironwall Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Guard
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502783
+- name: Ironwall Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Guard
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502782
+- name: Ironwall Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502532
+- name: KO Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Slugger
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502748
+- name: KO Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Slugger
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502747
+- name: KO Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502533
+- name: Magazine Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Load Shells
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502794
+- name: Magazine Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Load Shells
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502793
+- name: Magazine/Attack Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Load Shells
+    level: 2
+  - name: Attack Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502795
+- name: Magazine/Draw Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Draw
+    level: 1
+  - name: Load Shells
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502796
+- name: Magazine/Expert Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Load Shells
+    level: 2
+  - name: Critical Eye
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502559
+- name: Magazine/Handicraft Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Load Shells
+    level: 2
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502797
+- name: Magazine/Ironwall Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Guard
+    level: 1
+  - name: Load Shells
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502798
+- name: Mastery Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Master's Touch
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502695
+- name: Mind's Eye Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Mind's Eye
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502691
+- name: Mind's Eye Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Mind's Eye
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502514
+- name: Mind's Eye Jwl III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Mind's Eye
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502692
+- name: Opener Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Opening Shot
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502702
+- name: Opener Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Opening Shot
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502701
+- name: Opener Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Opening Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502515
+- name: Opener/Blaze Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Opening Shot
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502703
+- name: Opener/Bolt Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 1
+  - name: Opening Shot
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502706
+- name: Opener/Dragon Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Opening Shot
+    level: 3
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502707
+- name: Opener/Frost Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Opening Shot
+    level: 3
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502705
+- name: Opener/Ironwall Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Opening Shot
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502709
+- name: Opener/Precise Jewel【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Ballistics
+    level: 1
+  - name: Opening Shot
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502708
+- name: Opener/Stream Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 1
+  - name: Opening Shot
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502704
+- name: Paracoat Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Para Functionality
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502722
+- name: Paralyzer Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Paralysis Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502656
+- name: Paralyzer Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Paralysis Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502512
+- name: Paralyzer Jwl III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Paralysis Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502563
+- name: Pierce Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Piercing Shots
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502697
+- name: Poison Jewel【2】
+  type: weapon
+  rarity: 5
+  slot_level: 2
+  skills:
+  - name: Poison Duration Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502774
+- name: Poison/Attack Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Poison Duration Up
+    level: 1
+  - name: Attack Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502775
+- name: Poison/Draw Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Poison Duration Up
+    level: 1
+  - name: Critical Draw
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502777
+- name: Poison/Expert Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Critical Eye
+    level: 1
+  - name: Poison Duration Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502776
+- name: Poison/Handicraft Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Poison Duration Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502778
+- name: Poison/Ironwall Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Poison Duration Up
+    level: 1
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502781
+- name: Poison/KO Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Slugger
+    level: 1
+  - name: Poison Duration Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502780
+- name: Poison/Precise Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Poison Duration Up
+    level: 1
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502779
+- name: Poisoncoat Jewel【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Poison Functionality
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502720
+- name: Precise Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Ballistics
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502699
+- name: Precise Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Ballistics
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502698
+- name: Precise Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502540
+- name: Quickswitch Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Rapid Morph
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502561
+- name: Quickswitch Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Rapid Morph
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502547
+- name: Quickswitch Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Rapid Morph
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502520
+- name: Quickswitch/Blaze Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Rapid Morph
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502751
+- name: Quickswitch/Bolt Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 1
+  - name: Rapid Morph
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502754
+- name: Quickswitch/Dragon Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Rapid Morph
+    level: 3
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502755
+- name: Quickswitch/Frost Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Rapid Morph
+    level: 3
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502753
+- name: Quickswitch/Handicraft Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Rapid Morph
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502756
+- name: Quickswitch/Ironwall Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Guard
+    level: 1
+  - name: Rapid Morph
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502758
+- name: Quickswitch/KO Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Rapid Morph
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502757
+- name: Quickswitch/Stream Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 1
+  - name: Rapid Morph
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502752
+- name: Razor Sharp Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Razor Sharp
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502680
+- name: Razor Sharp Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Razor Sharp
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502525
+- name: Razor Sharp/KO Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Slugger
+    level: 1
+  - name: Razor Sharp
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502688
+- name: Rzr Sharp Jwl III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Razor Sharp
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502681
+- name: Rzr Sharp/Blaze Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Razor Sharp
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502682
+- name: Rzr Sharp/Bolt Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Razor Sharp
+    level: 3
+  - name: Thunder Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502685
+- name: Rzr Sharp/Dragon Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Dragon Attack
+    level: 1
+  - name: Razor Sharp
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502686
+- name: Rzr Sharp/Frost Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Ice Attack
+    level: 1
+  - name: Razor Sharp
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502683
+- name: Rzr Sharp/Handicraft Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Razor Sharp
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502687
+- name: Rzr Sharp/Ironwall Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Razor Sharp
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502689
+- name: Rzr Sharp/Stream Jwl【3】
+  type: weapon
+  rarity: 7
+  slot_level: 3
+  skills:
+  - name: Razor Sharp
+    level: 3
+  - name: Water Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502684
+- name: Salvo Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Rapid Fire Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502700
+- name: Sharp Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Protective Polish
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502690
+- name: Sharp Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Protective Polish
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502554
+- name: Sharp Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Protective Polish
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502539
+- name: Shield Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Guard Up
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502785
+- name: Shield Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Guard Up
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502556
+- name: Shield Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Guard Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502784
+- name: Shield/Blaze Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Guard Up
+    level: 3
+  - name: Fire Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502786
+- name: Shield/Bolt Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Thunder Attack
+    level: 1
+  - name: Guard Up
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502789
+- name: Shield/Dragon Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Guard Up
+    level: 3
+  - name: Dragon Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502790
+- name: Shield/Frost Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Guard Up
+    level: 3
+  - name: Ice Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502788
+- name: Shield/Handicraft Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Guard Up
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502791
+- name: Shield/Ironwall Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Guard Up
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502792
+- name: Shield/Stream Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 1
+  - name: Guard Up
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502787
+- name: Sleep Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Sleep Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502528
+- name: Sleep Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Sleep Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502657
+- name: Sleep Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Sleep Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502536
+- name: Sleepcoat Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Sleep Functionality
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502721
+- name: Sonorous Jewel【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Horn Maestro
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502530
+- name: Sonorous/Attack Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Horn Maestro
+    level: 2
+  - name: Attack Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502759
+- name: Sonorous/Draw Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Horn Maestro
+    level: 2
+  - name: Critical Draw
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502761
+- name: Sonorous/Expert Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Critical Eye
+    level: 1
+  - name: Horn Maestro
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502760
+- name: Sonorous/Handicraft Jwl【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Handicraft
+    level: 1
+  - name: Horn Maestro
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502762
+- name: Sonorous/KO Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Horn Maestro
+    level: 2
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502763
+- name: Spread Jewel【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Spread/Power Shots
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502572
+- name: Stream Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502601
+- name: Stream Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Water Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502534
+- name: Stream Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Water Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502510
+- name: Stream/Bandolier Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Tetrad Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502606
+- name: Stream/Crit Elem Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Critical Element
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502602
+- name: Stream/Enhancer Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Power Prolonger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502608
+- name: Stream/Focus Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Focus
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502607
+- name: Stream/Guardian Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Guard Up
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502565
+- name: Stream/Handicraft Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Handicraft
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502603
+- name: Stream/Ironwall Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Guard
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502611
+- name: Stream/KO Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Slugger
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502609
+- name: Stream/Opener Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Opening Shot
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502605
+- name: Stream/Precise Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Ballistics
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502566
+- name: Stream/Quickswitch Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Rapid Morph
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502610
+- name: Stream/Rzr Sharp Jwl【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Water Attack
+    level: 3
+  - name: Razor Sharp
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502604
+- name: Stream/Shield Jewel【3】
+  type: weapon
+  rarity: 6
+  slot_level: 3
+  skills:
+  - name: Guard Up
+    level: 1
+  - name: Water Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502612
+- name: Trueshot Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Special Ammo Boost
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502719
+- name: Trueshot Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Special Ammo Boost
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502541
+- name: Venom Jewel III【3】
+  type: weapon
+  rarity: 5
+  slot_level: 3
+  skills:
+  - name: Poison Attack
+    level: 3
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502570
+- name: Venom Jewel II【2】
+  type: weapon
+  rarity: 4
+  slot_level: 2
+  skills:
+  - name: Poison Attack
+    level: 2
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502655
+- name: Venom Jewel【1】
+  type: weapon
+  rarity: 3
+  slot_level: 1
+  skills:
+  - name: Poison Attack
+    level: 1
+  source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502535
