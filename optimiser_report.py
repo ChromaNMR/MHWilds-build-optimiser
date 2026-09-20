@@ -10,7 +10,7 @@ from pathlib import Path
 
 import yaml
 
-from optimiser import GearSet, Scoring
+from optimiser import GearSet, Scoring, SlotAssignment
 
 CONSTRAINT_DESCRIPTIONS = {
     0: "all mandatory skills present, and mandatory max-level skills at max",
@@ -119,6 +119,102 @@ def render_set(gear_set: GearSet, rank: int, scoring: Scoring) -> str:
     else:
         lines.append("  Decorations: none worth slotting")
 
+    if gear_set.free_slots:
+        sizes = ", ".join(str(s) for s in gear_set.free_slots)
+        reserved = min(gear_set.reserved_slots, len(gear_set.free_slots))
+        note = (
+            f" ({reserved} reserved for resistance jewels)"
+            if reserved
+            else " (nothing worth slotting)"
+        )
+        lines.append(f"  Free slots: [{sizes}]{note}")
+    else:
+        lines.append("  Free slots: none")
+
+    return "\n".join(lines)
+
+
+def _placements_by_source(gear_set: GearSet) -> dict[str, list[SlotAssignment]]:
+    """Every slot (filled or not) grouped by the piece/talisman it belongs to."""
+    grouped: dict[str, list[SlotAssignment]] = {}
+    for placement in gear_set.placements:
+        grouped.setdefault(placement.source, []).append(placement)
+    return grouped
+
+
+def _slot_brackets(placements: list[SlotAssignment]) -> str:
+    if not placements:
+        return ""
+    parts = [
+        f"[{p.size}: {p.decoration.name if p.decoration else 'empty'}]"
+        for p in placements
+    ]
+    return "  " + " ".join(parts)
+
+
+def render_set_inline(gear_set: GearSet, rank: int, total: int, scoring: Scoring) -> str:
+    """Render a set with each piece's decoration slots inline on its own line.
+
+    Used by the GUI results viewer (one set at a time); the console renderer
+    (render_set) instead groups decorations into a separate section.
+    """
+    lines = []
+    tier = f"  [{gear_set.tier}]" if gear_set.tier else ""
+    lines.append(
+        f"Set {rank} of {total}{tier}   score {gear_set.total_score:.2f}"
+        f"   (skills {gear_set.skill_score:.2f} + defence {gear_set.defense_score:.2f})"
+    )
+    lines.append("-" * WIDTH)
+
+    by_source = _placements_by_source(gear_set)
+    for piece in gear_set.pieces:
+        brackets = _slot_brackets(by_source.get(piece.name, []))
+        lines.append(
+            f"  {piece.piece_type:<6} {piece.name:<26} {piece.set:<18}"
+            f" def {piece.defense.max:>3}{brackets}"
+        )
+
+    talisman_skills = ", ".join(
+        f"{s.name} {s.level}" for s in gear_set.talisman.skills
+    )
+    talisman_brackets = _slot_brackets(by_source.get(gear_set.talisman.name, []))
+    lines.append(
+        f"  {'charm':<6} {gear_set.talisman.name:<26} {talisman_skills}{talisman_brackets}"
+    )
+    lines.append(
+        f"  Total defence {gear_set.defense_total}"
+        + (
+            f"   |   weapon slots on charm: {gear_set.weapon_slots}"
+            if gear_set.weapon_slots
+            else ""
+        )
+    )
+
+    lines.append("")
+    lines.append("  Skills:")
+    for name, level in _sorted_skills(gear_set, scoring):
+        skill = scoring.by_name.get(name)
+        if skill is None or skill.type in ("Set Bonus", "Group"):
+            continue
+        capped = min(level, skill.max_level)
+        lines.append(
+            f"    {name:<28} {capped}/{skill.max_level}{_skill_note(name, capped, scoring)}"
+        )
+
+    if gear_set.active_bonuses:
+        lines.append("")
+        lines.append("  Set / group bonuses:")
+        for bonus in gear_set.active_bonuses:
+            kind = "group" if bonus.bonus_type == "group_skill" else "set"
+            effects = ", ".join(bonus.effects)
+            weight = scoring.weight(bonus.name)
+            marker = f"  [w{weight:g}]" if weight else ""
+            lines.append(
+                f"    {bonus.name:<28} {kind:<5} {bonus.pieces} pieces"
+                f" -> level {bonus.level}  ({effects}){marker}"
+            )
+
+    lines.append("")
     if gear_set.free_slots:
         sizes = ", ".join(str(s) for s in gear_set.free_slots)
         reserved = min(gear_set.reserved_slots, len(gear_set.free_slots))
