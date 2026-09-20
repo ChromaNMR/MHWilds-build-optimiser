@@ -36,6 +36,13 @@ LEVEL_CURVE = 1.0  # >1 punishes partial levels harder for high level_weight
 # gets extreme enough that mid-weight skills start losing their depth again.
 WEIGHT_EXPONENT = 2.0
 
+# How sharply level_weight drives the value of each extra level. The share of a
+# skill's value that sits in its levels is (level_weight / 5) ** this. Holding it
+# just above WEIGHT_EXPONENT is what makes a point in a 1/4 skill beat a point in
+# a 4/1 one while keeping 2/3 and 3/2 roughly even; at exactly WEIGHT_EXPONENT
+# those first two come out equal instead.
+LEVEL_WEIGHT_EXPONENT = 2.2
+
 # Whole-set defence is worth about as much as one skill of this weight. It is
 # raised to WEIGHT_EXPONENT alongside skills so the balance holds if that moves.
 DEFENSE_EQUIV_WEIGHT = 2.0
@@ -47,8 +54,10 @@ MANDATORY_WEIGHT = 5.0  # weight at which a skill is treated as mandatory
 MAX_LEVEL_WEIGHT = 5.0  # level_weight at which a skill must reach max level
 
 RESERVED_SLOTS = 2  # slots held back for per-hunt resistance jewels
-BEAM_WIDTH = 3000
-FINAL_POOL = 1200  # complete armour combos given the full evaluation
+# 3000/1200 left ~1% of score on the table; the result plateaus here and wider
+# beams (9000/15000) find nothing better, at several times the runtime.
+BEAM_WIDTH = 5000
+FINAL_POOL = 2000  # complete armour combos given the full evaluation
 TALISMAN_SHORTLIST = 5
 
 # The talisman schema stores a decoration slot *count* with no size, so a count
@@ -106,10 +115,12 @@ class Scoring:
         self,
         skills: list[Skill],
         weight_exponent: float = WEIGHT_EXPONENT,
+        level_weight_exponent: float = LEVEL_WEIGHT_EXPONENT,
         level_curve: float = LEVEL_CURVE,
         defense_equiv_weight: float = DEFENSE_EQUIV_WEIGHT,
     ) -> None:
         self.weight_exponent = weight_exponent
+        self.level_weight_exponent = level_weight_exponent
         self.level_curve = level_curve
         self.defense_points = defense_equiv_weight**weight_exponent
         self.by_name = {s.name: s for s in skills}
@@ -140,7 +151,12 @@ class Scoring:
             value = 0.0
         else:
             capped = min(level, skill.max_level)
+            # Share of the skill's value carried by its levels rather than by
+            # merely having it. Raising level_weight to an exponent above
+            # WEIGHT_EXPONENT makes each point worth more in skills you want
+            # levelled than in merely high-weight ones.
             alpha = max(0.0, min(1.0, skill.level_weight / 5.0))
+            alpha **= self.level_weight_exponent
             progress = (capped / skill.max_level) ** self.level_curve
             # Sign-preserving, so 'actively avoid' weights stay negative.
             importance = math.copysign(
