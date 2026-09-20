@@ -1,0 +1,1118 @@
+skills_db: skills_outputs\skills_DB_burst.yaml
+constraint_level: 0
+constraint: all mandatory skills present, and mandatory max-level skills at max
+sets:
+- rank: 1
+  tier: closest variants
+  score:
+    total: 168.509
+    skills: 165.6
+    defence: 2.909
+  defence_total: 450
+  pieces:
+  - piece_type: head
+    name: Udra Mirehelm γ
+    set: Nu Udra γ
+    defence: 94
+    slots:
+    - 1
+    - 1
+    - 1
+  - piece_type: chest
+    name: Gore Mail β
+    set: Gore β
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: arms
+    name: Afi Armguards α
+    set: Afi α
+    defence: 90
+    slots:
+    - 2
+    - 1
+    - 1
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Battle Greaves α
+    set: Battle α
+    defence: 86
+    slots:
+    - 3
+    - 1
+  talisman:
+    name: Exploiter Charm III
+    skills:
+    - name: Weakness Exploit
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 5
+    Marathon Runner: 3
+    Evade Window: 2
+    Divine Blessing: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Stamina Surge: 1
+    Tremor Resistance: 1
+  set_bonuses:
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Gore Mail β
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Gore Mail β
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: Afi Armguards α
+    slot_size: 2
+    decoration: Destroyer Jewel【2】
+  - source: Afi Armguards α
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  - source: Afi Armguards α
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  - source: Gore Coil α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Battle Greaves α
+    slot_size: 3
+    decoration: Refresh Jewel【2】
+  free_slots:
+  - 1
+  - 1
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 2
+  tier: closest variants
+  score:
+    total: 167.043
+    skills: 163.8
+    defence: 3.243
+  defence_total: 456
+  pieces:
+  - piece_type: head
+    name: Udra Mirehelm γ
+    set: Nu Udra γ
+    defence: 94
+    slots:
+    - 1
+    - 1
+    - 1
+  - piece_type: chest
+    name: Lagiacrus Mail β
+    set: Lagiacrus β
+    defence: 94
+    slots:
+    - 2
+    - 2
+    - 1
+  - piece_type: arms
+    name: Sororal Vambraces α
+    set: Sororal α
+    defence: 92
+    slots:
+    - 2
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Battle Greaves α
+    set: Battle α
+    defence: 86
+    slots:
+    - 3
+    - 1
+  talisman:
+    name: Exploiter Charm III
+    skills:
+    - name: Weakness Exploit
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 5
+    Marathon Runner: 3
+    Divine Blessing: 1
+    Evade Window: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Stamina Surge: 1
+    Tremor Resistance: 1
+    Evade Extender: 1
+  set_bonuses:
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Lagiacrus Mail β
+    slot_size: 2
+    decoration: Evasion Jewel【2】
+  - source: Lagiacrus Mail β
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: Gore Coil α
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Gore Coil α
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  - source: Battle Greaves α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Battle Greaves α
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  free_slots:
+  - 2
+  - 2
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 3
+  tier: closest variants
+  score:
+    total: 166.924
+    skills: 163.8
+    defence: 3.124
+  defence_total: 454
+  pieces:
+  - piece_type: head
+    name: Sororal Earrings α
+    set: Sororal α
+    defence: 92
+    slots:
+    - 3
+    - 1
+    - 1
+  - piece_type: chest
+    name: Lagiacrus Mail β
+    set: Lagiacrus β
+    defence: 94
+    slots:
+    - 2
+    - 2
+    - 1
+  - piece_type: arms
+    name: G. Arkveld Vambraces β
+    set: Guardian Arkveld β
+    defence: 92
+    slots:
+    - 1
+    - 1
+    - 1
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Battle Greaves α
+    set: Battle α
+    defence: 86
+    slots:
+    - 3
+    - 1
+  talisman:
+    name: Chain Charm III
+    skills:
+    - name: Burst
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 5
+    Marathon Runner: 3
+    Divine Blessing: 1
+    Evade Window: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Stamina Surge: 1
+    Tremor Resistance: 1
+  set_bonuses:
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Sororal Earrings α
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Sororal Earrings α
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Sororal Earrings α
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Lagiacrus Mail β
+    slot_size: 2
+    decoration: Destroyer Jewel【2】
+  - source: Lagiacrus Mail β
+    slot_size: 2
+    decoration: Evasion Jewel【2】
+  - source: Lagiacrus Mail β
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: G. Arkveld Vambraces β
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: G. Arkveld Vambraces β
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  - source: G. Arkveld Vambraces β
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  - source: Gore Coil α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Battle Greaves α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  free_slots:
+  - 1
+  - 1
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 4
+  tier: distinct builds
+  score:
+    total: 166.176
+    skills: 163.04
+    defence: 3.136
+  defence_total: 454
+  pieces:
+  - piece_type: head
+    name: Arkvulcan Helm γ
+    set: Arkveld γ
+    defence: 94
+    slots:
+    - 2
+    - 1
+  - piece_type: chest
+    name: Gore Mail β
+    set: Gore β
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: arms
+    name: Arkvulcan Vambraces γ
+    set: Arkveld γ
+    defence: 94
+    slots:
+    - 1
+    - 1
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Battle Greaves α
+    set: Battle α
+    defence: 86
+    slots:
+    - 3
+    - 1
+  talisman:
+    name: Chain Charm III
+    skills:
+    - name: Burst
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 4
+    Marathon Runner: 3
+    Evade Window: 2
+    Divine Blessing: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Arkveld's Hunger: 1
+    Tremor Resistance: 1
+    Flayer: 2
+  set_bonuses:
+  - name: Arkveld's Hunger
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Hasten Recovery I
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Arkvulcan Helm γ
+    slot_size: 2
+    decoration: Destroyer Jewel【2】
+  - source: Arkvulcan Helm γ
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Gore Mail β
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Gore Mail β
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Arkvulcan Vambraces γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Arkvulcan Vambraces γ
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: Gore Coil α
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Gore Coil α
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  free_slots:
+  - 1
+  - 3
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 5
+  tier: distinct builds
+  score:
+    total: 165.319
+    skills: 162.0
+    defence: 3.319
+  defence_total: 458
+  pieces:
+  - piece_type: head
+    name: Udra Mirehelm γ
+    set: Nu Udra γ
+    defence: 94
+    slots:
+    - 1
+    - 1
+    - 1
+  - piece_type: chest
+    name: Lagiacrus Mail β
+    set: Lagiacrus β
+    defence: 94
+    slots:
+    - 2
+    - 2
+    - 1
+  - piece_type: arms
+    name: Diver's Braces α
+    set: Diver α
+    defence: 90
+    slots:
+    - 3
+    - 1
+    - 1
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Gore Greaves β
+    set: Gore β
+    defence: 90
+    slots:
+    - 3
+    - 1
+    - 1
+  talisman:
+    name: Exploiter Charm III
+    skills:
+    - name: Weakness Exploit
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 5
+    Marathon Runner: 3
+    Divine Blessing: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Stamina Surge: 1
+    Tremor Resistance: 1
+    Ambush: 1
+    Flinch Free: 1
+  set_bonuses:
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: Lagiacrus Mail β
+    slot_size: 2
+    decoration: Destroyer Jewel【2】
+  - source: Lagiacrus Mail β
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: Diver's Braces α
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Diver's Braces α
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  - source: Diver's Braces α
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  - source: Gore Coil α
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Gore Coil α
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  - source: Gore Greaves β
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Gore Greaves β
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  free_slots:
+  - 1
+  - 2
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 6
+  tier: distinct builds
+  score:
+    total: 165.307
+    skills: 162.0
+    defence: 3.307
+  defence_total: 458
+  pieces:
+  - piece_type: head
+    name: Udra Mirehelm γ
+    set: Nu Udra γ
+    defence: 94
+    slots:
+    - 1
+    - 1
+    - 1
+  - piece_type: chest
+    name: Mizutsune Mail α
+    set: Mizutsune α
+    defence: 90
+    slots:
+    - 2
+    - 1
+  - piece_type: arms
+    name: G. Arkveld Vambraces β
+    set: Guardian Arkveld β
+    defence: 92
+    slots:
+    - 1
+    - 1
+    - 1
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Sororal Boots α
+    set: Sororal α
+    defence: 92
+    slots:
+    - 3
+    - 2
+  talisman:
+    name: Exploiter Charm III
+    skills:
+    - name: Weakness Exploit
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 5
+    Marathon Runner: 3
+    Divine Blessing: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Stamina Surge: 1
+    Tremor Resistance: 1
+  set_bonuses:
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Mizutsune Mail α
+    slot_size: 2
+    decoration: Physique Jewel【1】
+  - source: Mizutsune Mail α
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: G. Arkveld Vambraces β
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: G. Arkveld Vambraces β
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: G. Arkveld Vambraces β
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: Gore Coil α
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  - source: Sororal Boots α
+    slot_size: 2
+    decoration: Physique Jewel【1】
+  free_slots:
+  - 3
+  - 3
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 7
+  tier: distinct bonuses
+  score:
+    total: 164.789
+    skills: 162.0
+    defence: 2.789
+  defence_total: 448
+  pieces:
+  - piece_type: head
+    name: Sororal Earrings α
+    set: Sororal α
+    defence: 92
+    slots:
+    - 3
+    - 1
+    - 1
+  - piece_type: chest
+    name: Afi Top α
+    set: Afi α
+    defence: 90
+    slots:
+    - 3
+    - 1
+    - 1
+  - piece_type: arms
+    name: Afi Armguards α
+    set: Afi α
+    defence: 90
+    slots:
+    - 2
+    - 1
+    - 1
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Battle Greaves α
+    set: Battle α
+    defence: 86
+    slots:
+    - 3
+    - 1
+  talisman:
+    name: Exploiter Charm III
+    skills:
+    - name: Weakness Exploit
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 5
+    Marathon Runner: 3
+    Divine Blessing: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Stamina Surge: 1
+    Tremor Resistance: 1
+    Flamefete Prayer: 1
+    Heroics: 1
+  set_bonuses:
+  - name: Flamefete Prayer
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Flamefete Boon I
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Sororal Earrings α
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Sororal Earrings α
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Sororal Earrings α
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Afi Top α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Afi Top α
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Afi Top α
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: Afi Armguards α
+    slot_size: 2
+    decoration: Destroyer Jewel【2】
+  - source: Afi Armguards α
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  - source: Afi Armguards α
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  - source: Gore Coil α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Battle Greaves α
+    slot_size: 3
+    decoration: Refresh Jewel【2】
+  free_slots:
+  - 1
+  - 1
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 8
+  tier: distinct bonuses
+  score:
+    total: 164.004
+    skills: 160.88
+    defence: 3.124
+  defence_total: 454
+  pieces:
+  - piece_type: head
+    name: Sororal Earrings α
+    set: Sororal α
+    defence: 92
+    slots:
+    - 3
+    - 1
+    - 1
+  - piece_type: chest
+    name: Guild Cross Suit α
+    set: Guild Cross α
+    defence: 90
+    slots:
+    - 3
+    - 2
+    - 1
+  - piece_type: arms
+    name: Sororal Vambraces α
+    set: Sororal α
+    defence: 92
+    slots:
+    - 2
+  - piece_type: waist
+    name: Gogmazios Coil α
+    set: Gogmazios α
+    defence: 94
+    slots:
+    - 2
+    - 1
+    - 1
+  - piece_type: legs
+    name: Battle Greaves α
+    set: Battle α
+    defence: 86
+    slots:
+    - 3
+    - 1
+  talisman:
+    name: Exploiter Charm III
+    skills:
+    - name: Weakness Exploit
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 3
+    Marathon Runner: 3
+    Divine Blessing: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Glory's Favor: 1
+    Stamina Surge: 1
+    Tremor Resistance: 1
+    Earplugs: 1
+    Evade Extender: 1
+    Peak Performance: 1
+  set_bonuses:
+  - name: Glory's Favor
+    type: group_skill
+    pieces: 3
+    level: 1
+    effects:
+    - Luck
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Sororal Earrings α
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Sororal Earrings α
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Sororal Earrings α
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Guild Cross Suit α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Guild Cross Suit α
+    slot_size: 2
+    decoration: Refresh Jewel【2】
+  - source: Guild Cross Suit α
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Gogmazios Coil α
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Gogmazios Coil α
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: Battle Greaves α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Battle Greaves α
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  free_slots:
+  - 2
+  - 2
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 9
+  tier: distinct bonuses
+  score:
+    total: 160.426
+    skills: 156.88
+    defence: 3.546
+  defence_total: 462
+  pieces:
+  - piece_type: head
+    name: Udra Mirehelm γ
+    set: Nu Udra γ
+    defence: 94
+    slots:
+    - 1
+    - 1
+    - 1
+  - piece_type: chest
+    name: Lagiacrus Mail β
+    set: Lagiacrus β
+    defence: 94
+    slots:
+    - 2
+    - 2
+    - 1
+  - piece_type: arms
+    name: Udra Mirebraces γ
+    set: Nu Udra γ
+    defence: 94
+    slots:
+    - 3
+    - 1
+    - 1
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Gore Greaves β
+    set: Gore β
+    defence: 90
+    slots:
+    - 3
+    - 1
+    - 1
+  talisman:
+    name: Exploiter Charm III
+    skills:
+    - name: Weakness Exploit
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 3
+    Marathon Runner: 3
+    Divine Blessing: 1
+    Partbreaker: 1
+    Adaptability: 1
+    Stamina Surge: 1
+    Tremor Resistance: 1
+    Resentment: 3
+    Flinch Free: 1
+    Nu Udra's Mutiny: 1
+  set_bonuses:
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Black Eclipse I
+  - name: Nu Udra's Mutiny
+    type: set_bonus
+    pieces: 2
+    level: 1
+    effects:
+    - Bad Blood I
+  decorations:
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: Lagiacrus Mail β
+    slot_size: 2
+    decoration: Destroyer Jewel【2】
+  - source: Lagiacrus Mail β
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: Udra Mirebraces γ
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Udra Mirebraces γ
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: Udra Mirebraces γ
+    slot_size: 1
+    decoration: Adapt Jewel【1】
+  - source: Gore Coil α
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Gore Coil α
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  - source: Gore Greaves β
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Gore Greaves β
+    slot_size: 1
+    decoration: Physique Jewel【1】
+  free_slots:
+  - 1
+  - 2
+  reserved_slots: 2
+  weapon_slots: 0
+- rank: 10
+  tier: distinct bonuses
+  score:
+    total: 158.132
+    skills: 155.04
+    defence: 3.092
+  defence_total: 454
+  pieces:
+  - piece_type: head
+    name: Udra Mirehelm γ
+    set: Nu Udra γ
+    defence: 94
+    slots:
+    - 1
+    - 1
+    - 1
+  - piece_type: chest
+    name: Gore Mail β
+    set: Gore β
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: arms
+    name: Rathalos Vambraces β
+    set: Rathalos β
+    defence: 90
+    slots:
+    - 3
+    - 2
+    - 1
+  - piece_type: waist
+    name: Gore Coil α
+    set: Gore α
+    defence: 90
+    slots:
+    - 3
+    - 1
+  - piece_type: legs
+    name: Gore Greaves β
+    set: Gore β
+    defence: 90
+    slots:
+    - 3
+    - 1
+    - 1
+  talisman:
+    name: Exploiter Charm III
+    skills:
+    - name: Weakness Exploit
+      level: 3
+  skills:
+    Burst: 5
+    Weakness Exploit: 5
+    Antivirus: 3
+    Gore Magala's Tyranny: 1
+    Constitution: 4
+    Marathon Runner: 3
+    Evade Window: 2
+    Divine Blessing: 1
+    Partbreaker: 1
+    Tremor Resistance: 1
+    Flinch Free: 1
+    Scale Layering: 1
+  set_bonuses:
+  - name: Scale Layering
+    type: group_skill
+    pieces: 3
+    level: 1
+    effects:
+    - Adrenaline
+  - name: Gore Magala's Tyranny
+    type: set_bonus
+    pieces: 3
+    level: 1
+    effects:
+    - Black Eclipse I
+  decorations:
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Protection Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sane Jewel【1】
+  - source: Udra Mirehelm γ
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: Gore Mail β
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Gore Mail β
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: Rathalos Vambraces β
+    slot_size: 3
+    decoration: Chain Jewel【3】
+  - source: Rathalos Vambraces β
+    slot_size: 2
+    decoration: Destroyer Jewel【2】
+  - source: Rathalos Vambraces β
+    slot_size: 1
+    decoration: Sprinter Jewel【1】
+  - source: Gore Coil α
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  - source: Gore Coil α
+    slot_size: 1
+    decoration: Footing Jewel【1】
+  - source: Gore Greaves β
+    slot_size: 3
+    decoration: Tenderizer Jewel【3】
+  free_slots:
+  - 1
+  - 1
+  reserved_slots: 2
+  weapon_slots: 0

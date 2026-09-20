@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from pathlib import Path
 
 import yaml
@@ -118,7 +118,20 @@ def _skill_levels(raw: list[dict]) -> list[SkillLevel]:
 
 
 def load_skills(path: Path = SKILLS_PATH) -> list[Skill]:
-    return [Skill(**raw) for raw in _load_yaml(path)]
+    raw = _load_yaml(path)
+    expected = {f.name for f in fields(Skill)}
+
+    if isinstance(raw, dict) and "sets" in raw:
+        raise ValueError(f"{path.name} is an optimiser results file, not a skills file.")
+    if not isinstance(raw, list) or not raw or not isinstance(raw[0], dict):
+        raise ValueError(f"{path.name} is not a skills file: expected a list of skills.")
+    if set(raw[0]) != expected:
+        raise ValueError(
+            f"{path.name} is not a skills file: entries should have the fields "
+            f"{', '.join(sorted(expected))}."
+        )
+
+    return [Skill(**entry) for entry in raw]
 
 
 def load_armor() -> list[ArmorPiece]:
