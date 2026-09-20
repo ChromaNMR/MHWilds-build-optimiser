@@ -7,10 +7,12 @@ from pathlib import Path
 
 import yaml
 
-SKILLS_PATH = Path(r"c:\Users\rando\Documents\VSCode projects\mhwilds optimiser\skills_default.yaml")
-ARMOR_PATH = Path(r"c:\Users\rando\Documents\VSCode projects\mhwilds optimiser\high_rank_armor.yaml")
-TALISMANS_PATH = Path(r"c:\Users\rando\Documents\VSCode projects\mhwilds optimiser\craftable_talismans.yaml")
-DECORATIONS_PATH = Path(r"c:\Users\rando\Documents\VSCode projects\mhwilds optimiser\decorations.yaml")
+DATA_DIR = Path(__file__).resolve().parent
+
+SKILLS_PATH = DATA_DIR / "skills_default.yaml"
+ARMOR_PATH = DATA_DIR / "high_rank_armor.yaml"
+TALISMANS_PATH = DATA_DIR / "craftable_talismans.yaml"
+DECORATIONS_PATH = DATA_DIR / "decorations.yaml"
 
 
 @dataclass
