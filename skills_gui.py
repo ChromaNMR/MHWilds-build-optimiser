@@ -16,15 +16,17 @@ from tkinter import filedialog, messagebox, ttk
 import yaml
 
 from load_data import SKILLS_PATH, GameData, Skill, load_game_data, load_skills
-from optimiser import GearSet, Scoring, optimise
+from optimiser import RESERVED_SLOTS, GearSet, Scoring, optimise
 from optimiser_report import render_set_inline
+
+NONE_OPTION = "(None)"
 
 
 class SkillsGui:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
         self.root.title("MHWilds Skill Weights")
-        self.root.geometry("700x560")
+        self.root.geometry("700x600")
 
         self.current_path: Path = Path(SKILLS_PATH)
         self.skills: list[Skill] = []
@@ -66,6 +68,30 @@ class SkillsGui:
         )
         self.type_combo.pack(side=tk.LEFT, padx=(4, 0))
         self.type_combo.bind("<<ComboboxSelected>>", lambda _e: self._refresh_listbox())
+
+        gogma = ttk.LabelFrame(self.root, text="Gogma weapon skills", padding=8)
+        gogma.pack(side=tk.TOP, fill=tk.X, padx=8, pady=(0, 8))
+        ttk.Label(gogma, text="Set Bonus:").pack(side=tk.LEFT)
+        self.gogma_set_var = tk.StringVar(value=NONE_OPTION)
+        self.gogma_set_combo = ttk.Combobox(
+            gogma,
+            textvariable=self.gogma_set_var,
+            values=[NONE_OPTION],
+            state="readonly",
+            width=26,
+        )
+        self.gogma_set_combo.pack(side=tk.LEFT, padx=(4, 16))
+
+        ttk.Label(gogma, text="Group Skill:").pack(side=tk.LEFT)
+        self.gogma_group_var = tk.StringVar(value=NONE_OPTION)
+        self.gogma_group_combo = ttk.Combobox(
+            gogma,
+            textvariable=self.gogma_group_var,
+            values=[NONE_OPTION],
+            state="readonly",
+            width=26,
+        )
+        self.gogma_group_combo.pack(side=tk.LEFT, padx=(4, 0))
 
         body = ttk.Frame(self.root, padding=8)
         body.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -123,6 +149,17 @@ class SkillsGui:
         )
         self.run_button.pack(side=tk.RIGHT)
 
+        self.reserved_slots_var = tk.StringVar(value=str(RESERVED_SLOTS))
+        ttk.Spinbox(
+            bottom,
+            from_=0,
+            to=10,
+            textvariable=self.reserved_slots_var,
+            width=3,
+            justify=tk.CENTER,
+        ).pack(side=tk.RIGHT, padx=(0, 8))
+        ttk.Label(bottom, text="Reserved level-1 slots:").pack(side=tk.RIGHT, padx=(8, 0))
+
         output_row = ttk.Frame(self.root, padding=(8, 0, 8, 4))
         output_row.pack(side=tk.BOTTOM, fill=tk.X)
         ttk.Label(output_row, text="Output file:").pack(side=tk.LEFT)
@@ -167,7 +204,22 @@ class SkillsGui:
         self.type_combo.config(values=types)
         self.type_var.set("All")
 
+        self._refresh_gogma_options()
         self._refresh_listbox()
+
+    def _refresh_gogma_options(self) -> None:
+        set_names = [NONE_OPTION] + sorted(
+            s.name for s in self.skills if s.type == "Set Bonus"
+        )
+        group_names = [NONE_OPTION] + sorted(
+            s.name for s in self.skills if s.type == "Group"
+        )
+        self.gogma_set_combo.config(values=set_names)
+        self.gogma_group_combo.config(values=group_names)
+        if self.gogma_set_var.get() not in set_names:
+            self.gogma_set_var.set(NONE_OPTION)
+        if self.gogma_group_var.get() not in group_names:
+            self.gogma_group_var.set(NONE_OPTION)
 
     def _filtered_skills(self) -> list[Skill]:
         selected_type = self.type_var.get()
@@ -287,6 +339,25 @@ class SkillsGui:
     def _run_optimiser(self) -> None:
         if self._optimiser_running:
             return
+
+        try:
+            reserved_slots = int(self.reserved_slots_var.get())
+            if reserved_slots < 0:
+                raise ValueError
+        except ValueError:
+            messagebox.showerror(
+                "Run Optimiser", "Reserved level-1 slots must be a non-negative integer."
+            )
+            return
+
+        extra_bonus_pieces: dict[str, int] = {}
+        set_bonus = self.gogma_set_var.get()
+        if set_bonus and set_bonus != NONE_OPTION:
+            extra_bonus_pieces[set_bonus] = extra_bonus_pieces.get(set_bonus, 0) + 1
+        group_skill = self.gogma_group_var.get()
+        if group_skill and group_skill != NONE_OPTION:
+            extra_bonus_pieces[group_skill] = extra_bonus_pieces.get(group_skill, 0) + 1
+
         self._optimiser_running = True
         self.run_button.config(state=tk.DISABLED, text="Working...")
         self.status_var.set("Running optimiser - this can take up to a minute...")
@@ -297,18 +368,29 @@ class SkillsGui:
         skills = self._effective_skills()
         thread = threading.Thread(
             target=self._optimiser_thread,
-            args=(skills, self._optimiser_queue),
+            args=(skills, reserved_slots, extra_bonus_pieces, self._optimiser_queue),
             daemon=True,
         )
         thread.start()
         self.root.after(100, self._poll_optimiser_queue)
 
-    def _optimiser_thread(self, skills: list[Skill], result_queue: queue.Queue) -> None:
+    def _optimiser_thread(
+        self,
+        skills: list[Skill],
+        reserved_slots: int,
+        extra_bonus_pieces: dict[str, int],
+        result_queue: queue.Queue,
+    ) -> None:
         try:
             if self.game_data is None:
                 self.game_data = load_game_data()
             scoring = Scoring(skills)
-            sets, _constraint_level, _optimiser = optimise(self.game_data, scoring)
+            sets, _constraint_level, _optimiser = optimise(
+                self.game_data,
+                scoring,
+                reserved_slots=reserved_slots,
+                extra_bonus_pieces=extra_bonus_pieces,
+            )
         except Exception as exc:  # noqa: BLE001
             result_queue.put(("error", exc, None))
             return

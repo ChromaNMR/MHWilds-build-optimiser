@@ -47,6 +47,13 @@ def _sorted_skills(gear_set: GearSet, scoring: Scoring):
     return sorted(gear_set.skill_levels.items(), key=sort_key)
 
 
+def _bonus_pieces_text(bonus) -> str:
+    text = f"{bonus.pieces} pieces"
+    if bonus.extra:
+        text += f" (+{bonus.extra} weapon)"
+    return text
+
+
 def _decorations_by_source(gear_set: GearSet) -> dict[str, list[str]]:
     grouped: dict[str, list[str]] = {}
     for placement in gear_set.placements:
@@ -106,7 +113,7 @@ def render_set(gear_set: GearSet, rank: int, scoring: Scoring) -> str:
             weight = scoring.weight(bonus.name)
             marker = f"  [w{weight:g}]" if weight else ""
             lines.append(
-                f"    {bonus.name:<28} {kind:<5} {bonus.pieces} pieces"
+                f"    {bonus.name:<28} {kind:<5} {_bonus_pieces_text(bonus)}"
                 f" -> level {bonus.level}  ({effects}){marker}"
             )
 
@@ -210,7 +217,7 @@ def render_set_inline(gear_set: GearSet, rank: int, total: int, scoring: Scoring
             weight = scoring.weight(bonus.name)
             marker = f"  [w{weight:g}]" if weight else ""
             lines.append(
-                f"    {bonus.name:<28} {kind:<5} {bonus.pieces} pieces"
+                f"    {bonus.name:<28} {kind:<5} {_bonus_pieces_text(bonus)}"
                 f" -> level {bonus.level}  ({effects}){marker}"
             )
 
@@ -291,6 +298,7 @@ def gear_set_to_dict(gear_set: GearSet, rank: int, scoring: Scoring) -> dict:
                 "name": b.name,
                 "type": b.bonus_type,
                 "pieces": b.pieces,
+                "extra_from_weapon": b.extra,
                 "level": b.level,
                 "effects": list(b.effects),
             }

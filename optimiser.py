@@ -477,7 +477,8 @@ class SlotAssignment:
 class ActiveBonus:
     name: str
     bonus_type: str
-    pieces: int
+    pieces: int  # from armour only
+    extra: int  # from a weapon-granted bonus point, if any (see extra_bonus_pieces)
     level: int
     effects: list[str]
 
@@ -540,6 +541,7 @@ class Optimiser:
         beam_width: int = BEAM_WIDTH,
         final_pool: int = FINAL_POOL,
         reserved_slots: int = RESERVED_SLOTS,
+        extra_bonus_pieces: dict[str, int] | None = None,
     ) -> None:
         self.game = game
         self.scoring = scoring
@@ -547,6 +549,11 @@ class Optimiser:
         self.beam_width = beam_width
         self.final_pool = final_pool
         self.reserved_slots = reserved_slots
+        # Piece-count-equivalents credited to a named set/group bonus from a
+        # source outside armour (e.g. a weapon's own bonus point), keyed by
+        # the bonus's base name (see bonus_base_name). See the GUI's "Gogma
+        # weapon skills" selectors.
+        self.extra_bonus_pieces = {k: v for k, v in (extra_bonus_pieces or {}).items() if v}
         self._slot_potential = self._build_slot_potential()
         self._talisman_levels = self._best_talisman_levels()
 
@@ -594,7 +601,8 @@ class Optimiser:
                 if bonus_idx is None:
                     continue
                 info = context.bonus_registry[name]
-                if info.level_for(state.bonus_counts[bonus_idx]) < target:
+                have = state.bonus_counts[bonus_idx] + self.extra_bonus_pieces.get(name, 0)
+                if info.level_for(have) < target:
                     return False
                 continue
             shortfall = target - state.levels[idx]
@@ -638,7 +646,7 @@ class Optimiser:
             total += scoring.score(name, state.levels[idx])
 
         for idx, name in enumerate(self.context.relevant_bonuses):
-            count = state.bonus_counts[idx]
+            count = state.bonus_counts[idx] + self.extra_bonus_pieces.get(name, 0)
             if count == 0:
                 continue
             info = self.context.bonus_registry[name]
@@ -923,22 +931,32 @@ class Optimiser:
                 base = bonus_base_name(bonus.name)
                 counts[base] = counts.get(base, 0) + 1
 
+        # A weapon-granted bonus point can activate a bonus no chosen armour
+        # piece carries at all, so consider every name with an extra point too.
+        names = set(counts) | {n for n, e in self.extra_bonus_pieces.items() if e}
+
         active: list[ActiveBonus] = []
-        for name, pieces_count in counts.items():
-            info = self.context.bonus_registry[name]
-            level = info.level_for(pieces_count)
+        for name in names:
+            info = self.context.bonus_registry.get(name)
+            if info is None:
+                continue  # extra point on a bonus with no known armour source
+            armour_pieces = counts.get(name, 0)
+            extra = self.extra_bonus_pieces.get(name, 0)
+            total = armour_pieces + extra
+            level = info.level_for(total)
             if level <= 0:
                 continue
             active.append(
                 ActiveBonus(
                     name=name,
                     bonus_type=info.bonus_type,
-                    pieces=pieces_count,
+                    pieces=armour_pieces,
+                    extra=extra,
                     level=level,
                     effects=[
                         effect
                         for effect, threshold in zip(info.effects, info.thresholds)
-                        if pieces_count >= threshold
+                        if total >= threshold
                     ],
                 )
             )
@@ -1025,6 +1043,7 @@ def optimise(
     final_pool: int = FINAL_POOL,
     reserved_slots: int = RESERVED_SLOTS,
     tiers=DEFAULT_TIERS,
+    extra_bonus_pieces: dict[str, int] | None = None,
 ) -> tuple[list[GearSet], int, Optimiser]:
     optimiser = Optimiser(
         game,
@@ -1032,6 +1051,7 @@ def optimise(
         beam_width=beam_width,
         final_pool=final_pool,
         reserved_slots=reserved_slots,
+        extra_bonus_pieces=extra_bonus_pieces,
     )
     sets, constraint_level = optimiser.run(tiers)
     return sets, constraint_level, optimiser
