@@ -4,7 +4,14 @@
 # standalone accessory-type piece). 'slots' gives the transcended slot
 # values when the piece supports Armor Transcending (rarity 5-7 in most
 # cases), otherwise the base slot values (see 'slots_source').
+# 'piece_type' is the equipment slot (head/chest/arms/waist/legs) the
+# piece occupies. For 5-piece sets this is inferred from position within
+# the set, since the source data is consistently ordered
+# head, chest, arms, waist, legs per set/rarity -- piece *names* alone are
+# not a reliable indicator (e.g. 'Coat' is a chest piece in one set but a
+# waist piece in another). Incomplete sets are classified by hand instead.
 - name: Afi Crown α
+  piece_type: head
   set: Afi α
   rarity: 5
   defense:
@@ -41,6 +48,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536396
 - name: Afi Top α
+  piece_type: chest
   set: Afi α
   rarity: 5
   defense:
@@ -77,6 +85,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536396
 - name: Afi Armguards α
+  piece_type: arms
   set: Afi α
   rarity: 5
   defense:
@@ -111,6 +120,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536396
 - name: Afi Wrap α
+  piece_type: waist
   set: Afi α
   rarity: 5
   defense:
@@ -149,6 +159,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536396
 - name: Afi Sandals α
+  piece_type: legs
   set: Afi α
   rarity: 5
   defense:
@@ -187,6 +198,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536396
 - name: Ajarakan Helm α
+  piece_type: head
   set: Ajarakan α
   rarity: 6
   defense:
@@ -216,6 +228,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502024
 - name: Ajarakan Mail α
+  piece_type: chest
   set: Ajarakan α
   rarity: 6
   defense:
@@ -245,6 +258,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502024
 - name: Ajarakan Vambraces α
+  piece_type: arms
   set: Ajarakan α
   rarity: 6
   defense:
@@ -274,6 +288,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502024
 - name: Ajarakan Coil α
+  piece_type: waist
   set: Ajarakan α
   rarity: 6
   defense:
@@ -303,6 +318,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502024
 - name: Ajarakan Greaves α
+  piece_type: legs
   set: Ajarakan α
   rarity: 6
   defense:
@@ -332,6 +348,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502024
 - name: Ajarakan Helm β
+  piece_type: head
   set: Ajarakan β
   rarity: 6
   defense:
@@ -361,6 +378,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502025
 - name: Ajarakan Mail β
+  piece_type: chest
   set: Ajarakan β
   rarity: 6
   defense:
@@ -388,6 +406,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502025
 - name: Ajarakan Vambraces β
+  piece_type: arms
   set: Ajarakan β
   rarity: 6
   defense:
@@ -417,6 +436,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502025
 - name: Ajarakan Coil β
+  piece_type: waist
   set: Ajarakan β
   rarity: 6
   defense:
@@ -446,6 +466,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502025
 - name: Ajarakan Greaves β
+  piece_type: legs
   set: Ajarakan β
   rarity: 6
   defense:
@@ -473,6 +494,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502025
 - name: Demon Prayer Beads α
+  piece_type: head
   set: Akuma α
   rarity: 6
   defense:
@@ -500,6 +522,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523136
 - name: Demon Garb α
+  piece_type: chest
   set: Akuma α
   rarity: 6
   defense:
@@ -527,6 +550,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523136
 - name: Demon Arm Wraps α
+  piece_type: arms
   set: Akuma α
   rarity: 6
   defense:
@@ -554,6 +578,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523136
 - name: Demon Belt α
+  piece_type: waist
   set: Akuma α
   rarity: 6
   defense:
@@ -581,6 +606,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523136
 - name: Demon Pants α
+  piece_type: legs
   set: Akuma α
   rarity: 6
   defense:
@@ -608,6 +634,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523136
 - name: Alloy Helm α
+  piece_type: head
   set: Alloy α
   rarity: 5
   defense:
@@ -630,6 +657,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501902
 - name: Alloy Mail α
+  piece_type: chest
   set: Alloy α
   rarity: 5
   defense:
@@ -652,6 +680,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501902
 - name: Alloy Vambraces α
+  piece_type: arms
   set: Alloy α
   rarity: 5
   defense:
@@ -674,6 +703,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501902
 - name: Alloy Coil α
+  piece_type: waist
   set: Alloy α
   rarity: 5
   defense:
@@ -698,6 +728,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501902
 - name: Alloy Greaves α
+  piece_type: legs
   set: Alloy α
   rarity: 5
   defense:
@@ -722,6 +753,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501902
 - name: Amstrigian α
+  piece_type: head
   set: Amstrigian α
   rarity: 5
   defense:
@@ -751,6 +783,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/513483
 - name: Analytic E.Y.E. α
+  piece_type: head
   set: Analytic E.Y.E. α
   rarity: 8
   defense:
@@ -773,6 +806,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572036
 - name: Arkvulcan Helm α
+  piece_type: head
   set: Arkveld α
   rarity: 8
   defense:
@@ -809,6 +843,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502045
 - name: Arkvulcan Mail α
+  piece_type: chest
   set: Arkveld α
   rarity: 8
   defense:
@@ -845,6 +880,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502045
 - name: Arkvulcan Vambraces α
+  piece_type: arms
   set: Arkveld α
   rarity: 8
   defense:
@@ -881,6 +917,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502045
 - name: Arkvulcan Coil α
+  piece_type: waist
   set: Arkveld α
   rarity: 8
   defense:
@@ -917,6 +954,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502045
 - name: Arkvulcan Greaves α
+  piece_type: legs
   set: Arkveld α
   rarity: 8
   defense:
@@ -953,6 +991,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502045
 - name: Arkvulcan Helm β
+  piece_type: head
   set: Arkveld β
   rarity: 8
   defense:
@@ -987,6 +1026,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502046
 - name: Arkvulcan Mail β
+  piece_type: chest
   set: Arkveld β
   rarity: 8
   defense:
@@ -1021,6 +1061,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502046
 - name: Arkvulcan Vambraces β
+  piece_type: arms
   set: Arkveld β
   rarity: 8
   defense:
@@ -1055,6 +1096,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502046
 - name: Arkvulcan Coil β
+  piece_type: waist
   set: Arkveld β
   rarity: 8
   defense:
@@ -1091,6 +1133,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502046
 - name: Arkvulcan Greaves β
+  piece_type: legs
   set: Arkveld β
   rarity: 8
   defense:
@@ -1127,6 +1170,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502046
 - name: Arkvulcan Helm γ
+  piece_type: head
   set: Arkveld γ
   rarity: 8
   defense:
@@ -1161,6 +1205,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580835
 - name: Arkvulcan Mail γ
+  piece_type: chest
   set: Arkveld γ
   rarity: 8
   defense:
@@ -1197,6 +1242,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580835
 - name: Arkvulcan Vambraces γ
+  piece_type: arms
   set: Arkveld γ
   rarity: 8
   defense:
@@ -1233,6 +1279,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580835
 - name: Arkvulcan Coil γ
+  piece_type: waist
   set: Arkveld γ
   rarity: 8
   defense:
@@ -1269,6 +1316,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580835
 - name: Arkvulcan Greaves γ
+  piece_type: legs
   set: Arkveld γ
   rarity: 8
   defense:
@@ -1305,6 +1353,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580835
 - name: Artian Helm α
+  piece_type: head
   set: Artian α
   rarity: 6
   defense:
@@ -1334,6 +1383,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502032
 - name: Artian Mail α
+  piece_type: chest
   set: Artian α
   rarity: 6
   defense:
@@ -1363,6 +1413,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502032
 - name: Artian Vambraces α
+  piece_type: arms
   set: Artian α
   rarity: 6
   defense:
@@ -1392,6 +1443,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502032
 - name: Artian Coil α
+  piece_type: waist
   set: Artian α
   rarity: 6
   defense:
@@ -1421,6 +1473,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502032
 - name: Artian Greaves α
+  piece_type: legs
   set: Artian α
   rarity: 6
   defense:
@@ -1450,6 +1503,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502032
 - name: Aviator Shades α
+  piece_type: head
   set: Aviator Shades α
   rarity: 8
   defense:
@@ -1474,6 +1528,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559729
 - name: Azure Age Hair α
+  piece_type: head
   set: Azure Age α
   rarity: 8
   defense:
@@ -1512,6 +1567,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/584418
 - name: Azure Age Haori α
+  piece_type: chest
   set: Azure Age α
   rarity: 8
   defense:
@@ -1550,6 +1606,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/584418
 - name: Azure Age Sleeve α
+  piece_type: arms
   set: Azure Age α
   rarity: 8
   defense:
@@ -1588,6 +1645,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/584418
 - name: Azure Age Obi α
+  piece_type: waist
   set: Azure Age α
   rarity: 8
   defense:
@@ -1626,6 +1684,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/584418
 - name: Azure Age Geta α
+  piece_type: legs
   set: Azure Age α
   rarity: 8
   defense:
@@ -1664,6 +1723,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/584418
 - name: Azuz Headdress α
+  piece_type: head
   set: Azuz α
   rarity: 6
   defense:
@@ -1691,6 +1751,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502408
 - name: Azuz Apron α
+  piece_type: chest
   set: Azuz α
   rarity: 6
   defense:
@@ -1718,6 +1779,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502408
 - name: Azuz Pants α
+  piece_type: legs
   set: Azuz α
   rarity: 6
   defense:
@@ -1745,6 +1807,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502408
 - name: Balahara Helm α
+  piece_type: head
   set: Balahara α
   rarity: 5
   defense:
@@ -1774,6 +1837,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501929
 - name: Balahara Mail α
+  piece_type: chest
   set: Balahara α
   rarity: 5
   defense:
@@ -1803,6 +1867,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501929
 - name: Balahara Vambraces α
+  piece_type: arms
   set: Balahara α
   rarity: 5
   defense:
@@ -1832,6 +1897,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501929
 - name: Balahara Coil α
+  piece_type: waist
   set: Balahara α
   rarity: 5
   defense:
@@ -1861,6 +1927,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501929
 - name: Balahara Greaves α
+  piece_type: legs
   set: Balahara α
   rarity: 5
   defense:
@@ -1890,6 +1957,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501929
 - name: Balahara Helm β
+  piece_type: head
   set: Balahara β
   rarity: 5
   defense:
@@ -1917,6 +1985,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501930
 - name: Balahara Mail β
+  piece_type: chest
   set: Balahara β
   rarity: 5
   defense:
@@ -1944,6 +2013,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501930
 - name: Balahara Vambraces β
+  piece_type: arms
   set: Balahara β
   rarity: 5
   defense:
@@ -1971,6 +2041,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501930
 - name: Balahara Coil β
+  piece_type: waist
   set: Balahara β
   rarity: 5
   defense:
@@ -1998,6 +2069,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501930
 - name: Balahara Greaves β
+  piece_type: legs
   set: Balahara β
   rarity: 5
   defense:
@@ -2025,6 +2097,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501930
 - name: Bale Burgeonet α
+  piece_type: head
   set: Bale α
   rarity: 8
   defense:
@@ -2049,6 +2122,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553652
 - name: Bale Cuirass α
+  piece_type: chest
   set: Bale α
   rarity: 8
   defense:
@@ -2073,6 +2147,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553652
 - name: Bale Gauntlets α
+  piece_type: arms
   set: Bale α
   rarity: 8
   defense:
@@ -2099,6 +2174,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553652
 - name: Bale Flanchard α
+  piece_type: waist
   set: Bale α
   rarity: 8
   defense:
@@ -2123,6 +2199,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553652
 - name: Bale Sollerets α
+  piece_type: legs
   set: Bale α
   rarity: 8
   defense:
@@ -2147,6 +2224,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553652
 - name: Battle Helm α
+  piece_type: head
   set: Battle α
   rarity: 6
   defense:
@@ -2174,6 +2252,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502413
 - name: Battle Mail α
+  piece_type: chest
   set: Battle α
   rarity: 6
   defense:
@@ -2203,6 +2282,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502413
 - name: Battle Vambraces α
+  piece_type: arms
   set: Battle α
   rarity: 6
   defense:
@@ -2230,6 +2310,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502413
 - name: Battle Coil α
+  piece_type: waist
   set: Battle α
   rarity: 6
   defense:
@@ -2259,6 +2340,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502413
 - name: Battle Greaves α
+  piece_type: legs
   set: Battle α
   rarity: 6
   defense:
@@ -2288,6 +2370,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502413
 - name: Blango Helm α
+  piece_type: head
   set: Blango α
   rarity: 6
   defense:
@@ -2324,6 +2407,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502030
 - name: Blango Mail α
+  piece_type: chest
   set: Blango α
   rarity: 6
   defense:
@@ -2360,6 +2444,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502030
 - name: Blango Vambraces α
+  piece_type: arms
   set: Blango α
   rarity: 6
   defense:
@@ -2396,6 +2481,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502030
 - name: Blango Coil α
+  piece_type: waist
   set: Blango α
   rarity: 6
   defense:
@@ -2432,6 +2518,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502030
 - name: Blango Greaves α
+  piece_type: legs
   set: Blango α
   rarity: 6
   defense:
@@ -2468,6 +2555,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502030
 - name: Blango Helm β
+  piece_type: head
   set: Blango β
   rarity: 6
   defense:
@@ -2502,6 +2590,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502031
 - name: Blango Mail β
+  piece_type: chest
   set: Blango β
   rarity: 6
   defense:
@@ -2536,6 +2625,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502031
 - name: Blango Vambraces β
+  piece_type: arms
   set: Blango β
   rarity: 6
   defense:
@@ -2570,6 +2660,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502031
 - name: Blango Coil β
+  piece_type: waist
   set: Blango β
   rarity: 6
   defense:
@@ -2604,6 +2695,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502031
 - name: Blango Greaves β
+  piece_type: legs
   set: Blango β
   rarity: 6
   defense:
@@ -2638,6 +2730,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502031
 - name: Blessed Waistchain α
+  piece_type: waist
   set: Blessed Waistchain α
   rarity: 8
   defense:
@@ -2662,6 +2755,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572035
 - name: Blossom Headgear α
+  piece_type: head
   set: Blossom α
   rarity: 5
   defense:
@@ -2689,6 +2783,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514807
 - name: Blossom Vest α
+  piece_type: chest
   set: Blossom α
   rarity: 5
   defense:
@@ -2716,6 +2811,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514807
 - name: Blossom Cuffs α
+  piece_type: arms
   set: Blossom α
   rarity: 5
   defense:
@@ -2743,6 +2839,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514807
 - name: Blossom Coat α
+  piece_type: waist
   set: Blossom α
   rarity: 5
   defense:
@@ -2772,6 +2869,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514807
 - name: Blossom Boots α
+  piece_type: legs
   set: Blossom α
   rarity: 5
   defense:
@@ -2801,6 +2899,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514807
 - name: Bone Helm α
+  piece_type: head
   set: Bone α
   rarity: 5
   defense:
@@ -2825,6 +2924,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501901
 - name: Bone Mail α
+  piece_type: chest
   set: Bone α
   rarity: 5
   defense:
@@ -2849,6 +2949,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501901
 - name: Bone Vambraces α
+  piece_type: arms
   set: Bone α
   rarity: 5
   defense:
@@ -2873,6 +2974,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501901
 - name: Bone Coil α
+  piece_type: waist
   set: Bone α
   rarity: 5
   defense:
@@ -2895,6 +2997,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501901
 - name: Bone Greaves α
+  piece_type: legs
   set: Bone α
   rarity: 5
   defense:
@@ -2917,6 +3020,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501901
 - name: Bulaqchi Specs α
+  piece_type: head
   set: Bulaqchi α
   rarity: 5
   defense:
@@ -2946,6 +3050,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501903
 - name: Bulaqchi Specs β
+  piece_type: head
   set: Bulaqchi β
   rarity: 5
   defense:
@@ -2973,6 +3078,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501904
 - name: Butterfly Vertex α
+  piece_type: head
   set: Butterfly α
   rarity: 6
   defense:
@@ -3004,6 +3110,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502410
 - name: Butterfly Thorax α
+  piece_type: chest
   set: Butterfly α
   rarity: 6
   defense:
@@ -3035,6 +3142,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502410
 - name: Butterfly Brachia α
+  piece_type: arms
   set: Butterfly α
   rarity: 6
   defense:
@@ -3066,6 +3174,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502410
 - name: Butterfly Elytra α
+  piece_type: waist
   set: Butterfly α
   rarity: 6
   defense:
@@ -3097,6 +3206,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502410
 - name: Butterfly Crura α
+  piece_type: legs
   set: Butterfly α
   rarity: 6
   defense:
@@ -3128,6 +3238,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502410
 - name: Ceremonial Helm α
+  piece_type: head
   set: Ceremonial α
   rarity: 5
   defense:
@@ -3164,6 +3275,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572033
 - name: Ceremonial Mail α
+  piece_type: chest
   set: Ceremonial α
   rarity: 5
   defense:
@@ -3202,6 +3314,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572033
 - name: Ceremonial Vambraces α
+  piece_type: arms
   set: Ceremonial α
   rarity: 5
   defense:
@@ -3238,6 +3351,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572033
 - name: Ceremonial Coil α
+  piece_type: waist
   set: Ceremonial α
   rarity: 5
   defense:
@@ -3276,6 +3390,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572033
 - name: Ceremonial Greaves α
+  piece_type: legs
   set: Ceremonial α
   rarity: 5
   defense:
@@ -3312,6 +3427,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572033
 - name: Chainmail Headgear α
+  piece_type: head
   set: Chainmail α
   rarity: 5
   defense:
@@ -3334,6 +3450,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501900
 - name: Chainmail Armor α
+  piece_type: chest
   set: Chainmail α
   rarity: 5
   defense:
@@ -3358,6 +3475,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501900
 - name: Chainmail Gloves α
+  piece_type: arms
   set: Chainmail α
   rarity: 5
   defense:
@@ -3382,6 +3500,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501900
 - name: Chainmail Belt α
+  piece_type: waist
   set: Chainmail α
   rarity: 5
   defense:
@@ -3406,6 +3525,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501900
 - name: Chainmail Pants α
+  piece_type: legs
   set: Chainmail α
   rarity: 5
   defense:
@@ -3428,6 +3548,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501900
 - name: Chatacabra Helm α
+  piece_type: head
   set: Chatacabra α
   rarity: 5
   defense:
@@ -3457,6 +3578,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501917
 - name: Chatacabra Mail α
+  piece_type: chest
   set: Chatacabra α
   rarity: 5
   defense:
@@ -3486,6 +3608,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501917
 - name: Chatacabra Vambraces α
+  piece_type: arms
   set: Chatacabra α
   rarity: 5
   defense:
@@ -3515,6 +3638,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501917
 - name: Chatacabra Coil α
+  piece_type: waist
   set: Chatacabra α
   rarity: 5
   defense:
@@ -3544,6 +3668,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501917
 - name: Chatacabra Greaves α
+  piece_type: legs
   set: Chatacabra α
   rarity: 5
   defense:
@@ -3573,6 +3698,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501917
 - name: Chatacabra Helm β
+  piece_type: head
   set: Chatacabra β
   rarity: 5
   defense:
@@ -3600,6 +3726,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501918
 - name: Chatacabra Mail β
+  piece_type: chest
   set: Chatacabra β
   rarity: 5
   defense:
@@ -3627,6 +3754,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501918
 - name: Chatacabra Vambraces β
+  piece_type: arms
   set: Chatacabra β
   rarity: 5
   defense:
@@ -3654,6 +3782,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501918
 - name: Chatacabra Coil β
+  piece_type: waist
   set: Chatacabra β
   rarity: 5
   defense:
@@ -3681,6 +3810,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501918
 - name: Chatacabra Greaves β
+  piece_type: legs
   set: Chatacabra β
   rarity: 5
   defense:
@@ -3708,6 +3838,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501918
 - name: Clerk Visor α
+  piece_type: head
   set: Clerk α
   rarity: 6
   defense:
@@ -3739,6 +3870,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512883
 - name: Clerk Suit α
+  piece_type: chest
   set: Clerk α
   rarity: 6
   defense:
@@ -3768,6 +3900,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512883
 - name: Clerk Vambraces α
+  piece_type: arms
   set: Clerk α
   rarity: 6
   defense:
@@ -3799,6 +3932,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512883
 - name: Clerk Belt α
+  piece_type: waist
   set: Clerk α
   rarity: 6
   defense:
@@ -3828,6 +3962,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512883
 - name: Clerk Shoes α
+  piece_type: legs
   set: Clerk α
   rarity: 6
   defense:
@@ -3857,6 +3992,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512883
 - name: Comaqchi Accessory α
+  piece_type: head
   set: Comaqchi α
   rarity: 5
   defense:
@@ -3886,6 +4022,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501913
 - name: Comaqchi Accessory β
+  piece_type: head
   set: Comaqchi β
   rarity: 5
   defense:
@@ -3913,6 +4050,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501914
 - name: Commission Helm α
+  piece_type: head
   set: Commission α
   rarity: 6
   defense:
@@ -3937,6 +4075,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503111
 - name: Commission Mail α
+  piece_type: chest
   set: Commission α
   rarity: 6
   defense:
@@ -3961,6 +4100,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503111
 - name: Commission Vambraces α
+  piece_type: arms
   set: Commission α
   rarity: 6
   defense:
@@ -3985,6 +4125,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503111
 - name: Commission Coil α
+  piece_type: waist
   set: Commission α
   rarity: 6
   defense:
@@ -4009,6 +4150,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503111
 - name: Commission Greaves α
+  piece_type: legs
   set: Commission α
   rarity: 6
   defense:
@@ -4033,6 +4175,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503111
 - name: Conga Helm α
+  piece_type: head
   set: Conga α
   rarity: 5
   defense:
@@ -4062,6 +4205,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501923
 - name: Conga Mail α
+  piece_type: chest
   set: Conga α
   rarity: 5
   defense:
@@ -4091,6 +4235,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501923
 - name: Conga Vambraces α
+  piece_type: arms
   set: Conga α
   rarity: 5
   defense:
@@ -4120,6 +4265,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501923
 - name: Conga Coil α
+  piece_type: waist
   set: Conga α
   rarity: 5
   defense:
@@ -4149,6 +4295,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501923
 - name: Conga Greaves α
+  piece_type: legs
   set: Conga α
   rarity: 5
   defense:
@@ -4178,6 +4325,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501923
 - name: Conga Helm β
+  piece_type: head
   set: Conga β
   rarity: 5
   defense:
@@ -4205,6 +4353,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501924
 - name: Conga Mail β
+  piece_type: chest
   set: Conga β
   rarity: 5
   defense:
@@ -4232,6 +4381,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501924
 - name: Conga Vambraces β
+  piece_type: arms
   set: Conga β
   rarity: 5
   defense:
@@ -4259,6 +4409,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501924
 - name: Conga Coil β
+  piece_type: waist
   set: Conga β
   rarity: 5
   defense:
@@ -4286,6 +4437,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501924
 - name: Conga Greaves β
+  piece_type: legs
   set: Conga β
   rarity: 5
   defense:
@@ -4313,6 +4465,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501924
 - name: Dahaad Shardhelm α
+  piece_type: head
   set: Dahaad α
   rarity: 7
   defense:
@@ -4349,6 +4502,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502035
 - name: Dahaad Shardmail α
+  piece_type: chest
   set: Dahaad α
   rarity: 7
   defense:
@@ -4385,6 +4539,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502035
 - name: Dahaad Shardbraces α
+  piece_type: arms
   set: Dahaad α
   rarity: 7
   defense:
@@ -4421,6 +4576,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502035
 - name: Dahaad Shardcoil α
+  piece_type: waist
   set: Dahaad α
   rarity: 7
   defense:
@@ -4457,6 +4613,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502035
 - name: Dahaad Shardgreaves α
+  piece_type: legs
   set: Dahaad α
   rarity: 7
   defense:
@@ -4493,6 +4650,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502035
 - name: Dahaad Shardhelm β
+  piece_type: head
   set: Dahaad β
   rarity: 7
   defense:
@@ -4527,6 +4685,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502036
 - name: Dahaad Shardmail β
+  piece_type: chest
   set: Dahaad β
   rarity: 7
   defense:
@@ -4563,6 +4722,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502036
 - name: Dahaad Shardbraces β
+  piece_type: arms
   set: Dahaad β
   rarity: 7
   defense:
@@ -4599,6 +4759,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502036
 - name: Dahaad Shardcoil β
+  piece_type: waist
   set: Dahaad β
   rarity: 7
   defense:
@@ -4635,6 +4796,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502036
 - name: Dahaad Shardgreaves β
+  piece_type: legs
   set: Dahaad β
   rarity: 7
   defense:
@@ -4669,6 +4831,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502036
 - name: Dahaad Shardhelm γ
+  piece_type: head
   set: Dahaad γ
   rarity: 8
   defense:
@@ -4703,6 +4866,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572237
 - name: Dahaad Shardmail γ
+  piece_type: chest
   set: Dahaad γ
   rarity: 8
   defense:
@@ -4737,6 +4901,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572237
 - name: Dahaad Shardbraces γ
+  piece_type: arms
   set: Dahaad γ
   rarity: 8
   defense:
@@ -4773,6 +4938,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572237
 - name: Dahaad Shardcoil γ
+  piece_type: waist
   set: Dahaad γ
   rarity: 8
   defense:
@@ -4809,6 +4975,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572237
 - name: Dahaad Shardgreaves γ
+  piece_type: legs
   set: Dahaad γ
   rarity: 8
   defense:
@@ -4845,6 +5012,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572237
 - name: Damascus Helm α
+  piece_type: head
   set: Damascus α
   rarity: 7
   defense:
@@ -4869,6 +5037,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502034
 - name: Damascus Mail α
+  piece_type: chest
   set: Damascus α
   rarity: 7
   defense:
@@ -4893,6 +5062,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502034
 - name: Damascus Vambraces α
+  piece_type: arms
   set: Damascus α
   rarity: 7
   defense:
@@ -4917,6 +5087,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502034
 - name: Damascus Coil α
+  piece_type: waist
   set: Damascus α
   rarity: 7
   defense:
@@ -4941,6 +5112,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502034
 - name: Damascus Greaves α
+  piece_type: legs
   set: Damascus α
   rarity: 7
   defense:
@@ -4965,6 +5137,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502034
 - name: Death Stench Brain α
+  piece_type: head
   set: Death Stench α
   rarity: 6
   defense:
@@ -4989,6 +5162,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502436
 - name: Death Stench Muscle α
+  piece_type: chest
   set: Death Stench α
   rarity: 6
   defense:
@@ -5013,6 +5187,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502436
 - name: Death Stench Grip α
+  piece_type: arms
   set: Death Stench α
   rarity: 6
   defense:
@@ -5037,6 +5212,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502436
 - name: Death Stench Bowels α
+  piece_type: waist
   set: Death Stench α
   rarity: 6
   defense:
@@ -5061,6 +5237,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502436
 - name: Death Stench Heel α
+  piece_type: legs
   set: Death Stench α
   rarity: 6
   defense:
@@ -5085,6 +5262,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502436
 - name: Diver's Mask α
+  piece_type: head
   set: Diver α
   rarity: 5
   defense:
@@ -5112,6 +5290,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532719
 - name: Diver's Suit α
+  piece_type: chest
   set: Diver α
   rarity: 5
   defense:
@@ -5141,6 +5320,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532719
 - name: Diver's Braces α
+  piece_type: arms
   set: Diver α
   rarity: 5
   defense:
@@ -5170,6 +5350,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532719
 - name: Diver's Belt α
+  piece_type: waist
   set: Diver α
   rarity: 5
   defense:
@@ -5199,6 +5380,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532719
 - name: Diver's Boots α
+  piece_type: legs
   set: Diver α
   rarity: 5
   defense:
@@ -5228,6 +5410,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532719
 - name: Dober Helm α
+  piece_type: head
   set: Dober α
   rarity: 7
   defense:
@@ -5252,6 +5435,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502033
 - name: Dober Mail α
+  piece_type: chest
   set: Dober α
   rarity: 7
   defense:
@@ -5276,6 +5460,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502033
 - name: Dober Vambraces α
+  piece_type: arms
   set: Dober α
   rarity: 7
   defense:
@@ -5300,6 +5485,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502033
 - name: Dober Coil α
+  piece_type: waist
   set: Dober α
   rarity: 7
   defense:
@@ -5324,6 +5510,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502033
 - name: Dober Greaves α
+  piece_type: legs
   set: Dober α
   rarity: 7
   defense:
@@ -5348,6 +5535,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502033
 - name: Doshaguma Helm α
+  piece_type: head
   set: Doshaguma α
   rarity: 6
   defense:
@@ -5384,6 +5572,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502404
 - name: Doshaguma Mail α
+  piece_type: chest
   set: Doshaguma α
   rarity: 6
   defense:
@@ -5420,6 +5609,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502404
 - name: Doshaguma Braces α
+  piece_type: arms
   set: Doshaguma α
   rarity: 6
   defense:
@@ -5456,6 +5646,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502404
 - name: Doshaguma Coil α
+  piece_type: waist
   set: Doshaguma α
   rarity: 6
   defense:
@@ -5490,6 +5681,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502404
 - name: Doshaguma Greaves α
+  piece_type: legs
   set: Doshaguma α
   rarity: 6
   defense:
@@ -5526,6 +5718,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502404
 - name: Doshaguma Helm β
+  piece_type: head
   set: Doshaguma β
   rarity: 6
   defense:
@@ -5562,6 +5755,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502405
 - name: Doshaguma Mail β
+  piece_type: chest
   set: Doshaguma β
   rarity: 6
   defense:
@@ -5596,6 +5790,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502405
 - name: Doshaguma Braces β
+  piece_type: arms
   set: Doshaguma β
   rarity: 6
   defense:
@@ -5632,6 +5827,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502405
 - name: Doshaguma Coil β
+  piece_type: waist
   set: Doshaguma β
   rarity: 6
   defense:
@@ -5666,6 +5862,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502405
 - name: Doshaguma Greaves β
+  piece_type: legs
   set: Doshaguma β
   rarity: 6
   defense:
@@ -5702,6 +5899,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502405
 - name: Doshagumask α
+  piece_type: head
   set: Doshagumask α
   rarity: 6
   defense:
@@ -5740,6 +5938,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/545729
 - name: Dragonking Eyepatch α
+  piece_type: head
   set: Dragonking α
   rarity: 8
   defense:
@@ -5762,6 +5961,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502050
 - name: Dreamwalker Helm α
+  piece_type: head
   set: Dreamwalker α
   rarity: 5
   defense:
@@ -5800,6 +6000,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559726
 - name: Dreamwalker Mail α
+  piece_type: chest
   set: Dreamwalker α
   rarity: 5
   defense:
@@ -5838,6 +6039,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559726
 - name: Dreamwalker Braces α
+  piece_type: arms
   set: Dreamwalker α
   rarity: 5
   defense:
@@ -5874,6 +6076,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559726
 - name: Dreamwalker Coil α
+  piece_type: waist
   set: Dreamwalker α
   rarity: 5
   defense:
@@ -5910,6 +6113,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559726
 - name: Dreamwalker Greaves α
+  piece_type: legs
   set: Dreamwalker α
   rarity: 5
   defense:
@@ -5946,6 +6150,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559726
 - name: Eager Wudwud α
+  piece_type: head
   set: Eager Wudwud α
   rarity: 8
   defense:
@@ -5977,6 +6182,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/574397
 - name: Earrings of Dedication α
+  piece_type: head
   set: Earrings of Dedication α
   rarity: 6
   defense:
@@ -6004,6 +6210,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512885
 - name: Expedition Headgear α
+  piece_type: head
   set: Expedition Headgear α
   rarity: 5
   defense:
@@ -6028,6 +6235,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503690
 - name: Faux Felyne α
+  piece_type: head
   set: Faux Felyne α
   rarity: 5
   defense:
@@ -6050,6 +6258,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/526304
 - name: Gajau Boots α
+  piece_type: legs
   set: Gajau α
   rarity: 6
   defense:
@@ -6079,6 +6288,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501938
 - name: Gala Suit Top Hat α
+  piece_type: head
   set: Gala Suit α
   rarity: 8
   defense:
@@ -6108,6 +6318,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/583632
 - name: Gala Suit Jacket α
+  piece_type: chest
   set: Gala Suit α
   rarity: 8
   defense:
@@ -6137,6 +6348,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/583632
 - name: Gala Suit Cuffs α
+  piece_type: arms
   set: Gala Suit α
   rarity: 8
   defense:
@@ -6166,6 +6378,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/583632
 - name: Gala Suit Tail α
+  piece_type: waist
   set: Gala Suit α
   rarity: 8
   defense:
@@ -6195,6 +6408,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/583632
 - name: Gala Suit Slacks α
+  piece_type: legs
   set: Gala Suit α
   rarity: 8
   defense:
@@ -6224,6 +6438,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/583632
 - name: Gelidron Mask α
+  piece_type: head
   set: Gelidron α
   rarity: 8
   defense:
@@ -6255,6 +6470,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559728
 - name: Gelidron Backpack α
+  piece_type: chest
   set: Gelidron α
   rarity: 8
   defense:
@@ -6286,6 +6502,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559728
 - name: Gogmazios Helm α
+  piece_type: head
   set: Gogmazios α
   rarity: 8
   defense:
@@ -6320,6 +6537,7 @@
   - Gogmapocalypse
   - Zoh Shia's Pulse
 - name: Gogmazios Mail α
+  piece_type: chest
   set: Gogmazios α
   rarity: 8
   defense:
@@ -6356,6 +6574,7 @@
   - Gogmapocalypse
   - Xu Wu's Vigor
 - name: Gogmazios Vambraces α
+  piece_type: arms
   set: Gogmazios α
   rarity: 8
   defense:
@@ -6390,6 +6609,7 @@
   - Gogmapocalypse
   - Fulgur Anjanath's Will
 - name: Gogmazios Coil α
+  piece_type: waist
   set: Gogmazios α
   rarity: 8
   defense:
@@ -6424,6 +6644,7 @@
   - Gogmapocalypse
   - Ebony Odogaron's Power
 - name: Gogmazios Greaves α
+  piece_type: legs
   set: Gogmazios α
   rarity: 8
   defense:
@@ -6458,6 +6679,7 @@
   - Doshaguma's Might
   - Gogmapocalypse
 - name: Gogmazios Helm β
+  piece_type: head
   set: Gogmazios β
   rarity: 8
   defense:
@@ -6492,6 +6714,7 @@
   - Gogmapocalypse
   - Guardian Arkveld's Vitality
 - name: Gogmazios Mail β
+  piece_type: chest
   set: Gogmazios β
   rarity: 8
   defense:
@@ -6528,6 +6751,7 @@
   - Gogmapocalypse
   - Rathalos's Flare
 - name: Gogmazios Vambraces β
+  piece_type: arms
   set: Gogmazios β
   rarity: 8
   defense:
@@ -6562,6 +6786,7 @@
   - Gogmapocalypse
   - Blangonga's Spirit
 - name: Gogmazios Coil β
+  piece_type: waist
   set: Gogmazios β
   rarity: 8
   defense:
@@ -6596,6 +6821,7 @@
   - Gogmapocalypse
   - Mizutsune's Prowess
 - name: Gogmazios Greaves β
+  piece_type: legs
   set: Gogmazios β
   rarity: 8
   defense:
@@ -6630,6 +6856,7 @@
   - Gogmapocalypse
   - Gravios's Protection
 - name: Gore Helm α
+  piece_type: head
   set: Gore α
   rarity: 7
   defense:
@@ -6666,6 +6893,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502043
 - name: Gore Mail α
+  piece_type: chest
   set: Gore α
   rarity: 7
   defense:
@@ -6702,6 +6930,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502043
 - name: Gore Vambraces α
+  piece_type: arms
   set: Gore α
   rarity: 7
   defense:
@@ -6738,6 +6967,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502043
 - name: Gore Coil α
+  piece_type: waist
   set: Gore α
   rarity: 7
   defense:
@@ -6774,6 +7004,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502043
 - name: Gore Greaves α
+  piece_type: legs
   set: Gore α
   rarity: 7
   defense:
@@ -6810,6 +7041,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502043
 - name: Gore Helm β
+  piece_type: head
   set: Gore β
   rarity: 7
   defense:
@@ -6846,6 +7078,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502044
 - name: Gore Mail β
+  piece_type: chest
   set: Gore β
   rarity: 7
   defense:
@@ -6880,6 +7113,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502044
 - name: Gore Vambraces β
+  piece_type: arms
   set: Gore β
   rarity: 7
   defense:
@@ -6916,6 +7150,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502044
 - name: Gore Coil β
+  piece_type: waist
   set: Gore β
   rarity: 7
   defense:
@@ -6950,6 +7185,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502044
 - name: Gore Greaves β
+  piece_type: legs
   set: Gore β
   rarity: 7
   defense:
@@ -6986,6 +7222,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502044
 - name: Gourmand's Earring α
+  piece_type: head
   set: Gourmand's Earring α
   rarity: 5
   defense:
@@ -7015,6 +7252,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512884
 - name: Gravios Helm α
+  piece_type: head
   set: Gravios α
   rarity: 6
   defense:
@@ -7051,6 +7289,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502028
 - name: Gravios Mail α
+  piece_type: chest
   set: Gravios α
   rarity: 6
   defense:
@@ -7087,6 +7326,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502028
 - name: Gravios Vambraces α
+  piece_type: arms
   set: Gravios α
   rarity: 6
   defense:
@@ -7123,6 +7363,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502028
 - name: Gravios Coil α
+  piece_type: waist
   set: Gravios α
   rarity: 6
   defense:
@@ -7159,6 +7400,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502028
 - name: Gravios Greaves α
+  piece_type: legs
   set: Gravios α
   rarity: 6
   defense:
@@ -7195,6 +7437,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502028
 - name: Gravios Helm β
+  piece_type: head
   set: Gravios β
   rarity: 6
   defense:
@@ -7229,6 +7472,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502029
 - name: Gravios Mail β
+  piece_type: chest
   set: Gravios β
   rarity: 6
   defense:
@@ -7265,6 +7509,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502029
 - name: Gravios Vambraces β
+  piece_type: arms
   set: Gravios β
   rarity: 6
   defense:
@@ -7299,6 +7544,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502029
 - name: Gravios Coil β
+  piece_type: waist
   set: Gravios β
   rarity: 6
   defense:
@@ -7335,6 +7581,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502029
 - name: Gravios Greaves β
+  piece_type: legs
   set: Gravios β
   rarity: 6
   defense:
@@ -7371,6 +7618,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502029
 - name: G. Arkveld Helm α
+  piece_type: head
   set: Guardian Arkveld α
   rarity: 8
   defense:
@@ -7407,6 +7655,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502047
 - name: G. Arkveld Mail α
+  piece_type: chest
   set: Guardian Arkveld α
   rarity: 8
   defense:
@@ -7443,6 +7692,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502047
 - name: G. Arkveld Vambraces α
+  piece_type: arms
   set: Guardian Arkveld α
   rarity: 8
   defense:
@@ -7479,6 +7729,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502047
 - name: G. Arkveld Coil α
+  piece_type: waist
   set: Guardian Arkveld α
   rarity: 8
   defense:
@@ -7515,6 +7766,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502047
 - name: G. Arkveld Greaves α
+  piece_type: legs
   set: Guardian Arkveld α
   rarity: 8
   defense:
@@ -7551,6 +7803,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502047
 - name: G. Arkveld Helm β
+  piece_type: head
   set: Guardian Arkveld β
   rarity: 8
   defense:
@@ -7587,6 +7840,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502048
 - name: G. Arkveld Mail β
+  piece_type: chest
   set: Guardian Arkveld β
   rarity: 8
   defense:
@@ -7623,6 +7877,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502048
 - name: G. Arkveld Vambraces β
+  piece_type: arms
   set: Guardian Arkveld β
   rarity: 8
   defense:
@@ -7657,6 +7912,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502048
 - name: G. Arkveld Coil β
+  piece_type: waist
   set: Guardian Arkveld β
   rarity: 8
   defense:
@@ -7691,6 +7947,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502048
 - name: G. Arkveld Greaves β
+  piece_type: legs
   set: Guardian Arkveld β
   rarity: 8
   defense:
@@ -7727,6 +7984,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502048
 - name: G. Doshaguma Helm α
+  piece_type: head
   set: Guardian Doshaguma α
   rarity: 6
   defense:
@@ -7763,6 +8021,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501941
 - name: G. Doshaguma Mail α
+  piece_type: chest
   set: Guardian Doshaguma α
   rarity: 6
   defense:
@@ -7799,6 +8058,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501941
 - name: G. Doshaguma Braces α
+  piece_type: arms
   set: Guardian Doshaguma α
   rarity: 6
   defense:
@@ -7835,6 +8095,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501941
 - name: G. Doshaguma Coil α
+  piece_type: waist
   set: Guardian Doshaguma α
   rarity: 6
   defense:
@@ -7871,6 +8132,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501941
 - name: G. Doshaguma Greaves α
+  piece_type: legs
   set: Guardian Doshaguma α
   rarity: 6
   defense:
@@ -7907,6 +8169,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501941
 - name: G. Doshaguma Helm β
+  piece_type: head
   set: Guardian Doshaguma β
   rarity: 6
   defense:
@@ -7941,6 +8204,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501942
 - name: G. Doshaguma Mail β
+  piece_type: chest
   set: Guardian Doshaguma β
   rarity: 6
   defense:
@@ -7975,6 +8239,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501942
 - name: G. Doshaguma Braces β
+  piece_type: arms
   set: Guardian Doshaguma β
   rarity: 6
   defense:
@@ -8009,6 +8274,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501942
 - name: G. Doshaguma Coil β
+  piece_type: waist
   set: Guardian Doshaguma β
   rarity: 6
   defense:
@@ -8043,6 +8309,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501942
 - name: G. Doshaguma Greaves β
+  piece_type: legs
   set: Guardian Doshaguma β
   rarity: 6
   defense:
@@ -8079,6 +8346,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501942
 - name: G. Ebony Helm α
+  piece_type: head
   set: Guardian Ebony α
   rarity: 6
   defense:
@@ -8115,6 +8383,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502026
 - name: G. Ebony Mail α
+  piece_type: chest
   set: Guardian Ebony α
   rarity: 6
   defense:
@@ -8151,6 +8420,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502026
 - name: G. Ebony Braces α
+  piece_type: arms
   set: Guardian Ebony α
   rarity: 6
   defense:
@@ -8187,6 +8457,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502026
 - name: G. Ebony Coil α
+  piece_type: waist
   set: Guardian Ebony α
   rarity: 6
   defense:
@@ -8223,6 +8494,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502026
 - name: G. Ebony Greaves α
+  piece_type: legs
   set: Guardian Ebony α
   rarity: 6
   defense:
@@ -8259,6 +8531,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502026
 - name: G. Ebony Helm β
+  piece_type: head
   set: Guardian Ebony β
   rarity: 6
   defense:
@@ -8293,6 +8566,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502027
 - name: G. Ebony Mail β
+  piece_type: chest
   set: Guardian Ebony β
   rarity: 6
   defense:
@@ -8327,6 +8601,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502027
 - name: G. Ebony Braces β
+  piece_type: arms
   set: Guardian Ebony β
   rarity: 6
   defense:
@@ -8363,6 +8638,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502027
 - name: G. Ebony Coil β
+  piece_type: waist
   set: Guardian Ebony β
   rarity: 6
   defense:
@@ -8397,6 +8673,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502027
 - name: G. Ebony Greaves β
+  piece_type: legs
   set: Guardian Ebony β
   rarity: 6
   defense:
@@ -8433,6 +8710,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502027
 - name: G. Fulgur Helm α
+  piece_type: head
   set: Guardian Fulgur α
   rarity: 6
   defense:
@@ -8469,6 +8747,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501939
 - name: G. Fulgur Mail α
+  piece_type: chest
   set: Guardian Fulgur α
   rarity: 6
   defense:
@@ -8505,6 +8784,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501939
 - name: G. Fulgur Vambraces α
+  piece_type: arms
   set: Guardian Fulgur α
   rarity: 6
   defense:
@@ -8541,6 +8821,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501939
 - name: G. Fulgur Coil α
+  piece_type: waist
   set: Guardian Fulgur α
   rarity: 6
   defense:
@@ -8577,6 +8858,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501939
 - name: G. Fulgur Greaves α
+  piece_type: legs
   set: Guardian Fulgur α
   rarity: 6
   defense:
@@ -8613,6 +8895,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501939
 - name: G. Fulgur Helm β
+  piece_type: head
   set: Guardian Fulgur β
   rarity: 6
   defense:
@@ -8647,6 +8930,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501940
 - name: G. Fulgur Mail β
+  piece_type: chest
   set: Guardian Fulgur β
   rarity: 6
   defense:
@@ -8681,6 +8965,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501940
 - name: G. Fulgur Vambraces β
+  piece_type: arms
   set: Guardian Fulgur β
   rarity: 6
   defense:
@@ -8715,6 +9000,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501940
 - name: G. Fulgur Coil β
+  piece_type: waist
   set: Guardian Fulgur β
   rarity: 6
   defense:
@@ -8749,6 +9035,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501940
 - name: G. Fulgur Greaves β
+  piece_type: legs
   set: Guardian Fulgur β
   rarity: 6
   defense:
@@ -8785,6 +9072,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501940
 - name: G. Rathalos Helm α
+  piece_type: head
   set: Guardian Rathalos α
   rarity: 6
   defense:
@@ -8821,6 +9109,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501944
 - name: G. Rathalos Mail α
+  piece_type: chest
   set: Guardian Rathalos α
   rarity: 6
   defense:
@@ -8857,6 +9146,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501944
 - name: G. Rathalos Vambraces α
+  piece_type: arms
   set: Guardian Rathalos α
   rarity: 6
   defense:
@@ -8895,6 +9185,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501944
 - name: G. Rathalos Coil α
+  piece_type: waist
   set: Guardian Rathalos α
   rarity: 6
   defense:
@@ -8931,6 +9222,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501944
 - name: G. Rathalos Greaves α
+  piece_type: legs
   set: Guardian Rathalos α
   rarity: 6
   defense:
@@ -8967,6 +9259,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501944
 - name: G. Rathalos Helm β
+  piece_type: head
   set: Guardian Rathalos β
   rarity: 6
   defense:
@@ -9001,6 +9294,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501946
 - name: G. Rathalos Mail β
+  piece_type: chest
   set: Guardian Rathalos β
   rarity: 6
   defense:
@@ -9037,6 +9331,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501946
 - name: G. Rathalos Vambraces β
+  piece_type: arms
   set: Guardian Rathalos β
   rarity: 6
   defense:
@@ -9071,6 +9366,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501946
 - name: G. Rathalos Coil β
+  piece_type: waist
   set: Guardian Rathalos β
   rarity: 6
   defense:
@@ -9105,6 +9401,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501946
 - name: G. Rathalos Greaves β
+  piece_type: legs
   set: Guardian Rathalos β
   rarity: 6
   defense:
@@ -9141,6 +9438,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501946
 - name: G. Seikret Coil α
+  piece_type: waist
   set: Guardian Seikret α
   rarity: 6
   defense:
@@ -9170,6 +9468,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501936
 - name: G. Seikret Coil β
+  piece_type: waist
   set: Guardian Seikret β
   rarity: 6
   defense:
@@ -9199,6 +9498,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501937
 - name: Guild Ace Earrings α
+  piece_type: head
   set: Guild Ace α
   rarity: 8
   defense:
@@ -9225,6 +9525,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502049
 - name: Guild Ace Mail α
+  piece_type: chest
   set: Guild Ace α
   rarity: 8
   defense:
@@ -9251,6 +9552,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502049
 - name: Guild Ace Vambraces α
+  piece_type: arms
   set: Guild Ace α
   rarity: 8
   defense:
@@ -9277,6 +9579,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502049
 - name: Guild Ace Coil α
+  piece_type: waist
   set: Guild Ace α
   rarity: 8
   defense:
@@ -9303,6 +9606,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502049
 - name: Guild Ace Boots α
+  piece_type: legs
   set: Guild Ace α
   rarity: 8
   defense:
@@ -9329,6 +9633,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502049
 - name: Guild Cross Circlet α
+  piece_type: head
   set: Guild Cross α
   rarity: 5
   defense:
@@ -9360,6 +9665,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512882
 - name: Guild Cross Suit α
+  piece_type: chest
   set: Guild Cross α
   rarity: 5
   defense:
@@ -9389,6 +9695,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512882
 - name: Guild Cross Vambraces α
+  piece_type: arms
   set: Guild Cross α
   rarity: 5
   defense:
@@ -9420,6 +9727,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512882
 - name: Guild Cross Coil α
+  piece_type: waist
   set: Guild Cross α
   rarity: 5
   defense:
@@ -9449,6 +9757,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512882
 - name: Guild Cross Boots α
+  piece_type: legs
   set: Guild Cross α
   rarity: 5
   defense:
@@ -9478,6 +9787,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512882
 - name: Gypceros Helm α
+  piece_type: head
   set: Gypceros α
   rarity: 5
   defense:
@@ -9507,6 +9817,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502402
 - name: Gypceros Mail α
+  piece_type: chest
   set: Gypceros α
   rarity: 5
   defense:
@@ -9536,6 +9847,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502402
 - name: Gypceros Vambraces α
+  piece_type: arms
   set: Gypceros α
   rarity: 5
   defense:
@@ -9565,6 +9877,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502402
 - name: Gypceros Coil α
+  piece_type: waist
   set: Gypceros α
   rarity: 5
   defense:
@@ -9594,6 +9907,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502402
 - name: Gypceros Greaves α
+  piece_type: legs
   set: Gypceros α
   rarity: 5
   defense:
@@ -9623,6 +9937,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502402
 - name: Gypceros Helm β
+  piece_type: head
   set: Gypceros β
   rarity: 5
   defense:
@@ -9650,6 +9965,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502403
 - name: Gypceros Mail β
+  piece_type: chest
   set: Gypceros β
   rarity: 5
   defense:
@@ -9677,6 +9993,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502403
 - name: Gypceros Vambraces β
+  piece_type: arms
   set: Gypceros β
   rarity: 5
   defense:
@@ -9704,6 +10021,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502403
 - name: Gypceros Coil β
+  piece_type: waist
   set: Gypceros β
   rarity: 5
   defense:
@@ -9731,6 +10049,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502403
 - name: Gypceros Greaves β
+  piece_type: legs
   set: Gypceros β
   rarity: 5
   defense:
@@ -9760,6 +10079,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502403
 - name: Half Rim Glasses α
+  piece_type: head
   set: Half Rim Glasses α
   rarity: 6
   defense:
@@ -9782,6 +10102,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536413
 - name: Harvest Flor α
+  piece_type: head
   set: Harvest α
   rarity: 8
   defense:
@@ -9811,6 +10132,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559727
 - name: Harvest Tronco α
+  piece_type: chest
   set: Harvest α
   rarity: 8
   defense:
@@ -9840,6 +10162,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559727
 - name: Harvest Trama α
+  piece_type: arms
   set: Harvest α
   rarity: 8
   defense:
@@ -9871,6 +10194,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559727
 - name: Harvest Hoja α
+  piece_type: waist
   set: Harvest α
   rarity: 8
   defense:
@@ -9902,6 +10226,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559727
 - name: Harvest Raiz α
+  piece_type: legs
   set: Harvest α
   rarity: 8
   defense:
@@ -9931,6 +10256,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559727
 - name: Hawkheart Jacket α
+  piece_type: chest
   set: Hawkheart Jacket α
   rarity: 6
   defense:
@@ -9955,6 +10281,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532585
 - name: High Metal Helm α
+  piece_type: head
   set: High Metal α
   rarity: 6
   defense:
@@ -9984,6 +10311,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502412
 - name: High Metal Mail α
+  piece_type: chest
   set: High Metal α
   rarity: 6
   defense:
@@ -10013,6 +10341,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502412
 - name: High Metal Braces α
+  piece_type: arms
   set: High Metal α
   rarity: 6
   defense:
@@ -10042,6 +10371,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502412
 - name: High Metal Coil α
+  piece_type: waist
   set: High Metal α
   rarity: 6
   defense:
@@ -10071,6 +10401,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502412
 - name: High Metal Greaves α
+  piece_type: legs
   set: High Metal α
   rarity: 6
   defense:
@@ -10100,6 +10431,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502412
 - name: Hirabami Headdress α
+  piece_type: head
   set: Hirabami α
   rarity: 5
   defense:
@@ -10129,6 +10461,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501931
 - name: Hirabami Mail α
+  piece_type: chest
   set: Hirabami α
   rarity: 5
   defense:
@@ -10158,6 +10491,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501931
 - name: Hirabami Vambraces α
+  piece_type: arms
   set: Hirabami α
   rarity: 5
   defense:
@@ -10187,6 +10521,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501931
 - name: Hirabami Coil α
+  piece_type: waist
   set: Hirabami α
   rarity: 5
   defense:
@@ -10214,6 +10549,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501931
 - name: Hirabami Greaves α
+  piece_type: legs
   set: Hirabami α
   rarity: 5
   defense:
@@ -10243,6 +10579,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501931
 - name: Hirabami Headdress β
+  piece_type: head
   set: Hirabami β
   rarity: 5
   defense:
@@ -10270,6 +10607,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501932
 - name: Hirabami Mail β
+  piece_type: chest
   set: Hirabami β
   rarity: 5
   defense:
@@ -10299,6 +10637,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501932
 - name: Hirabami Vambraces β
+  piece_type: arms
   set: Hirabami β
   rarity: 5
   defense:
@@ -10326,6 +10665,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501932
 - name: Hirabami Coil β
+  piece_type: waist
   set: Hirabami β
   rarity: 5
   defense:
@@ -10353,6 +10693,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501932
 - name: Hirabami Greaves β
+  piece_type: legs
   set: Hirabami β
   rarity: 5
   defense:
@@ -10380,6 +10721,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501932
 - name: Hope Mask α
+  piece_type: head
   set: Hope α
   rarity: 5
   defense:
@@ -10402,6 +10744,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501894
 - name: Hope Mail α
+  piece_type: chest
   set: Hope α
   rarity: 5
   defense:
@@ -10424,6 +10767,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501894
 - name: Hope Vambraces α
+  piece_type: arms
   set: Hope α
   rarity: 5
   defense:
@@ -10446,6 +10790,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501894
 - name: Hope Coil α
+  piece_type: waist
   set: Hope α
   rarity: 5
   defense:
@@ -10470,6 +10815,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501894
 - name: Hope Greaves α
+  piece_type: legs
   set: Hope α
   rarity: 5
   defense:
@@ -10492,6 +10838,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501894
 - name: Ingot Helm α
+  piece_type: head
   set: Ingot α
   rarity: 6
   defense:
@@ -10516,6 +10863,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501935
 - name: Ingot Mail α
+  piece_type: chest
   set: Ingot α
   rarity: 6
   defense:
@@ -10540,6 +10888,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501935
 - name: Ingot Vambraces α
+  piece_type: arms
   set: Ingot α
   rarity: 6
   defense:
@@ -10564,6 +10913,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501935
 - name: Ingot Coil α
+  piece_type: waist
   set: Ingot α
   rarity: 6
   defense:
@@ -10588,6 +10938,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501935
 - name: Ingot Greaves α
+  piece_type: legs
   set: Ingot α
   rarity: 6
   defense:
@@ -10612,6 +10963,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501935
 - name: King Beetle Vertex α
+  piece_type: head
   set: King Beetle α
   rarity: 6
   defense:
@@ -10643,6 +10995,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502411
 - name: King Beetle Thorax α
+  piece_type: chest
   set: King Beetle α
   rarity: 6
   defense:
@@ -10674,6 +11027,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502411
 - name: King Beetle Brachia α
+  piece_type: arms
   set: King Beetle α
   rarity: 6
   defense:
@@ -10705,6 +11059,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502411
 - name: King Beetle Elytra α
+  piece_type: waist
   set: King Beetle α
   rarity: 6
   defense:
@@ -10736,6 +11091,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502411
 - name: King Beetle Crura α
+  piece_type: legs
   set: King Beetle α
   rarity: 6
   defense:
@@ -10767,6 +11123,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502411
 - name: Kitten Frames α
+  piece_type: head
   set: Kitten Frames α
   rarity: 8
   defense:
@@ -10793,6 +11150,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559730
 - name: Kranodath Mail α
+  piece_type: chest
   set: Kranodath α
   rarity: 5
   defense:
@@ -10822,6 +11180,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501911
 - name: Kranodath Mail β
+  piece_type: chest
   set: Kranodath β
   rarity: 5
   defense:
@@ -10849,6 +11208,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501912
 - name: Kunafa Headgear α
+  piece_type: head
   set: Kunafa α
   rarity: 6
   defense:
@@ -10878,6 +11238,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501947
 - name: Kunafa Cloak α
+  piece_type: chest
   set: Kunafa α
   rarity: 6
   defense:
@@ -10907,6 +11268,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501947
 - name: Kunafa Sash α
+  piece_type: waist
   set: Kunafa α
   rarity: 6
   defense:
@@ -10936,6 +11298,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501947
 - name: Kunafa Chaps α
+  piece_type: legs
   set: Kunafa α
   rarity: 6
   defense:
@@ -10965,6 +11328,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501947
 - name: Kut-Ku Helm α
+  piece_type: head
   set: Kut-Ku α
   rarity: 5
   defense:
@@ -10994,6 +11358,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501915
 - name: Kut-Ku Mail α
+  piece_type: chest
   set: Kut-Ku α
   rarity: 5
   defense:
@@ -11023,6 +11388,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501915
 - name: Kut-Ku Vambraces α
+  piece_type: arms
   set: Kut-Ku α
   rarity: 5
   defense:
@@ -11052,6 +11418,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501915
 - name: Kut-Ku Coil α
+  piece_type: waist
   set: Kut-Ku α
   rarity: 5
   defense:
@@ -11081,6 +11448,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501915
 - name: Kut-Ku Greaves α
+  piece_type: legs
   set: Kut-Ku α
   rarity: 5
   defense:
@@ -11110,6 +11478,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501915
 - name: Kut-Ku Helm β
+  piece_type: head
   set: Kut-Ku β
   rarity: 5
   defense:
@@ -11137,6 +11506,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501916
 - name: Kut-Ku Mail β
+  piece_type: chest
   set: Kut-Ku β
   rarity: 5
   defense:
@@ -11164,6 +11534,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501916
 - name: Kut-Ku Vambraces β
+  piece_type: arms
   set: Kut-Ku β
   rarity: 5
   defense:
@@ -11191,6 +11562,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501916
 - name: Kut-Ku Coil β
+  piece_type: waist
   set: Kut-Ku β
   rarity: 5
   defense:
@@ -11220,6 +11592,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501916
 - name: Kut-Ku Greaves β
+  piece_type: legs
   set: Kut-Ku β
   rarity: 5
   defense:
@@ -11249,6 +11622,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501916
 - name: Lagiacrus Helm α
+  piece_type: head
   set: Lagiacrus α
   rarity: 7
   defense:
@@ -11285,6 +11659,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532640
 - name: Lagiacrus Mail α
+  piece_type: chest
   set: Lagiacrus α
   rarity: 7
   defense:
@@ -11323,6 +11698,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532640
 - name: Lagiacrus Braces α
+  piece_type: arms
   set: Lagiacrus α
   rarity: 7
   defense:
@@ -11361,6 +11737,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532640
 - name: Lagiacrus Coil α
+  piece_type: waist
   set: Lagiacrus α
   rarity: 7
   defense:
@@ -11399,6 +11776,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532640
 - name: Lagiacrus Greaves α
+  piece_type: legs
   set: Lagiacrus α
   rarity: 7
   defense:
@@ -11437,6 +11815,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532640
 - name: Lagiacrus Helm β
+  piece_type: head
   set: Lagiacrus β
   rarity: 7
   defense:
@@ -11471,6 +11850,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532641
 - name: Lagiacrus Mail β
+  piece_type: chest
   set: Lagiacrus β
   rarity: 7
   defense:
@@ -11507,6 +11887,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532641
 - name: Lagiacrus Braces β
+  piece_type: arms
   set: Lagiacrus β
   rarity: 7
   defense:
@@ -11543,6 +11924,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532641
 - name: Lagiacrus Coil β
+  piece_type: waist
   set: Lagiacrus β
   rarity: 7
   defense:
@@ -11579,6 +11961,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532641
 - name: Lagiacrus Greaves β
+  piece_type: legs
   set: Lagiacrus β
   rarity: 7
   defense:
@@ -11615,6 +11998,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532641
 - name: Barina Headgear α
+  piece_type: head
   set: Lala Barina α
   rarity: 5
   defense:
@@ -11644,6 +12028,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501921
 - name: Barina Mail α
+  piece_type: chest
   set: Lala Barina α
   rarity: 5
   defense:
@@ -11673,6 +12058,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501921
 - name: Barina Vambraces α
+  piece_type: arms
   set: Lala Barina α
   rarity: 5
   defense:
@@ -11702,6 +12088,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501921
 - name: Barina Coil α
+  piece_type: waist
   set: Lala Barina α
   rarity: 5
   defense:
@@ -11729,6 +12116,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501921
 - name: Barina Greaves α
+  piece_type: legs
   set: Lala Barina α
   rarity: 5
   defense:
@@ -11758,6 +12146,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501921
 - name: Barina Headgear β
+  piece_type: head
   set: Lala Barina β
   rarity: 5
   defense:
@@ -11785,6 +12174,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501922
 - name: Barina Mail β
+  piece_type: chest
   set: Lala Barina β
   rarity: 5
   defense:
@@ -11814,6 +12204,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501922
 - name: Barina Vambraces β
+  piece_type: arms
   set: Lala Barina β
   rarity: 5
   defense:
@@ -11841,6 +12232,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501922
 - name: Barina Coil β
+  piece_type: waist
   set: Lala Barina β
   rarity: 5
   defense:
@@ -11868,6 +12260,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501922
 - name: Barina Greaves β
+  piece_type: legs
   set: Lala Barina β
   rarity: 5
   defense:
@@ -11895,6 +12288,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501922
 - name: Leather Headgear α
+  piece_type: head
   set: Leather α
   rarity: 5
   defense:
@@ -11917,6 +12311,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501899
 - name: Leather Mail α
+  piece_type: chest
   set: Leather α
   rarity: 5
   defense:
@@ -11941,6 +12336,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501899
 - name: Leather Gloves α
+  piece_type: arms
   set: Leather α
   rarity: 5
   defense:
@@ -11965,6 +12361,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501899
 - name: Leather Belt α
+  piece_type: waist
   set: Leather α
   rarity: 5
   defense:
@@ -11987,6 +12384,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501899
 - name: Leather Pants α
+  piece_type: legs
   set: Leather α
   rarity: 5
   defense:
@@ -12011,6 +12409,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501899
 - name: Lovely Shades α
+  piece_type: head
   set: Lovely Shades α
   rarity: 6
   defense:
@@ -12033,6 +12432,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536420
 - name: Melahoa Hat α
+  piece_type: head
   set: Melahoa α
   rarity: 6
   defense:
@@ -12062,6 +12462,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502414
 - name: Melahoa Jacket α
+  piece_type: chest
   set: Melahoa α
   rarity: 6
   defense:
@@ -12089,6 +12490,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502414
 - name: Melahoa Branch α
+  piece_type: arms
   set: Melahoa α
   rarity: 6
   defense:
@@ -12118,6 +12520,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502414
 - name: Melahoa Folia α
+  piece_type: waist
   set: Melahoa α
   rarity: 6
   defense:
@@ -12147,6 +12550,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502414
 - name: Melahoa Roots α
+  piece_type: legs
   set: Melahoa α
   rarity: 6
   defense:
@@ -12174,6 +12578,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502414
 - name: Mimiphyta α
+  piece_type: head
   set: Mimiphyta α
   rarity: 5
   defense:
@@ -12203,6 +12608,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503674
 - name: Mirror Visor α
+  piece_type: head
   set: Mirror Visor α
   rarity: 8
   defense:
@@ -12225,6 +12631,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572037
 - name: Mizutsune Helm α
+  piece_type: head
   set: Mizutsune α
   rarity: 6
   defense:
@@ -12261,6 +12668,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512819
 - name: Mizutsune Mail α
+  piece_type: chest
   set: Mizutsune α
   rarity: 6
   defense:
@@ -12297,6 +12705,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512819
 - name: Mizutsune Braces α
+  piece_type: arms
   set: Mizutsune α
   rarity: 6
   defense:
@@ -12333,6 +12742,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512819
 - name: Mizutsune Coil α
+  piece_type: waist
   set: Mizutsune α
   rarity: 6
   defense:
@@ -12369,6 +12779,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512819
 - name: Mizutsune Greaves α
+  piece_type: legs
   set: Mizutsune α
   rarity: 6
   defense:
@@ -12405,6 +12816,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512819
 - name: Mizutsune Helm β
+  piece_type: head
   set: Mizutsune β
   rarity: 6
   defense:
@@ -12439,6 +12851,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512831
 - name: Mizutsune Mail β
+  piece_type: chest
   set: Mizutsune β
   rarity: 6
   defense:
@@ -12475,6 +12888,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512831
 - name: Mizutsune Braces β
+  piece_type: arms
   set: Mizutsune β
   rarity: 6
   defense:
@@ -12511,6 +12925,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512831
 - name: Mizutsune Coil β
+  piece_type: waist
   set: Mizutsune β
   rarity: 6
   defense:
@@ -12545,6 +12960,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512831
 - name: Mizutsune Greaves β
+  piece_type: legs
   set: Mizutsune β
   rarity: 6
   defense:
@@ -12579,6 +12995,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512831
 - name: Nerscylla Helm α
+  piece_type: head
   set: Nerscylla α
   rarity: 5
   defense:
@@ -12608,6 +13025,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501927
 - name: Nerscylla Mail α
+  piece_type: chest
   set: Nerscylla α
   rarity: 5
   defense:
@@ -12637,6 +13055,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501927
 - name: Nerscylla Vambraces α
+  piece_type: arms
   set: Nerscylla α
   rarity: 5
   defense:
@@ -12666,6 +13085,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501927
 - name: Nerscylla Coil α
+  piece_type: waist
   set: Nerscylla α
   rarity: 5
   defense:
@@ -12695,6 +13115,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501927
 - name: Nerscylla Greaves α
+  piece_type: legs
   set: Nerscylla α
   rarity: 5
   defense:
@@ -12724,6 +13145,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501927
 - name: Nerscylla Helm β
+  piece_type: head
   set: Nerscylla β
   rarity: 5
   defense:
@@ -12751,6 +13173,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501928
 - name: Nerscylla Mail β
+  piece_type: chest
   set: Nerscylla β
   rarity: 5
   defense:
@@ -12778,6 +13201,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501928
 - name: Nerscylla Vambraces β
+  piece_type: arms
   set: Nerscylla β
   rarity: 5
   defense:
@@ -12805,6 +13229,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501928
 - name: Nerscylla Coil β
+  piece_type: waist
   set: Nerscylla β
   rarity: 5
   defense:
@@ -12832,6 +13257,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501928
 - name: Nerscylla Greaves β
+  piece_type: legs
   set: Nerscylla β
   rarity: 5
   defense:
@@ -12859,6 +13285,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501928
 - name: Udra Mirehelm α
+  piece_type: head
   set: Nu Udra α
   rarity: 7
   defense:
@@ -12895,6 +13322,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502041
 - name: Udra Miremail α
+  piece_type: chest
   set: Nu Udra α
   rarity: 7
   defense:
@@ -12931,6 +13359,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502041
 - name: Udra Mirebraces α
+  piece_type: arms
   set: Nu Udra α
   rarity: 7
   defense:
@@ -12967,6 +13396,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502041
 - name: Udra Mirecoil α
+  piece_type: waist
   set: Nu Udra α
   rarity: 7
   defense:
@@ -13003,6 +13433,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502041
 - name: Udra Miregreaves α
+  piece_type: legs
   set: Nu Udra α
   rarity: 7
   defense:
@@ -13039,6 +13470,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502041
 - name: Udra Mirehelm β
+  piece_type: head
   set: Nu Udra β
   rarity: 7
   defense:
@@ -13075,6 +13507,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502042
 - name: Udra Miremail β
+  piece_type: chest
   set: Nu Udra β
   rarity: 7
   defense:
@@ -13109,6 +13542,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502042
 - name: Udra Mirebraces β
+  piece_type: arms
   set: Nu Udra β
   rarity: 7
   defense:
@@ -13145,6 +13579,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502042
 - name: Udra Mirecoil β
+  piece_type: waist
   set: Nu Udra β
   rarity: 7
   defense:
@@ -13179,6 +13614,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502042
 - name: Udra Miregreaves β
+  piece_type: legs
   set: Nu Udra β
   rarity: 7
   defense:
@@ -13215,6 +13651,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502042
 - name: Udra Mirehelm γ
+  piece_type: head
   set: Nu Udra γ
   rarity: 8
   defense:
@@ -13249,6 +13686,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559725
 - name: Udra Miremail γ
+  piece_type: chest
   set: Nu Udra γ
   rarity: 8
   defense:
@@ -13283,6 +13721,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559725
 - name: Udra Mirebraces γ
+  piece_type: arms
   set: Nu Udra γ
   rarity: 8
   defense:
@@ -13317,6 +13756,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559725
 - name: Udra Mirecoil γ
+  piece_type: waist
   set: Nu Udra γ
   rarity: 8
   defense:
@@ -13353,6 +13793,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559725
 - name: Udra Miregreaves γ
+  piece_type: legs
   set: Nu Udra γ
   rarity: 8
   defense:
@@ -13391,6 +13832,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559725
 - name: Numinous Crown α
+  piece_type: head
   set: Numinous α
   rarity: 8
   defense:
@@ -13427,6 +13869,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512832
 - name: Numinous Shroud α
+  piece_type: chest
   set: Numinous α
   rarity: 8
   defense:
@@ -13463,6 +13906,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512832
 - name: Numinous Vambraces α
+  piece_type: arms
   set: Numinous α
   rarity: 8
   defense:
@@ -13499,6 +13943,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512832
 - name: Numinous Overlay α
+  piece_type: waist
   set: Numinous α
   rarity: 8
   defense:
@@ -13535,6 +13980,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512832
 - name: Numinous Greaves α
+  piece_type: legs
   set: Numinous α
   rarity: 8
   defense:
@@ -13573,6 +14019,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512832
 - name: Numinous Crown β
+  piece_type: head
   set: Numinous β
   rarity: 8
   defense:
@@ -13609,6 +14056,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512833
 - name: Numinous Shroud β
+  piece_type: chest
   set: Numinous β
   rarity: 8
   defense:
@@ -13643,6 +14091,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512833
 - name: Numinous Vambraces β
+  piece_type: arms
   set: Numinous β
   rarity: 8
   defense:
@@ -13677,6 +14126,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512833
 - name: Numinous Overlay β
+  piece_type: waist
   set: Numinous β
   rarity: 8
   defense:
@@ -13713,6 +14163,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512833
 - name: Numinous Greaves β
+  piece_type: legs
   set: Numinous β
   rarity: 8
   defense:
@@ -13751,6 +14202,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512833
 - name: Omega Ear Cuffs α
+  piece_type: head
   set: Omega Attire α
   rarity: 8
   defense:
@@ -13782,6 +14234,7 @@
       pieces_required: 4
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553653
 - name: Omega Suit α
+  piece_type: chest
   set: Omega Attire α
   rarity: 8
   defense:
@@ -13811,6 +14264,7 @@
       pieces_required: 4
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553653
 - name: Omega Vambraces α
+  piece_type: arms
   set: Omega Attire α
   rarity: 8
   defense:
@@ -13842,6 +14296,7 @@
       pieces_required: 4
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553653
 - name: Omega Accessory α
+  piece_type: waist
   set: Omega Attire α
   rarity: 8
   defense:
@@ -13873,6 +14328,7 @@
       pieces_required: 4
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553653
 - name: Omega Boots α
+  piece_type: legs
   set: Omega Attire α
   rarity: 8
   defense:
@@ -13902,6 +14358,7 @@
       pieces_required: 4
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553653
 - name: Orion Cap α
+  piece_type: head
   set: Orion α
   rarity: 8
   defense:
@@ -13929,6 +14386,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572034
 - name: Orion Vest α
+  piece_type: chest
   set: Orion α
   rarity: 8
   defense:
@@ -13958,6 +14416,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572034
 - name: Orion Vambraces α
+  piece_type: arms
   set: Orion α
   rarity: 8
   defense:
@@ -13987,6 +14446,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572034
 - name: Orion Coat α
+  piece_type: waist
   set: Orion α
   rarity: 8
   defense:
@@ -14016,6 +14476,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572034
 - name: Orion Boots α
+  piece_type: legs
   set: Orion α
   rarity: 8
   defense:
@@ -14045,6 +14506,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572034
 - name: Pinion Necklace α
+  piece_type: head
   set: Pinion Necklace α
   rarity: 7
   defense:
@@ -14069,6 +14531,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/535743
 - name: Piragill Greaves α
+  piece_type: legs
   set: Piragill α
   rarity: 5
   defense:
@@ -14098,6 +14561,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501907
 - name: Piragill Greaves β
+  piece_type: legs
   set: Piragill β
   rarity: 5
   defense:
@@ -14125,6 +14589,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501908
 - name: Quematrice Helm α
+  piece_type: head
   set: Quematrice α
   rarity: 5
   defense:
@@ -14154,6 +14619,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501919
 - name: Quematrice Mail α
+  piece_type: chest
   set: Quematrice α
   rarity: 5
   defense:
@@ -14183,6 +14649,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501919
 - name: Quematrice Braces α
+  piece_type: arms
   set: Quematrice α
   rarity: 5
   defense:
@@ -14212,6 +14679,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501919
 - name: Quematrice Coil α
+  piece_type: waist
   set: Quematrice α
   rarity: 5
   defense:
@@ -14241,6 +14709,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501919
 - name: Quematrice Greaves α
+  piece_type: legs
   set: Quematrice α
   rarity: 5
   defense:
@@ -14270,6 +14739,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501919
 - name: Quematrice Helm β
+  piece_type: head
   set: Quematrice β
   rarity: 5
   defense:
@@ -14297,6 +14767,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501920
 - name: Quematrice Mail β
+  piece_type: chest
   set: Quematrice β
   rarity: 5
   defense:
@@ -14324,6 +14795,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501920
 - name: Quematrice Braces β
+  piece_type: arms
   set: Quematrice β
   rarity: 5
   defense:
@@ -14351,6 +14823,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501920
 - name: Quematrice Coil β
+  piece_type: waist
   set: Quematrice β
   rarity: 5
   defense:
@@ -14378,6 +14851,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501920
 - name: Quematrice Greaves β
+  piece_type: legs
   set: Quematrice β
   rarity: 5
   defense:
@@ -14405,6 +14879,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501920
 - name: Rathalos Helm α
+  piece_type: head
   set: Rathalos α
   rarity: 6
   defense:
@@ -14441,6 +14916,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502406
 - name: Rathalos Mail α
+  piece_type: chest
   set: Rathalos α
   rarity: 6
   defense:
@@ -14477,6 +14953,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502406
 - name: Rathalos Vambraces α
+  piece_type: arms
   set: Rathalos α
   rarity: 6
   defense:
@@ -14513,6 +14990,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502406
 - name: Rathalos Coil α
+  piece_type: waist
   set: Rathalos α
   rarity: 6
   defense:
@@ -14549,6 +15027,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502406
 - name: Rathalos Greaves α
+  piece_type: legs
   set: Rathalos α
   rarity: 6
   defense:
@@ -14585,6 +15064,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502406
 - name: Rathalos Helm β
+  piece_type: head
   set: Rathalos β
   rarity: 6
   defense:
@@ -14621,6 +15101,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502407
 - name: Rathalos Mail β
+  piece_type: chest
   set: Rathalos β
   rarity: 6
   defense:
@@ -14655,6 +15136,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502407
 - name: Rathalos Vambraces β
+  piece_type: arms
   set: Rathalos β
   rarity: 6
   defense:
@@ -14689,6 +15171,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502407
 - name: Rathalos Coil β
+  piece_type: waist
   set: Rathalos β
   rarity: 6
   defense:
@@ -14723,6 +15206,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502407
 - name: Rathalos Greaves β
+  piece_type: legs
   set: Rathalos β
   rarity: 6
   defense:
@@ -14757,6 +15241,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502407
 - name: Rathian Helm α
+  piece_type: head
   set: Rathian α
   rarity: 5
   defense:
@@ -14786,6 +15271,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501933
 - name: Rathian Mail α
+  piece_type: chest
   set: Rathian α
   rarity: 5
   defense:
@@ -14813,6 +15299,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501933
 - name: Rathian Vambraces α
+  piece_type: arms
   set: Rathian α
   rarity: 5
   defense:
@@ -14842,6 +15329,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501933
 - name: Rathian Coil α
+  piece_type: waist
   set: Rathian α
   rarity: 5
   defense:
@@ -14871,6 +15359,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501933
 - name: Rathian Greaves α
+  piece_type: legs
   set: Rathian α
   rarity: 5
   defense:
@@ -14900,6 +15389,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501933
 - name: Rathian Helm β
+  piece_type: head
   set: Rathian β
   rarity: 5
   defense:
@@ -14927,6 +15417,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501934
 - name: Rathian Mail β
+  piece_type: chest
   set: Rathian β
   rarity: 5
   defense:
@@ -14954,6 +15445,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501934
 - name: Rathian Vambraces β
+  piece_type: arms
   set: Rathian β
   rarity: 5
   defense:
@@ -14983,6 +15475,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501934
 - name: Rathian Coil β
+  piece_type: waist
   set: Rathian β
   rarity: 5
   defense:
@@ -15010,6 +15503,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501934
 - name: Rathian Greaves β
+  piece_type: legs
   set: Rathian β
   rarity: 5
   defense:
@@ -15039,6 +15533,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501934
 - name: Rey Sandhelm α
+  piece_type: head
   set: Rey Dau α
   rarity: 7
   defense:
@@ -15075,6 +15570,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502039
 - name: Rey Sandmail α
+  piece_type: chest
   set: Rey Dau α
   rarity: 7
   defense:
@@ -15111,6 +15607,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502039
 - name: Rey Sandbraces α
+  piece_type: arms
   set: Rey Dau α
   rarity: 7
   defense:
@@ -15147,6 +15644,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502039
 - name: Rey Sandcoil α
+  piece_type: waist
   set: Rey Dau α
   rarity: 7
   defense:
@@ -15183,6 +15681,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502039
 - name: Rey Sandgreaves α
+  piece_type: legs
   set: Rey Dau α
   rarity: 7
   defense:
@@ -15219,6 +15718,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502039
 - name: Rey Sandhelm β
+  piece_type: head
   set: Rey Dau β
   rarity: 7
   defense:
@@ -15255,6 +15755,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502040
 - name: Rey Sandmail β
+  piece_type: chest
   set: Rey Dau β
   rarity: 7
   defense:
@@ -15291,6 +15792,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502040
 - name: Rey Sandbraces β
+  piece_type: arms
   set: Rey Dau β
   rarity: 7
   defense:
@@ -15325,6 +15827,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502040
 - name: Rey Sandcoil β
+  piece_type: waist
   set: Rey Dau β
   rarity: 7
   defense:
@@ -15361,6 +15864,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502040
 - name: Rey Sandgreaves β
+  piece_type: legs
   set: Rey Dau β
   rarity: 7
   defense:
@@ -15395,6 +15899,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502040
 - name: Rey Sandhelm γ
+  piece_type: head
   set: Rey Dau γ
   rarity: 8
   defense:
@@ -15433,6 +15938,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514827
 - name: Rey Sandmail γ
+  piece_type: chest
   set: Rey Dau γ
   rarity: 8
   defense:
@@ -15467,6 +15973,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514827
 - name: Rey Sandbraces γ
+  piece_type: arms
   set: Rey Dau γ
   rarity: 8
   defense:
@@ -15501,6 +16008,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514827
 - name: Rey Sandcoil γ
+  piece_type: waist
   set: Rey Dau γ
   rarity: 8
   defense:
@@ -15537,6 +16045,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514827
 - name: Rey Sandgreaves γ
+  piece_type: legs
   set: Rey Dau γ
   rarity: 8
   defense:
@@ -15573,6 +16082,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514827
 - name: Rompomask α
+  piece_type: head
   set: Rompomask α
   rarity: 8
   defense:
@@ -15602,6 +16112,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/583625
 - name: Rompopolo Helm α
+  piece_type: head
   set: Rompopolo α
   rarity: 5
   defense:
@@ -15629,6 +16140,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501925
 - name: Rompopolo Mail α
+  piece_type: chest
   set: Rompopolo α
   rarity: 5
   defense:
@@ -15658,6 +16170,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501925
 - name: Rompopolo Vambraces α
+  piece_type: arms
   set: Rompopolo α
   rarity: 5
   defense:
@@ -15687,6 +16200,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501925
 - name: Rompopolo Coil α
+  piece_type: waist
   set: Rompopolo α
   rarity: 5
   defense:
@@ -15716,6 +16230,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501925
 - name: Rompopolo Greaves α
+  piece_type: legs
   set: Rompopolo α
   rarity: 5
   defense:
@@ -15745,6 +16260,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501925
 - name: Rompopolo Helm β
+  piece_type: head
   set: Rompopolo β
   rarity: 5
   defense:
@@ -15772,6 +16288,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501926
 - name: Rompopolo Mail β
+  piece_type: chest
   set: Rompopolo β
   rarity: 5
   defense:
@@ -15799,6 +16316,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501926
 - name: Rompopolo Vambraces β
+  piece_type: arms
   set: Rompopolo β
   rarity: 5
   defense:
@@ -15826,6 +16344,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501926
 - name: Rompopolo Coil β
+  piece_type: waist
   set: Rompopolo β
   rarity: 5
   defense:
@@ -15853,6 +16372,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501926
 - name: Rompopolo Greaves β
+  piece_type: legs
   set: Rompopolo β
   rarity: 5
   defense:
@@ -15880,6 +16400,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501926
 - name: Round Glasses α
+  piece_type: head
   set: Round Glasses α
   rarity: 7
   defense:
@@ -15902,6 +16423,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514823
 - name: Sakuratide Headgear α
+  piece_type: head
   set: Sakuratide α
   rarity: 5
   defense:
@@ -15938,6 +16460,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514811
 - name: Sakuratide Robe α
+  piece_type: chest
   set: Sakuratide α
   rarity: 5
   defense:
@@ -15974,6 +16497,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514811
 - name: Sakuratide Bracers α
+  piece_type: arms
   set: Sakuratide α
   rarity: 5
   defense:
@@ -16010,6 +16534,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514811
 - name: Sakuratide Obi α
+  piece_type: waist
   set: Sakuratide α
   rarity: 5
   defense:
@@ -16046,6 +16571,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514811
 - name: Sakuratide Hakama α
+  piece_type: legs
   set: Sakuratide α
   rarity: 5
   defense:
@@ -16082,6 +16608,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514811
 - name: Sealed Dragon Cloth α
+  piece_type: chest
   set: Sealed Dragon Cloth α
   rarity: 6
   defense:
@@ -16106,6 +16633,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/520571
 - name: Sealed Eyepatch α
+  piece_type: head
   set: Sealed Eyepatch α
   rarity: 7
   defense:
@@ -16128,6 +16656,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514825
 - name: Regios Helm α
+  piece_type: head
   set: Seregios α
   rarity: 7
   defense:
@@ -16166,6 +16695,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532648
 - name: Regios Mail α
+  piece_type: chest
   set: Seregios α
   rarity: 7
   defense:
@@ -16204,6 +16734,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532648
 - name: Regios Vambraces α
+  piece_type: arms
   set: Seregios α
   rarity: 7
   defense:
@@ -16240,6 +16771,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532648
 - name: Regios Coil α
+  piece_type: waist
   set: Seregios α
   rarity: 7
   defense:
@@ -16278,6 +16810,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532648
 - name: Regios Greaves α
+  piece_type: legs
   set: Seregios α
   rarity: 7
   defense:
@@ -16316,6 +16849,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532648
 - name: Regios Helm β
+  piece_type: head
   set: Seregios β
   rarity: 7
   defense:
@@ -16352,6 +16886,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532649
 - name: Regios Mail β
+  piece_type: chest
   set: Seregios β
   rarity: 7
   defense:
@@ -16388,6 +16923,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532649
 - name: Regios Vambraces β
+  piece_type: arms
   set: Seregios β
   rarity: 7
   defense:
@@ -16422,6 +16958,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532649
 - name: Regios Coil β
+  piece_type: waist
   set: Seregios β
   rarity: 7
   defense:
@@ -16458,6 +16995,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532649
 - name: Regios Greaves β
+  piece_type: legs
   set: Seregios β
   rarity: 7
   defense:
@@ -16494,6 +17032,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532649
 - name: Shadow Shades α
+  piece_type: head
   set: Shadow Shades α
   rarity: 7
   defense:
@@ -16518,6 +17057,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/514824
 - name: Sild Hood α
+  piece_type: head
   set: Sild α
   rarity: 6
   defense:
@@ -16545,6 +17085,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503033
 - name: Sild Coat α
+  piece_type: chest
   set: Sild α
   rarity: 6
   defense:
@@ -16572,6 +17113,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503033
 - name: Skull Mask α
+  piece_type: head
   set: Skull Mask α
   rarity: 8
   defense:
@@ -16596,6 +17138,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/556335
 - name: Sororal Earrings α
+  piece_type: head
   set: Sororal α
   rarity: 8
   defense:
@@ -16630,6 +17173,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580909
 - name: Sororal Coat α
+  piece_type: chest
   set: Sororal α
   rarity: 8
   defense:
@@ -16668,6 +17212,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580909
 - name: Sororal Vambraces α
+  piece_type: arms
   set: Sororal α
   rarity: 8
   defense:
@@ -16706,6 +17251,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580909
 - name: Sororal Coil α
+  piece_type: waist
   set: Sororal α
   rarity: 8
   defense:
@@ -16742,6 +17288,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580909
 - name: Sororal Boots α
+  piece_type: legs
   set: Sororal α
   rarity: 8
   defense:
@@ -16778,6 +17325,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580909
 - name: Square Glasses α
+  piece_type: head
   set: Square Glasses α
   rarity: 6
   defense:
@@ -16802,6 +17350,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512878
 - name: Strategist Spectacles α
+  piece_type: head
   set: Strategist Spectacles α
   rarity: 6
   defense:
@@ -16824,6 +17373,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512877
 - name: Suja Sash α
+  piece_type: waist
   set: Suja α
   rarity: 6
   defense:
@@ -16851,6 +17401,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502409
 - name: Talioth Vambraces α
+  piece_type: arms
   set: Talioth α
   rarity: 5
   defense:
@@ -16880,6 +17431,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501905
 - name: Talioth Vambraces β
+  piece_type: arms
   set: Talioth β
   rarity: 5
   defense:
@@ -16907,6 +17459,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501906
 - name: Toe Bean Mittens α
+  piece_type: arms
   set: Toe Bean Mittens α
   rarity: 7
   defense:
@@ -16931,6 +17484,7 @@
   set_bonuses: []
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/546160
 - name: Duna Wildhelm α
+  piece_type: head
   set: Uth Duna α
   rarity: 7
   defense:
@@ -16967,6 +17521,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502037
 - name: Duna Wildmail α
+  piece_type: chest
   set: Uth Duna α
   rarity: 7
   defense:
@@ -17003,6 +17558,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502037
 - name: Duna Wildbraces α
+  piece_type: arms
   set: Uth Duna α
   rarity: 7
   defense:
@@ -17039,6 +17595,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502037
 - name: Duna Wildcoil α
+  piece_type: waist
   set: Uth Duna α
   rarity: 7
   defense:
@@ -17075,6 +17632,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502037
 - name: Duna Wildgreaves α
+  piece_type: legs
   set: Uth Duna α
   rarity: 7
   defense:
@@ -17111,6 +17669,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502037
 - name: Duna Wildhelm β
+  piece_type: head
   set: Uth Duna β
   rarity: 7
   defense:
@@ -17147,6 +17706,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502038
 - name: Duna Wildmail β
+  piece_type: chest
   set: Uth Duna β
   rarity: 7
   defense:
@@ -17181,6 +17741,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502038
 - name: Duna Wildbraces β
+  piece_type: arms
   set: Uth Duna β
   rarity: 7
   defense:
@@ -17217,6 +17778,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502038
 - name: Duna Wildcoil β
+  piece_type: waist
   set: Uth Duna β
   rarity: 7
   defense:
@@ -17251,6 +17813,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502038
 - name: Duna Wildgreaves β
+  piece_type: legs
   set: Uth Duna β
   rarity: 7
   defense:
@@ -17285,6 +17848,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/502038
 - name: Duna Wildhelm γ
+  piece_type: head
   set: Uth Duna γ
   rarity: 8
   defense:
@@ -17321,6 +17885,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536399
 - name: Duna Wildmail γ
+  piece_type: chest
   set: Uth Duna γ
   rarity: 8
   defense:
@@ -17357,6 +17922,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536399
 - name: Duna Wildbraces γ
+  piece_type: arms
   set: Uth Duna γ
   rarity: 8
   defense:
@@ -17393,6 +17959,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536399
 - name: Duna Wildcoil γ
+  piece_type: waist
   set: Uth Duna γ
   rarity: 8
   defense:
@@ -17427,6 +17994,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536399
 - name: Duna Wildgreaves γ
+  piece_type: legs
   set: Uth Duna γ
   rarity: 8
   defense:
@@ -17463,6 +18031,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536399
 - name: Vespoid Helm α
+  piece_type: head
   set: Vespoid α
   rarity: 5
   defense:
@@ -17492,6 +18061,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501909
 - name: Vespoid Mail α
+  piece_type: chest
   set: Vespoid α
   rarity: 5
   defense:
@@ -17521,6 +18091,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501909
 - name: Vespoid Vambraces α
+  piece_type: arms
   set: Vespoid α
   rarity: 5
   defense:
@@ -17550,6 +18121,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501909
 - name: Vespoid Coil α
+  piece_type: waist
   set: Vespoid α
   rarity: 5
   defense:
@@ -17579,6 +18151,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501909
 - name: Vespoid Greaves α
+  piece_type: legs
   set: Vespoid α
   rarity: 5
   defense:
@@ -17608,6 +18181,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501909
 - name: Vespoid Helm β
+  piece_type: head
   set: Vespoid β
   rarity: 5
   defense:
@@ -17635,6 +18209,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501910
 - name: Vespoid Mail β
+  piece_type: chest
   set: Vespoid β
   rarity: 5
   defense:
@@ -17662,6 +18237,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501910
 - name: Vespoid Vambraces β
+  piece_type: arms
   set: Vespoid β
   rarity: 5
   defense:
@@ -17689,6 +18265,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501910
 - name: Vespoid Coil β
+  piece_type: waist
   set: Vespoid β
   rarity: 5
   defense:
@@ -17716,6 +18293,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501910
 - name: Vespoid Greaves β
+  piece_type: legs
   set: Vespoid β
   rarity: 5
   defense:
@@ -17743,6 +18321,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501910
 - name: Xu Wu Helm α
+  piece_type: head
   set: Xu Wu α
   rarity: 6
   defense:
@@ -17779,6 +18358,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501943
 - name: Xu Wu Mail α
+  piece_type: chest
   set: Xu Wu α
   rarity: 6
   defense:
@@ -17815,6 +18395,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501943
 - name: Xu Wu Vambraces α
+  piece_type: arms
   set: Xu Wu α
   rarity: 6
   defense:
@@ -17849,6 +18430,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501943
 - name: Xu Wu Coil α
+  piece_type: waist
   set: Xu Wu α
   rarity: 6
   defense:
@@ -17885,6 +18467,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501943
 - name: Xu Wu Greaves α
+  piece_type: legs
   set: Xu Wu α
   rarity: 6
   defense:
@@ -17921,6 +18504,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501943
 - name: Xu Wu Helm β
+  piece_type: head
   set: Xu Wu β
   rarity: 6
   defense:
@@ -17955,6 +18539,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501945
 - name: Xu Wu Mail β
+  piece_type: chest
   set: Xu Wu β
   rarity: 6
   defense:
@@ -17989,6 +18574,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501945
 - name: Xu Wu Vambraces β
+  piece_type: arms
   set: Xu Wu β
   rarity: 6
   defense:
@@ -18023,6 +18609,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501945
 - name: Xu Wu Coil β
+  piece_type: waist
   set: Xu Wu β
   rarity: 6
   defense:
@@ -18059,6 +18646,7 @@
       pieces_required: 3
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501945
 - name: Xu Wu Greaves β
+  piece_type: legs
   set: Xu Wu β
   rarity: 6
   defense:

@@ -6,12 +6,16 @@
 # slots) are excluded, since their stats are not fixed/enumerable.
 # Craftable Talismans never carry decoration slots in this game -- only
 # Appraised ones do -- so every 'slots' field below is empty.
+# 'decoration_slots' (armour/weapon) is a placeholder, left at 0.
 - name: Blast Charm I
   rarity: 3
   skills:
   - name: Blast Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501158
 - name: Blast Charm II
   rarity: 4
@@ -19,6 +23,9 @@
   - name: Blast Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503608
 - name: Blast Charm III
   rarity: 5
@@ -26,6 +33,9 @@
   - name: Blast Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503609
 - name: Bleed Charm I
   rarity: 3
@@ -33,6 +43,9 @@
   - name: Bleeding Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501172
 - name: Bleed Charm II
   rarity: 5
@@ -40,6 +53,9 @@
   - name: Bleeding Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503635
 - name: Bleed Charm III
   rarity: 6
@@ -47,6 +63,9 @@
   - name: Bleeding Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503636
 - name: Blessing Charm I
   rarity: 3
@@ -54,6 +73,9 @@
   - name: Divine Blessing
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501146
 - name: Blessing Charm II
   rarity: 4
@@ -61,6 +83,9 @@
   - name: Divine Blessing
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503581
 - name: Blessing Charm III
   rarity: 5
@@ -68,6 +93,9 @@
   - name: Divine Blessing
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501538
 - name: Blight Charm I
   rarity: 6
@@ -75,6 +103,9 @@
   - name: Blight Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503602
 - name: Blight Charm II
   rarity: 7
@@ -82,6 +113,9 @@
   - name: Blight Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503603
 - name: Blight Charm III
   rarity: 8
@@ -89,6 +123,9 @@
   - name: Blight Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/571424
 - name: Bombardier Charm I
   rarity: 4
@@ -96,6 +133,9 @@
   - name: Bombardier
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501184
 - name: Bombardier Charm II
   rarity: 5
@@ -103,6 +143,9 @@
   - name: Bombardier
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501545
 - name: Bombardier Charm III
   rarity: 6
@@ -110,6 +153,9 @@
   - name: Bombardier
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503614
 - name: Botany Charm I
   rarity: 2
@@ -117,6 +163,9 @@
   - name: Botanist
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501170
 - name: Botany Charm II
   rarity: 4
@@ -124,6 +173,9 @@
   - name: Botanist
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501547
 - name: Botany Charm III
   rarity: 4
@@ -131,6 +183,9 @@
   - name: Botanist
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503610
 - name: Botany Charm IV
   rarity: 5
@@ -138,6 +193,9 @@
   - name: Botanist
     level: 4
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503611
 - name: Breaker Charm I
   rarity: 5
@@ -145,6 +203,9 @@
   - name: Partbreaker
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501534
 - name: Breaker Charm II
   rarity: 7
@@ -152,6 +213,9 @@
   - name: Partbreaker
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503347
 - name: Breaker Charm III
   rarity: 8
@@ -159,6 +223,9 @@
   - name: Partbreaker
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/571425
 - name: Chain Charm I
   rarity: 5
@@ -166,6 +233,9 @@
   - name: Burst
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501533
 - name: Chain Charm II
   rarity: 7
@@ -173,6 +243,9 @@
   - name: Burst
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503632
 - name: Chain Charm III
   rarity: 8
@@ -180,6 +253,9 @@
   - name: Burst
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553762
 - name: Chainblade Charm I
   rarity: 4
@@ -187,6 +263,9 @@
   - name: Flayer
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501177
 - name: Chainblade Charm II
   rarity: 7
@@ -194,6 +273,9 @@
   - name: Flayer
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503342
 - name: Chainblade Charm III
   rarity: 8
@@ -201,6 +283,9 @@
   - name: Flayer
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580884
 - name: Challenger Charm I
   rarity: 5
@@ -208,6 +293,9 @@
   - name: Agitator
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503340
 - name: Challenger Charm II
   rarity: 7
@@ -215,6 +303,9 @@
   - name: Agitator
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503341
 - name: Challenger Charm III
   rarity: 8
@@ -222,6 +313,9 @@
   - name: Agitator
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572317
 - name: Convert Charm I
   rarity: 7
@@ -229,6 +323,9 @@
   - name: Convert Element
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503647
 - name: Convert Charm II
   rarity: 8
@@ -236,6 +333,9 @@
   - name: Convert Element
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512896
 - name: Counter Charm I
   rarity: 5
@@ -243,6 +343,9 @@
   - name: Counterstrike
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503627
 - name: Counter Charm II
   rarity: 6
@@ -250,6 +353,9 @@
   - name: Counterstrike
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503628
 - name: Counter Charm III
   rarity: 7
@@ -257,6 +363,9 @@
   - name: Counterstrike
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503629
 - name: Counterattack Charm I
   rarity: 5
@@ -264,6 +373,9 @@
   - name: Adrenaline Rush
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503559
 - name: Counterattack Charm II
   rarity: 7
@@ -271,6 +383,9 @@
   - name: Adrenaline Rush
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503633
 - name: Counterattack Charm III
   rarity: 8
@@ -278,6 +393,9 @@
   - name: Adrenaline Rush
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532594
 - name: Defense Charm I
   rarity: 2
@@ -285,6 +403,9 @@
   - name: Defense Boost
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501129
 - name: Defense Charm II
   rarity: 4
@@ -292,6 +413,9 @@
   - name: Defense Boost
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503578
 - name: Defense Charm III
   rarity: 5
@@ -299,6 +423,9 @@
   - name: Defense Boost
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503579
 - name: Defense Charm IV
   rarity: 6
@@ -306,6 +433,9 @@
   - name: Defense Boost
     level: 4
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503580
 - name: Defense Charm V
   rarity: 7
@@ -313,6 +443,9 @@
   - name: Defense Boost
     level: 5
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/517552
 - name: Descent Charm I
   rarity: 4
@@ -320,6 +453,9 @@
   - name: Ambush
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501178
 - name: Descent Charm II
   rarity: 6
@@ -327,6 +463,9 @@
   - name: Ambush
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503634
 - name: Descent Charm III
   rarity: 7
@@ -334,6 +473,9 @@
   - name: Ambush
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559908
 - name: Dragon Charm I
   rarity: 3
@@ -341,6 +483,9 @@
   - name: Dragon Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501151
 - name: Dragon Charm II
   rarity: 4
@@ -348,6 +493,9 @@
   - name: Dragon Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503600
 - name: Dragon Charm III
   rarity: 5
@@ -355,6 +503,9 @@
   - name: Dragon Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503601
 - name: Earplugs Charm I
   rarity: 6
@@ -362,6 +513,9 @@
   - name: Earplugs
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503587
 - name: Earplugs Charm II
   rarity: 7
@@ -369,6 +523,9 @@
   - name: Earplugs
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512894
 - name: Escape Charm I
   rarity: 4
@@ -376,6 +533,9 @@
   - name: Bind Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501157
 - name: Escape Charm II
   rarity: 6
@@ -383,6 +543,9 @@
   - name: Bind Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503644
 - name: Escape Charm III
   rarity: 7
@@ -390,6 +553,9 @@
   - name: Bind Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503645
 - name: Evasion Charm I
   rarity: 4
@@ -397,6 +563,9 @@
   - name: Evade Window
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501179
 - name: Evasion Charm II
   rarity: 5
@@ -404,6 +573,9 @@
   - name: Evade Window
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503592
 - name: Evasion Charm III
   rarity: 6
@@ -411,6 +583,9 @@
   - name: Evade Window
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503593
 - name: Evasion Charm IV
   rarity: 7
@@ -418,6 +593,9 @@
   - name: Evade Window
     level: 4
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512895
 - name: Exploiter Charm I
   rarity: 5
@@ -425,6 +603,9 @@
   - name: Weakness Exploit
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501530
 - name: Exploiter Charm II
   rarity: 7
@@ -432,6 +613,9 @@
   - name: Weakness Exploit
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503573
 - name: Exploiter Charm III
   rarity: 8
@@ -439,6 +623,9 @@
   - name: Weakness Exploit
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/580882
 - name: Extension Charm I
   rarity: 3
@@ -446,6 +633,9 @@
   - name: Item Prolonger
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501169
 - name: Extension Charm II
   rarity: 4
@@ -453,6 +643,9 @@
   - name: Item Prolonger
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503617
 - name: Extension Charm III
   rarity: 5
@@ -460,6 +653,9 @@
   - name: Item Prolonger
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501546
 - name: Fire Charm I
   rarity: 2
@@ -467,6 +663,9 @@
   - name: Fire Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501147
 - name: Fire Charm II
   rarity: 4
@@ -474,6 +673,9 @@
   - name: Fire Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503595
 - name: Fire Charm III
   rarity: 5
@@ -481,6 +683,9 @@
   - name: Fire Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503596
 - name: Fitness Charm I
   rarity: 4
@@ -488,6 +693,9 @@
   - name: Constitution
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501173
 - name: Fitness Charm II
   rarity: 5
@@ -495,6 +703,9 @@
   - name: Constitution
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503564
 - name: Fitness Charm III
   rarity: 6
@@ -502,6 +713,9 @@
   - name: Constitution
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503139
 - name: Fitness Charm IV
   rarity: 7
@@ -509,6 +723,9 @@
   - name: Constitution
     level: 4
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503565
 - name: Fitness Charm V
   rarity: 8
@@ -516,6 +733,9 @@
   - name: Constitution
     level: 5
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/512893
 - name: Foray Charm I
   rarity: 4
@@ -523,6 +743,9 @@
   - name: Foray
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501163
 - name: Foray Charm II
   rarity: 6
@@ -530,6 +753,9 @@
   - name: Foray
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503630
 - name: Foray Charm III
   rarity: 7
@@ -537,6 +763,9 @@
   - name: Foray
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/553765
 - name: Friendship Charm I
   rarity: 3
@@ -544,6 +773,9 @@
   - name: Wide-Range
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501167
 - name: Friendship Charm II
   rarity: 4
@@ -551,6 +783,9 @@
   - name: Wide-Range
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501544
 - name: Friendship Charm III
   rarity: 4
@@ -558,6 +793,9 @@
   - name: Wide-Range
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503618
 - name: Friendship Charm IV
   rarity: 5
@@ -565,6 +803,9 @@
   - name: Wide-Range
     level: 4
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503619
 - name: Friendship Charm V
   rarity: 6
@@ -572,6 +813,9 @@
   - name: Wide-Range
     level: 5
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532760
 - name: Fury Charm I
   rarity: 5
@@ -579,6 +823,9 @@
   - name: Resentment
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501537
 - name: Fury Charm II
   rarity: 7
@@ -586,6 +833,9 @@
   - name: Resentment
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503572
 - name: Fury Charm III
   rarity: 8
@@ -593,6 +843,9 @@
   - name: Resentment
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/559907
 - name: Geology Charm I
   rarity: 2
@@ -600,6 +853,9 @@
   - name: Geologist
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501171
 - name: Geology Charm II
   rarity: 4
@@ -607,6 +863,9 @@
   - name: Geologist
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503612
 - name: Geology Charm III
   rarity: 5
@@ -614,6 +873,9 @@
   - name: Geologist
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503613
 - name: Glutton's Charm I
   rarity: 2
@@ -621,6 +883,9 @@
   - name: Speed Eating
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501166
 - name: Glutton's Charm II
   rarity: 4
@@ -628,6 +893,9 @@
   - name: Speed Eating
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503585
 - name: Glutton's Charm III
   rarity: 5
@@ -635,6 +903,9 @@
   - name: Speed Eating
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503586
 - name: Grit Charm I
   rarity: 4
@@ -642,6 +913,9 @@
   - name: Heroics
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501176
 - name: Grit Charm II
   rarity: 6
@@ -649,6 +923,9 @@
   - name: Heroics
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503622
 - name: Grit Charm III
   rarity: 7
@@ -656,6 +933,9 @@
   - name: Heroics
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503623
 - name: Grit Charm IV
   rarity: 8
@@ -663,6 +943,9 @@
   - name: Heroics
     level: 4
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532595
 - name: Guard Charm I
   rarity: 3
@@ -670,6 +953,9 @@
   - name: Iron Skin
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501155
 - name: Guard Charm II
   rarity: 5
@@ -677,6 +963,9 @@
   - name: Iron Skin
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503637
 - name: Guard Charm III
   rarity: 6
@@ -684,6 +973,9 @@
   - name: Iron Skin
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503638
 - name: Hope Charm
   rarity: 5
@@ -693,6 +985,9 @@
   - name: Recovery Up
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501796
 - name: Hungerless Charm I
   rarity: 2
@@ -700,6 +995,9 @@
   - name: Hunger Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501162
 - name: Hungerless Charm II
   rarity: 4
@@ -707,6 +1005,9 @@
   - name: Hunger Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503625
 - name: Hungerless Charm III
   rarity: 5
@@ -714,6 +1015,9 @@
   - name: Hunger Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503626
 - name: Ice Charm I
   rarity: 3
@@ -721,6 +1025,9 @@
   - name: Ice Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501150
 - name: Ice Charm II
   rarity: 4
@@ -728,6 +1035,9 @@
   - name: Ice Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501187
 - name: Ice Charm III
   rarity: 5
@@ -735,6 +1045,9 @@
   - name: Ice Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501540
 - name: Imbibe Charm I
   rarity: 7
@@ -742,6 +1055,9 @@
   - name: Elemental Absorption
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503646
 - name: Imbibe Charm II
   rarity: 8
@@ -749,6 +1065,9 @@
   - name: Elemental Absorption
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/532596
 - name: Impact Charm I
   rarity: 3
@@ -756,6 +1075,9 @@
   - name: Flinch Free
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501164
 - name: Impact Charm II
   rarity: 4
@@ -763,6 +1085,9 @@
   - name: Flinch Free
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503624
 - name: Impact Charm III
   rarity: 5
@@ -770,6 +1095,9 @@
   - name: Flinch Free
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501543
 - name: Intimidator Charm I
   rarity: 3
@@ -777,6 +1105,9 @@
   - name: Intimidator
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501165
 - name: Intimidator Charm II
   rarity: 5
@@ -784,6 +1115,9 @@
   - name: Intimidator
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503642
 - name: Intimidator Charm III
   rarity: 6
@@ -791,6 +1125,9 @@
   - name: Intimidator
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503643
 - name: Leaping Charm I
   rarity: 4
@@ -798,6 +1135,9 @@
   - name: Evade Extender
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501180
 - name: Leaping Charm II
   rarity: 5
@@ -805,6 +1145,9 @@
   - name: Evade Extender
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503594
 - name: Leaping Charm III
   rarity: 6
@@ -812,6 +1155,9 @@
   - name: Evade Extender
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503138
 - name: Light Eater's Charm I
   rarity: 4
@@ -819,6 +1165,9 @@
   - name: Free Meal
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501186
 - name: Light Eater's Charm II
   rarity: 5
@@ -826,6 +1175,9 @@
   - name: Free Meal
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503620
 - name: Light Eater's Charm III
   rarity: 6
@@ -833,6 +1185,9 @@
   - name: Free Meal
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503621
 - name: Maintenance Charm I
   rarity: 4
@@ -840,6 +1195,9 @@
   - name: Tool Specialist
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501168
 - name: Maintenance Charm II
   rarity: 6
@@ -847,6 +1205,9 @@
   - name: Tool Specialist
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503640
 - name: Maintenance Charm III
   rarity: 7
@@ -854,6 +1215,9 @@
   - name: Tool Specialist
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503641
 - name: Maintenance Charm IV
   rarity: 8
@@ -861,6 +1225,9 @@
   - name: Tool Specialist
     level: 4
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/536518
 - name: Marathon Charm I
   rarity: 4
@@ -868,6 +1235,9 @@
   - name: Marathon Runner
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501175
 - name: Marathon Charm II
   rarity: 5
@@ -875,6 +1245,9 @@
   - name: Marathon Runner
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503563
 - name: Marathon Charm III
   rarity: 6
@@ -882,6 +1255,9 @@
   - name: Marathon Runner
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503475
 - name: Mighty Charm I
   rarity: 5
@@ -889,6 +1265,9 @@
   - name: Maximum Might
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501531
 - name: Mighty Charm II
   rarity: 7
@@ -896,6 +1275,9 @@
   - name: Maximum Might
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503575
 - name: Mighty Charm III
   rarity: 8
@@ -903,6 +1285,9 @@
   - name: Maximum Might
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523609
 - name: Mushroom Charm I
   rarity: 4
@@ -910,6 +1295,9 @@
   - name: Mushroomancer
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501185
 - name: Mushroom Charm II
   rarity: 6
@@ -917,6 +1305,9 @@
   - name: Mushroomancer
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503615
 - name: Mushroom Charm III
   rarity: 7
@@ -924,6 +1315,9 @@
   - name: Mushroomancer
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503616
 - name: Paralysis Charm I
   rarity: 2
@@ -931,6 +1325,9 @@
   - name: Paralysis Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501153
 - name: Paralysis Charm II
   rarity: 4
@@ -938,6 +1335,9 @@
   - name: Paralysis Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501188
 - name: Paralysis Charm III
   rarity: 5
@@ -945,6 +1345,9 @@
   - name: Paralysis Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503560
 - name: Phoenix Charm I
   rarity: 6
@@ -952,6 +1355,9 @@
   - name: Coalescence
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501535
 - name: Phoenix Charm II
   rarity: 7
@@ -959,6 +1365,9 @@
   - name: Coalescence
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503631
 - name: Phoenix Charm III
   rarity: 8
@@ -966,6 +1375,9 @@
   - name: Coalescence
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/572318
 - name: Poison Charm I
   rarity: 3
@@ -973,6 +1385,9 @@
   - name: Poison Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501152
 - name: Poison Charm II
   rarity: 4
@@ -980,6 +1395,9 @@
   - name: Poison Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503604
 - name: Poison Charm III
   rarity: 5
@@ -987,6 +1405,9 @@
   - name: Poison Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503605
 - name: Power Charm I
   rarity: 5
@@ -994,6 +1415,9 @@
   - name: Latent Power
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501532
 - name: Power Charm II
   rarity: 7
@@ -1001,6 +1425,9 @@
   - name: Latent Power
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503574
 - name: Power Charm III
   rarity: 8
@@ -1008,6 +1435,9 @@
   - name: Latent Power
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/517553
 - name: Recovery Charm I
   rarity: 3
@@ -1015,6 +1445,9 @@
   - name: Recovery Up
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501159
 - name: Recovery Charm II
   rarity: 4
@@ -1022,6 +1455,9 @@
   - name: Recovery Up
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501541
 - name: Recovery Charm III
   rarity: 5
@@ -1029,6 +1465,9 @@
   - name: Recovery Up
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503582
 - name: Rice Ball Charm
   rarity: 6
@@ -1036,6 +1475,9 @@
   - name: Rice Ball
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/523981
 - name: Sanity Charm I
   rarity: 5
@@ -1043,6 +1485,9 @@
   - name: Antivirus
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501536
 - name: Sanity Charm II
   rarity: 6
@@ -1050,6 +1495,9 @@
   - name: Antivirus
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503648
 - name: Sanity Charm III
   rarity: 7
@@ -1057,6 +1505,9 @@
   - name: Antivirus
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503649
 - name: Sheathe Charm I
   rarity: 4
@@ -1064,6 +1515,9 @@
   - name: Quick Sheathe
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501181
 - name: Sheathe Charm II
   rarity: 5
@@ -1071,6 +1525,9 @@
   - name: Quick Sheathe
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503566
 - name: Sheathe Charm III
   rarity: 6
@@ -1078,6 +1535,9 @@
   - name: Quick Sheathe
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503567
 - name: Sleep Charm I
   rarity: 3
@@ -1085,6 +1545,9 @@
   - name: Sleep Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501154
 - name: Sleep Charm II
   rarity: 4
@@ -1092,6 +1555,9 @@
   - name: Sleep Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501142
 - name: Sleep Charm III
   rarity: 5
@@ -1099,6 +1565,9 @@
   - name: Sleep Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503561
 - name: Speed Heal Charm I
   rarity: 2
@@ -1106,6 +1575,9 @@
   - name: Recovery Speed
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501160
 - name: Speed Heal Charm II
   rarity: 4
@@ -1113,6 +1585,9 @@
   - name: Recovery Speed
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503583
 - name: Speed Heal Charm III
   rarity: 5
@@ -1120,6 +1595,9 @@
   - name: Recovery Speed
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503584
 - name: Stun Charm I
   rarity: 3
@@ -1127,6 +1605,9 @@
   - name: Stun Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501156
 - name: Stun Charm II
   rarity: 4
@@ -1134,6 +1615,9 @@
   - name: Stun Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503606
 - name: Stun Charm III
   rarity: 5
@@ -1141,6 +1625,9 @@
   - name: Stun Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503607
 - name: Surge Charm I
   rarity: 4
@@ -1148,6 +1635,9 @@
   - name: Stamina Surge
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501174
 - name: Surge Charm II
   rarity: 5
@@ -1155,6 +1645,9 @@
   - name: Stamina Surge
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503576
 - name: Surge Charm III
   rarity: 6
@@ -1162,6 +1655,9 @@
   - name: Stamina Surge
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503577
 - name: Survival Charm I
   rarity: 3
@@ -1169,6 +1665,9 @@
   - name: Survival Expert
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501161
 - name: Survival Charm II
   rarity: 5
@@ -1176,6 +1675,9 @@
   - name: Survival Expert
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501542
 - name: Survival Charm III
   rarity: 6
@@ -1183,6 +1685,9 @@
   - name: Survival Expert
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503639
 - name: Thunder Charm I
   rarity: 3
@@ -1190,6 +1695,9 @@
   - name: Thunder Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501149
 - name: Thunder Charm II
   rarity: 4
@@ -1197,6 +1705,9 @@
   - name: Thunder Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503599
 - name: Thunder Charm III
   rarity: 5
@@ -1204,6 +1715,9 @@
   - name: Thunder Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501539
 - name: Tremor Charm I
   rarity: 4
@@ -1211,6 +1725,9 @@
   - name: Tremor Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501183
 - name: Tremor Charm II
   rarity: 5
@@ -1218,6 +1735,9 @@
   - name: Tremor Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503590
 - name: Tremor Charm III
   rarity: 6
@@ -1225,6 +1745,9 @@
   - name: Tremor Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503591
 - name: Unscathed Charm I
   rarity: 5
@@ -1232,6 +1755,9 @@
   - name: Peak Performance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501529
 - name: Unscathed Charm II
   rarity: 7
@@ -1239,6 +1765,9 @@
   - name: Peak Performance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503562
 - name: Unscathed Charm III
   rarity: 8
@@ -1246,6 +1775,9 @@
   - name: Peak Performance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/537161
 - name: Water Charm I
   rarity: 2
@@ -1253,6 +1785,9 @@
   - name: Water Resistance
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501148
 - name: Water Charm II
   rarity: 4
@@ -1260,6 +1795,9 @@
   - name: Water Resistance
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503597
 - name: Water Charm III
   rarity: 5
@@ -1267,6 +1805,9 @@
   - name: Water Resistance
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503598
 - name: Windproof Charm I
   rarity: 4
@@ -1274,6 +1815,9 @@
   - name: Windproof
     level: 1
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/501182
 - name: Windproof Charm II
   rarity: 5
@@ -1281,6 +1825,9 @@
   - name: Windproof
     level: 2
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503588
 - name: Windproof Charm III
   rarity: 6
@@ -1288,4 +1835,7 @@
   - name: Windproof
     level: 3
   slots: []
+  decoration_slots:
+    armour: 0
+    weapon: 0
   source_url: https://game8.co/games/Monster-Hunter-Wilds/archives/503589

@@ -62,6 +62,7 @@ class SetBonus:
 @dataclass
 class ArmorPiece:
     name: str
+    piece_type: str
     set: str
     rarity: int
     defense: Defense
@@ -74,11 +75,18 @@ class ArmorPiece:
 
 
 @dataclass
+class DecorationSlots:
+    armour: int = 0
+    weapon: int = 0
+
+
+@dataclass
 class Talisman:
     name: str
     rarity: int
     skills: list[SkillLevel]
     slots: list[int]
+    decoration_slots: DecorationSlots
     source_url: str
 
 
@@ -119,6 +127,7 @@ def load_armor() -> list[ArmorPiece]:
         pieces.append(
             ArmorPiece(
                 name=raw["name"],
+                piece_type=raw["piece_type"],
                 set=raw["set"],
                 rarity=raw["rarity"],
                 defense=Defense(**raw["defense"]),
@@ -149,6 +158,7 @@ def load_talismans() -> list[Talisman]:
                 rarity=raw["rarity"],
                 skills=_skill_levels(raw["skills"]),
                 slots=raw["slots"],
+                decoration_slots=DecorationSlots(**raw["decoration_slots"]),
                 source_url=raw["source_url"],
             )
         )
