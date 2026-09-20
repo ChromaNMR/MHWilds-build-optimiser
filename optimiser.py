@@ -222,21 +222,6 @@ def consume_slot(slots: tuple[int, int, int], size: int, count: int = 1):
     return n1, n2, n3
 
 
-def reserve_capacity(slots: tuple[int, int, int], count: int) -> tuple[int, int, int]:
-    """Hold back ``count`` slots, smallest first, for resistance jewels."""
-    n1, n2, n3 = slots
-    for _ in range(count):
-        if n1:
-            n1 -= 1
-        elif n2:
-            n2 -= 1
-        elif n3:
-            n3 -= 1
-        else:
-            break
-    return n1, n2, n3
-
-
 @dataclass
 class PieceProfile:
     """An armour piece reduced to only what the search cares about."""
@@ -812,23 +797,27 @@ class Optimiser:
             levels[granted.name] = levels.get(granted.name, 0) + granted.level
 
         talisman_sizes, weapon_slots = talisman_slot_sizes(talisman)
-        talisman_slots = slot_counts(talisman_sizes)
-        pooled = (
-            state.slots[0] + talisman_slots[0],
-            state.slots[1] + talisman_slots[1],
-            state.slots[2] + talisman_slots[2],
+
+        # Every physical decoration slot's size. Reservation is decided on
+        # this concrete list (smallest sizes first) rather than an abstract
+        # slot-count, so the slots actually left empty are guaranteed to be
+        # the least valuable ones - see _assign_decorations.
+        all_sizes = sorted(
+            size for piece in pieces for size in piece.slots if size
         )
+        all_sizes.extend(talisman_sizes)
+        all_sizes.sort()
 
         options = decoration_options(levels, context)
 
         chosen_counts: tuple[int, ...] = ()
         reserved = 0
-        gained = 0.0
         final_levels: dict[str, int] = {}
         best_level = 3
-        for reserve in range(self.reserved_slots, -1, -1):
-            available = reserve_capacity(pooled, reserve)
-            value, counts = fill_slots(options, available)
+        max_reserve = min(self.reserved_slots, len(all_sizes))
+        for reserve in range(max_reserve, -1, -1):
+            available_counts = slot_counts(all_sizes[reserve:])
+            _value, counts = fill_slots(options, available_counts)
             trial_levels = dict(levels)
             for option, count in zip(options, counts):
                 if count:
@@ -836,12 +825,7 @@ class Optimiser:
             level_met = constraint_level_met(trial_levels, scoring)
             if level_met < best_level:
                 best_level = level_met
-                chosen_counts, reserved, gained, final_levels = (
-                    counts,
-                    reserve,
-                    value,
-                    trial_levels,
-                )
+                chosen_counts, reserved, final_levels = counts, reserve, trial_levels
             if level_met == 0:
                 break
 
@@ -849,7 +833,7 @@ class Optimiser:
             return None
 
         placements, free_slots = self._assign_decorations(
-            pieces, talisman, talisman_sizes, options, chosen_counts
+            pieces, talisman, talisman_sizes, options, chosen_counts, reserved
         )
 
         active_bonuses = self._active_bonuses(pieces)
@@ -893,7 +877,10 @@ class Optimiser:
         talisman_sizes: list[int],
         options: list[DecoOption],
         counts: tuple[int, ...],
+        reserve_count: int,
     ) -> tuple[list[SlotAssignment], list[int]]:
+        # Built in each piece's own slot order (not size order), so the GUI's
+        # per-piece display matches the source data's slot ordering.
         slots: list[SlotAssignment] = []
         for piece in pieces:
             for size in piece.slots:
@@ -902,6 +889,15 @@ class Optimiser:
         for size in talisman_sizes:
             slots.append(SlotAssignment(source=talisman.name, size=size))
 
+        # The `reserve_count` smallest slots are held back entirely - never
+        # offered to the fitter below - matching the sizes fill_slots was
+        # given in _build_set, so a size-1 slot is always sacrificed before a
+        # size-2/3 one.
+        reserved_ids = {
+            id(s) for s in sorted(slots, key=lambda s: s.size)[:reserve_count]
+        }
+        eligible = [s for s in slots if id(s) not in reserved_ids]
+
         wanted: list[Decoration] = []
         for option, count in zip(options, counts):
             wanted.extend([option.decoration] * count)
@@ -909,7 +905,7 @@ class Optimiser:
 
         for deco in wanted:
             fit = min(
-                (s for s in slots if s.decoration is None and s.size >= deco.slot_level),
+                (s for s in eligible if s.decoration is None and s.size >= deco.slot_level),
                 key=lambda s: s.size,
                 default=None,
             )
