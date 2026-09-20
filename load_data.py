@@ -164,17 +164,18 @@ def load_armor() -> list[ArmorPiece]:
     return pieces
 
 
-def load_talismans() -> list[Talisman]:
+def load_talismans(path: Path = TALISMANS_PATH) -> list[Talisman]:
     talismans = []
-    for raw in _load_yaml(TALISMANS_PATH):
+    raw_list = _load_yaml(path) or []
+    for raw in raw_list:
         talismans.append(
             Talisman(
                 name=raw["name"],
                 rarity=raw["rarity"],
                 skills=_skill_levels(raw["skills"]),
-                slots=raw["slots"],
-                decoration_slots=DecorationSlots(**raw["decoration_slots"]),
-                source_url=raw["source_url"],
+                slots=raw.get("slots", []),
+                decoration_slots=DecorationSlots(**raw.get("decoration_slots", {})),
+                source_url=raw.get("source_url", ""),
             )
         )
     return talismans
