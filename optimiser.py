@@ -245,12 +245,53 @@ class BonusInfo:
         return sum(1 for t in self.thresholds if pieces >= t)
 
 
+def resolve_pins(
+    game: GameData, pinned_pieces: dict[str, str] | None
+) -> dict[str, ArmorPiece]:
+    """Equipment slot -> the armour piece pinned to it.
+
+    Piece names are unique across the armour data, so a name alone identifies a
+    piece. Every input is validated here rather than at the call site because an
+    unrecognised name would otherwise reach the beam as an empty candidate list,
+    turning a typo into a search that silently returns nothing.
+    """
+    if not pinned_pieces:
+        return {}
+
+    by_name = {piece.name: piece for piece in game.armor}
+    resolved: dict[str, ArmorPiece] = {}
+    for piece_type, name in pinned_pieces.items():
+        if not name:
+            continue
+        if piece_type not in PIECE_TYPES:
+            raise ValueError(
+                f"{piece_type!r} is not an equipment slot; expected one of "
+                + ", ".join(PIECE_TYPES)
+            )
+        piece = by_name.get(name)
+        if piece is None:
+            raise ValueError(f"No armour piece is named {name!r}.")
+        if piece.piece_type != piece_type:
+            raise ValueError(
+                f"{name!r} is a {piece.piece_type} piece and cannot be pinned to "
+                f"the {piece_type} slot."
+            )
+        resolved[piece_type] = piece
+    return resolved
+
+
 class Context:
     """Precomputed, weight-profile-specific view of the game data."""
 
-    def __init__(self, game: GameData, scoring: Scoring) -> None:
+    def __init__(
+        self,
+        game: GameData,
+        scoring: Scoring,
+        pinned_pieces: dict[str, str] | None = None,
+    ) -> None:
         self.game = game
         self.scoring = scoring
+        self.pinned = resolve_pins(game, pinned_pieces)
 
         self.bonus_registry = self._build_bonus_registry(game)
 
@@ -265,11 +306,19 @@ class Context:
         self.bonus_index = {name: i for i, name in enumerate(self.relevant_bonuses)}
 
         self.decoration_for_skill = self._best_decorations(game)
+        # A pinned slot skips prune_dominated entirely: pruning only decides
+        # between alternatives, and a pinned slot has none. The single candidate
+        # also makes the slot sort first in _search_armour's stage order, so every
+        # later decision is ranked with the pinned piece already counted.
         self.candidates = {
-            piece_type: prune_dominated(
-                [self.profile(a) for a in game.armor if a.piece_type == piece_type],
-                scoring,
-                self.relevant_skills,
+            piece_type: (
+                [self.profile(self.pinned[piece_type])]
+                if piece_type in self.pinned
+                else prune_dominated(
+                    [self.profile(a) for a in game.armor if a.piece_type == piece_type],
+                    scoring,
+                    self.relevant_skills,
+                )
             )
             for piece_type in PIECE_TYPES
         }
@@ -499,6 +548,7 @@ class GearSet:
     total_score: float
     constraint_level: int
     tier: str = ""
+    pinned_types: frozenset[str] = frozenset()
 
     @property
     def piece_names(self) -> tuple[str, ...]:
@@ -542,10 +592,11 @@ class Optimiser:
         final_pool: int = FINAL_POOL,
         reserved_slots: int = RESERVED_SLOTS,
         extra_bonus_pieces: dict[str, int] | None = None,
+        pinned_pieces: dict[str, str] | None = None,
     ) -> None:
         self.game = game
         self.scoring = scoring
-        self.context = Context(game, scoring)
+        self.context = Context(game, scoring, pinned_pieces=pinned_pieces)
         self.beam_width = beam_width
         self.final_pool = final_pool
         self.reserved_slots = reserved_slots
@@ -876,6 +927,7 @@ class Optimiser:
             defense_score=defense_component,
             total_score=skill_score + defense_component,
             constraint_level=constraint_level_met(final_levels, scoring),
+            pinned_types=frozenset(context.pinned),
         )
 
     def _assign_decorations(
@@ -1044,6 +1096,7 @@ def optimise(
     reserved_slots: int = RESERVED_SLOTS,
     tiers=DEFAULT_TIERS,
     extra_bonus_pieces: dict[str, int] | None = None,
+    pinned_pieces: dict[str, str] | None = None,
 ) -> tuple[list[GearSet], int, Optimiser]:
     optimiser = Optimiser(
         game,
@@ -1052,6 +1105,7 @@ def optimise(
         final_pool=final_pool,
         reserved_slots=reserved_slots,
         extra_bonus_pieces=extra_bonus_pieces,
+        pinned_pieces=pinned_pieces,
     )
     sets, constraint_level = optimiser.run(tiers)
     return sets, constraint_level, optimiser
@@ -1097,6 +1151,12 @@ def main() -> None:
         help="slots to hold back for resistance jewels",
     )
     parser.add_argument("--output", help="YAML file to write the sets to")
+    for piece_type in PIECE_TYPES:
+        parser.add_argument(
+            f"--pin-{piece_type}",
+            metavar="PIECE",
+            help=f"force the {piece_type} slot to this armour piece, by name",
+        )
     args = parser.parse_args()
 
     from optimiser_report import render_console, write_yaml
@@ -1104,6 +1164,16 @@ def main() -> None:
     db_path = Path(args.skills_db)
     game = load_game_data()
     scoring = Scoring(load_skills(db_path))
+
+    pinned_pieces = {
+        piece_type: getattr(args, f"pin_{piece_type}")
+        for piece_type in PIECE_TYPES
+        if getattr(args, f"pin_{piece_type}")
+    }
+    try:
+        pinned = resolve_pins(game, pinned_pieces)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     unreachable = Context(game, scoring).unreachable_weighted_skills()
     if unreachable:
@@ -1118,9 +1188,10 @@ def main() -> None:
         beam_width=args.beam,
         reserved_slots=args.reserve,
         tiers=build_tiers(args.count),
+        pinned_pieces=pinned_pieces,
     )
 
-    print(render_console(sets, scoring, constraint_level, db_path))
+    print(render_console(sets, scoring, constraint_level, db_path, pinned=pinned))
 
     output = Path(args.output) if args.output else Path("optimiser_outputs") / (
         gear_set_filename(db_path)

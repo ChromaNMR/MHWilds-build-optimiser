@@ -10,7 +10,8 @@ from pathlib import Path
 
 import yaml
 
-from optimiser import GearSet, Scoring, SlotAssignment
+from load_data import ArmorPiece
+from optimiser import PIECE_TYPES, GearSet, Scoring, SlotAssignment
 
 CONSTRAINT_DESCRIPTIONS = {
     0: "all mandatory skills present, and mandatory max-level skills at max",
@@ -19,6 +20,11 @@ CONSTRAINT_DESCRIPTIONS = {
 }
 
 WIDTH = 78
+PIN_MARKER = "* "  # leading column on a pinned piece; legend lives in the header
+
+
+def _pin_marker(gear_set: GearSet, piece) -> str:
+    return PIN_MARKER if piece.piece_type in gear_set.pinned_types else "  "
 
 
 def _skill_note(name: str, level: int, scoring: Scoring) -> str:
@@ -75,8 +81,8 @@ def render_set(gear_set: GearSet, rank: int, scoring: Scoring) -> str:
     for piece in gear_set.pieces:
         slots = ", ".join(str(s) for s in piece.slots if s) or "-"
         lines.append(
-            f"  {piece.piece_type:<6} {piece.name:<26} {piece.set:<18}"
-            f" def {piece.defense.max:>3}  slots [{slots}]"
+            f"{_pin_marker(gear_set, piece)}{piece.piece_type:<6} {piece.name:<26}"
+            f" {piece.set:<18} def {piece.defense.max:>3}  slots [{slots}]"
         )
     talisman_skills = ", ".join(
         f"{s.name} {s.level}" for s in gear_set.talisman.skills
@@ -177,8 +183,8 @@ def render_set_inline(gear_set: GearSet, rank: int, total: int, scoring: Scoring
     for piece in gear_set.pieces:
         brackets = _slot_brackets(by_source.get(piece.name, []))
         lines.append(
-            f"  {piece.piece_type:<6} {piece.name:<26} {piece.set:<18}"
-            f" def {piece.defense.max:>3}{brackets}"
+            f"{_pin_marker(gear_set, piece)}{piece.piece_type:<6} {piece.name:<26}"
+            f" {piece.set:<18} def {piece.defense.max:>3}{brackets}"
         )
 
     talisman_skills = ", ".join(
@@ -238,7 +244,12 @@ def render_set_inline(gear_set: GearSet, rank: int, total: int, scoring: Scoring
 
 
 def render_console(
-    sets: list[GearSet], scoring: Scoring, constraint_level: int, db_path: Path
+    sets: list[GearSet],
+    scoring: Scoring,
+    constraint_level: int,
+    db_path: Path,
+    pinned: dict[str, ArmorPiece] | None = None,
+    strict: bool = True,
 ) -> str:
     header = [
         "=" * WIDTH,
@@ -248,7 +259,18 @@ def render_console(
     mandatory = sorted(scoring.mandatory)
     if mandatory:
         header.append("Mandatory skills: " + ", ".join(mandatory))
-    if constraint_level > 0:
+    if pinned:
+        header.append(
+            f"Pinned ({PIN_MARKER.strip()}): "
+            + ", ".join(
+                f"{piece_type} {pinned[piece_type].name}"
+                for piece_type in PIECE_TYPES
+                if piece_type in pinned
+            )
+        )
+    if strict:
+        header.append("Mandatory skills are required: sets missing one are not shown.")
+    elif constraint_level > 0:
         header.append(
             "NOTE: constraints were relaxed to fill the requested number of sets."
         )
@@ -279,6 +301,7 @@ def gear_set_to_dict(gear_set: GearSet, rank: int, scoring: Scoring) -> dict:
                 "set": p.set,
                 "defence": p.defense.max,
                 "slots": [s for s in p.slots if s],
+                "pinned": p.piece_type in gear_set.pinned_types,
             }
             for p in gear_set.pieces
         ],

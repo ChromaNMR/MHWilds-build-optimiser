@@ -10,12 +10,14 @@ talismans into the optimiser's talisman pool without touching the yaml.
 
 from __future__ import annotations
 
+import json
 import queue
 import threading
+import math
 import tkinter as tk
 from dataclasses import asdict, replace
 from pathlib import Path
-from tkinter import filedialog, messagebox, ttk
+from tkinter import filedialog, font as tkfont, messagebox, ttk
 
 import yaml
 
@@ -31,13 +33,174 @@ from load_data import (
     load_skills,
     load_talismans,
 )
-from optimiser import RESERVED_SLOTS, GearSet, Scoring, optimise
+from optimiser import PIECE_TYPES, RESERVED_SLOTS, GearSet, Scoring, optimise
 from optimiser_report import render_set_inline
 
 NONE_OPTION = "(None)"
 CUSTOM_TALISMANS_DIR = DATA_DIR / "custom_talismans_outputs"
 MAX_TALISMAN_SKILLS = 3
 MAX_TALISMAN_SLOTS = 3
+
+HINT_WRAP = 300  # px; the widest column a hint has to sit in is the gear panel
+
+# Light keeps whatever ttk theme Tk starts with - vista on Windows, which draws
+# entries, comboboxes and scrollbars through the OS and ignores colour styling.
+# That is exactly why dark has to switch to clam: clam is drawn by Tk, so its
+# colours can be set. The two modes therefore look different by construction,
+# and that is the accepted trade for leaving the light appearance untouched.
+THEMES = {
+    "light": {
+        "ttk_theme": None,  # None means "whatever Tk started with"
+        "hint": "#555555",
+        "status": "#2a7f2a",
+        "window": None,  # None means "leave the widget's own default alone"
+        "text_bg": "white",
+        "text_fg": "black",
+        "select_bg": "#0078d7",
+        "select_fg": "white",
+    },
+    "dark": {
+        "ttk_theme": "clam",
+        "hint": "#a0a0a0",
+        "status": "#6fbf6f",
+        "window": "#1f1f1f",
+        "surface": "#2b2b2b",  # entries, buttons, anything inset
+        "border": "#3c3c3c",
+        "text": "#e6e6e6",
+        "disabled": "#6b6b6b",
+        "hover": "#3a3a3a",
+        "text_bg": "#252526",
+        "text_fg": "#e6e6e6",
+        "select_bg": "#094771",
+        "select_fg": "#ffffff",
+    },
+}
+
+# Tuning the layout means tuning these, not hunting through the builders. The
+# window is sized to the skill list and the gear panel; the detail pane between
+# them holds a few short controls and only ever gets the slack.
+# The window is NOT given a fixed size. Two attempts at hard-coding one both
+# clipped the Gogma selectors and left the weighting column too wide, because
+# the right numbers depend on font metrics and display scaling that only Tk can
+# measure at runtime. _size_to_content asks Tk instead. The skill list is the
+# one thing that has no natural height of its own, so it names its own here and
+# the rest of the window follows from it.
+LIST_ROWS = 18
+GAP = 4  # vertical breathing room between a hint and the control it describes
+SCREEN_MARGIN = 80  # px left for the title bar and taskbar when sizing to fit
+GUI_STATE_PATH = DATA_DIR / "gui_state.json"  # remembered window size; gitignored
+SECTION_PAD = (8, 4, 8, 8)  # inside every titled box, so they all read alike
+PIN_DETAIL_HEIGHT = 18  # px reserved per pinned-piece line, set or not
+
+# Every control that holds a value gets one of these above it. They live in one
+# dict rather than inline at each widget so wording stays consistent and a
+# behaviour change cannot leave a caption describing what the code used to do -
+# "weight" in particular is only true because mandatory skills are now enforced.
+HINTS = {
+    "type": "Show only skills of this type.",
+    "weight": "How much you want this skill.",
+    "level_focus": (
+        "How much of that value depends on reaching higher levels, rather "
+        "than on simply having the skill at all."
+    ),
+    "pins": (
+        "Force a slot to a specific set's piece. Slots left empty are chosen "
+        "freely."
+    ),
+    "gogma": (
+        "Credits one extra piece toward this bonus, standing in for the bonus "
+        "point a Gogma weapon carries."
+    ),
+    "reserved": "Decoration slots left empty for resistance jewels.",
+    "relax": (
+        "Return the full ten sets even if some miss a required skill. Off by "
+        "default: a short list that meets your requirements beats a full one "
+        "that quietly does not."
+    ),
+    "output": (
+        "Filename for Save. Written beside the skills file you loaded, not "
+        "into skills_outputs/."
+    ),
+    "talismans": (
+        "Talismans from a file, added to this run's pool only. "
+        "craftable_talismans.yaml is never modified."
+    ),
+    "ct_name": "Shown in results. Any name that is not already in the file.",
+    "ct_rarity": "Cosmetic here - the optimiser does not read it.",
+    "ct_skills": "Up to three armour skills and the level each is granted at.",
+    "ct_armour_slots": "Decoration slot sizes on the talisman. 0 means no slot.",
+    "ct_weapon_slots": (
+        "Reported with the set but never filled: only armour decorations are "
+        "placed."
+    ),
+}
+
+# Weight is signed because a negative weight actively avoids a skill. Level
+# weight is not: Scoring clamps it to 0-1 before use, so a negative value is a
+# silent no-op, and the free-text box it replaces let you type one.
+WEIGHT_CHOICES = [str(v) for v in range(-1, 6)]
+LEVEL_WEIGHT_CHOICES = [str(v) for v in range(0, 6)]
+
+WEIGHT_SCALE = (
+    ("-1", "Avoid"),
+    ("0", "Ignore"),
+    ("1-4", "Prefer, increasingly"),
+    ("5", "Require - no set without it is shown"),
+)
+# Deliberately not phrased as a minimum level, because it does not set one.
+# It splits a skill's value between having it and levelling it; only the 5/5
+# corner, where mandatory-max applies, forces a level at all.
+LEVEL_FOCUS_SCALE = (
+    ("0", "Level 1 is worth as much as max"),
+    ("1-4", "Higher levels worth increasingly more"),
+    ("5", "Only max level is worth full value"),
+)
+
+DESC_WRAP = 380  # px; the description column's wrap width, and its own measure
+
+# Field labels stay on screen with nothing beside them when no skill is chosen,
+# so the section keeps its shape and reads as waiting rather than broken. Each
+# value's column is widened to the longest value in the loaded file, which keeps
+# the labels after it from sliding sideways as you click down the list.
+INFO_FIELDS = (
+    ("Type:", "type"),
+    ("Max Level:", "max_level"),
+    ("Scaling:", "scaling"),
+)
+
+
+def _hint(parent: tk.Widget, key: str, wrap: int = HINT_WRAP) -> ttk.Label:
+    label = ttk.Label(
+        parent,
+        text=HINTS[key],
+        style="Hint.TLabel",
+        wraplength=wrap,
+        justify=tk.LEFT,
+    )
+    return label
+
+
+def _scale_table(parent: tk.Widget, rows) -> ttk.Frame:
+    """A dial's values as a two-column key: value on the left, meaning right."""
+    table = ttk.Frame(parent)
+    for index, (value, meaning) in enumerate(rows):
+        ttk.Label(
+            table, text=value, style="Hint.TLabel", width=4, anchor=tk.E
+        ).grid(row=index, column=0, sticky=tk.E, padx=(0, 8))
+        ttk.Label(table, text=meaning, style="Hint.TLabel").grid(
+            row=index, column=1, sticky=tk.W
+        )
+    return table
+
+
+def _weight_text(value: float) -> str:
+    """Spell a stored weight the way the dropdown spells it, so 5.0 shows as 5.
+
+    A non-integral value from a hand-edited file is left exactly as it is: the
+    dropdown displays it and offers integers alongside, so it survives untouched
+    unless a new value is actually chosen.
+    """
+    return str(int(value)) if float(value).is_integer() else str(value)
 
 
 def _slot_sizes(value, default_size: int = 1) -> list[int]:
@@ -51,7 +214,21 @@ class SkillsGui:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
         self.root.title("MHWilds Skill Weights")
-        self.root.geometry("760x680")
+
+
+        self.game_data: GameData = load_game_data()
+        self.sets_by_slot = {
+            piece_type: sorted(
+                {p.set for p in self.game_data.armor if p.piece_type == piece_type}
+            )
+            for piece_type in PIECE_TYPES
+        }
+        # (slot, set) identifies a piece uniquely across the whole armour data,
+        # so choosing a set for a slot fully determines which piece is pinned
+        # and no second dropdown is needed.
+        self.piece_by_slot_set = {
+            (p.piece_type, p.set): p for p in self.game_data.armor
+        }
 
         self.current_path: Path = Path(SKILLS_PATH)
         self.skills: list[Skill] = []
@@ -62,8 +239,14 @@ class SkillsGui:
         self.selected_name: str | None = None
         self._suppress_trace = False
 
+        state = self._read_state()
+        self.dark_var = tk.BooleanVar(value=bool(state.get("dark", False)))
+        # Captured before any theme switch, so light mode can always get back to
+        # whatever Tk chose for this platform rather than to a name hard-coded
+        # here - "vista" does not exist on Linux.
+        self._native_ttk_theme = ttk.Style(root).theme_use()
+
         # Optimiser integration state.
-        self.game_data: GameData | None = None
         self._optimiser_running = False
         self.gear_sets: list[GearSet] = []
         self.gear_scoring: Scoring | None = None
@@ -82,10 +265,248 @@ class SkillsGui:
 
         self._build_widgets()
         self._load_file(self.current_path)
+        # Theme before sizing: clam's padding and font metrics differ from
+        # vista's, so the requested size is only meaningful once the widgets are
+        # wearing the theme they will open in.
+        self._apply_theme()
+        self._apply_window_size()
+        self.root.protocol("WM_DELETE_WINDOW", self._on_close)
+
+    def _apply_window_size(self) -> None:
+        """Open at the size last closed at, or at the size the widgets ask for.
+
+        Neither half is enough alone. A size written into the source cannot be
+        right on every display, because character widths, theme padding and the
+        desktop's scaling only exist at runtime - two attempts at hard-coding one
+        clipped the Gogma selectors here. But Tk's requested size is only the
+        smallest that fits, and preferring a roomier window is not something it
+        can know. So Tk supplies the floor and the last session supplies the
+        size, and resizing the window once is how you set it.
+
+        update_idletasks forces the pending layout pass first; before it, a
+        window reports a requested size of 1x1.
+        """
+        self.root.update_idletasks()
+        max_height = self.root.winfo_screenheight() - SCREEN_MARGIN
+        width = self.root.winfo_reqwidth()
+        height = min(self.root.winfo_reqheight(), max_height)
+        self.root.minsize(width, height)
+
+        state = self._read_state()
+        remembered = None
+        try:
+            remembered = int(state["width"]), int(state["height"])
+        except (KeyError, TypeError, ValueError):
+            pass
+        if remembered is not None:
+            # Clamped to this screen: a size saved on a larger monitor would
+            # otherwise open partly off it, with no way to drag it back.
+            width = max(width, min(remembered[0], self.root.winfo_screenwidth()))
+            height = max(height, min(remembered[1], max_height))
+        self.root.geometry(f"{width}x{height}")
+
+    @staticmethod
+    def _read_state() -> dict:
+        """Remembered window size and theme, or {} if there is nothing usable.
+
+        A missing file is the normal first run and a corrupt one is someone's
+        stray edit; both fall back to the computed defaults, so neither is worth
+        a dialog before the window is even up.
+        """
+        try:
+            state = json.loads(GUI_STATE_PATH.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return {}
+        return state if isinstance(state, dict) else {}
+
+    def _write_state(self) -> None:
+        try:
+            GUI_STATE_PATH.write_text(
+                json.dumps(
+                    {
+                        "width": self.root.winfo_width(),
+                        "height": self.root.winfo_height(),
+                        "dark": bool(self.dark_var.get()),
+                    }
+                ),
+                encoding="utf-8",
+            )
+        except OSError:
+            pass  # a read-only checkout must still be able to quit
+
+    def _on_close(self) -> None:
+        self._write_state()
+        self.root.destroy()
 
     # --- layout ------------------------------------------------------------
 
+    # --- theming -----------------------------------------------------------
+
+    def _apply_theme(self) -> None:
+        """Repaint everything for the current mode.
+
+        ttk styles are global and live, so switching is a restyle rather than a
+        rebuild - but only for ttk widgets. Listboxes and the results Text are
+        classic Tk, drawn from their own options, so they are recoloured by hand
+        below; miss one and it stays a white rectangle in a dark window.
+        """
+        palette = THEMES["dark" if self.dark_var.get() else "light"]
+        style = ttk.Style(self.root)
+        style.theme_use(palette["ttk_theme"] or self._native_ttk_theme)
+        if palette["ttk_theme"]:
+            self._style_dark(style, palette)
+
+        style.configure("Hint.TLabel", foreground=palette["hint"])
+        style.configure("Status.TLabel", foreground=palette["status"])
+        if palette["window"]:
+            self.root.configure(background=palette["window"])
+            style.configure("Hint.TLabel", background=palette["window"])
+            style.configure("Status.TLabel", background=palette["window"])
+
+        for listbox in (self.listbox, self.ct_listbox):
+            listbox.configure(
+                background=palette["text_bg"],
+                foreground=palette["text_fg"],
+                selectbackground=palette["select_bg"],
+                selectforeground=palette["select_fg"],
+            )
+        self._theme_results_window()
+
+        # A combobox builds its drop-down list the first time it is opened, from
+        # the option database rather than from the style, so these have to be
+        # set before that happens - which is why they are refreshed on every
+        # theme change rather than once at startup.
+        for option, value in (
+            ("*TCombobox*Listbox.background", palette["text_bg"]),
+            ("*TCombobox*Listbox.foreground", palette["text_fg"]),
+            ("*TCombobox*Listbox.selectBackground", palette["select_bg"]),
+            ("*TCombobox*Listbox.selectForeground", palette["select_fg"]),
+        ):
+            self.root.option_add(option, value)
+
+        self._set_dark_title_bar(bool(palette["ttk_theme"]))
+
+    def _theme_results_window(self) -> None:
+        """Colour the results Toplevel, if it is open.
+
+        Its Text widget is classic Tk, so no ttk restyle reaches it, and the
+        Toplevel carries its own background rather than inheriting the root's.
+        """
+        palette = THEMES["dark" if self.dark_var.get() else "light"]
+        window = getattr(self, "results_window", None)
+        if window is None or not window.winfo_exists():
+            return
+        if palette["window"]:
+            window.configure(background=palette["window"])
+        self.results_text.configure(
+            background=palette["text_bg"],
+            foreground=palette["text_fg"],
+            insertbackground=palette["text_fg"],
+            selectbackground=palette["select_bg"],
+            selectforeground=palette["select_fg"],
+        )
+
+    @staticmethod
+    def _style_dark(style: ttk.Style, palette: dict) -> None:
+        """Colour clam's elements. Only reached in dark mode."""
+        window, surface = palette["window"], palette["surface"]
+        text, border = palette["text"], palette["border"]
+
+        style.configure(
+            ".",
+            background=window,
+            foreground=text,
+            fieldbackground=surface,
+            bordercolor=border,
+            # clam draws its 3D relief from these two; matching them to the
+            # background is what flattens the bevels instead of leaving pale
+            # highlights around every widget.
+            lightcolor=window,
+            darkcolor=window,
+            troughcolor=surface,
+            arrowcolor=text,
+            insertcolor=text,
+        )
+        style.map(".", foreground=[("disabled", palette["disabled"])])
+
+        style.configure("TLabelframe", background=window, bordercolor=border)
+        style.configure("TLabelframe.Label", background=window, foreground=text)
+        style.configure("TButton", background=surface, foreground=text)
+        style.map(
+            "TButton",
+            background=[("pressed", border), ("active", palette["hover"])],
+        )
+        style.configure(
+            "TCombobox", fieldbackground=surface, background=surface, foreground=text
+        )
+        # readonly is its own state for a combobox: without this map, every
+        # dropdown in this GUI stays light, because they are all readonly.
+        style.map(
+            "TCombobox",
+            fieldbackground=[("readonly", surface)],
+            background=[("readonly", surface)],
+            foreground=[("readonly", text)],
+        )
+        style.configure("TEntry", fieldbackground=surface, foreground=text)
+        style.configure(
+            "TSpinbox", fieldbackground=surface, background=surface, foreground=text
+        )
+        style.configure("TCheckbutton", background=window, foreground=text)
+        style.map(
+            "TCheckbutton",
+            background=[("active", window)],
+            indicatorcolor=[("selected", palette["select_bg"])],
+        )
+        style.configure("TNotebook", background=window, bordercolor=border)
+        style.configure("TNotebook.Tab", background=surface, foreground=text)
+        style.map("TNotebook.Tab", background=[("selected", window)])
+        style.configure(
+            "TScrollbar", background=surface, troughcolor=window, bordercolor=border
+        )
+        style.configure("TSeparator", background=border)
+
+    def _set_dark_title_bar(self, dark: bool) -> None:
+        """Ask Windows for a dark title bar. Cosmetic, so failure is ignored.
+
+        The frame stays light otherwise, which looks worse than no dark mode at
+        all. Attribute 20 is DWMWA_USE_IMMERSIVE_DARK_MODE on Windows 10 1903
+        and later; 19 was its number before that, so both are tried. Anything
+        else - a different OS, an older build, a missing dwmapi - simply leaves
+        the title bar alone.
+        """
+        try:
+            import ctypes
+
+            self.root.update_idletasks()
+            handle = ctypes.windll.user32.GetParent(self.root.winfo_id())
+            value = ctypes.c_int(int(dark))
+            for attribute in (20, 19):
+                if ctypes.windll.dwmapi.DwmSetWindowAttribute(
+                    handle, attribute, ctypes.byref(value), ctypes.sizeof(value)
+                ) == 0:
+                    break
+            # The frame only repaints on a visibility change.
+            self.root.withdraw()
+            self.root.deiconify()
+        except Exception:  # noqa: BLE001
+            pass
+
+    def _on_theme_toggle(self) -> None:
+        self._apply_theme()
+        self._write_state()
+
     def _build_widgets(self) -> None:
+        chrome = ttk.Frame(self.root, padding=(8, 4, 8, 0))
+        chrome.pack(side=tk.TOP, fill=tk.X)
+        # Outside the notebook because it applies to the whole application
+        # rather than to either tab's contents.
+        ttk.Checkbutton(
+            chrome,
+            text="Dark Mode",
+            variable=self.dark_var,
+            command=self._on_theme_toggle,
+        ).pack(side=tk.RIGHT)
+
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self.notebook.bind("<<NotebookTabChanged>>", self._on_tab_changed)
@@ -99,160 +520,354 @@ class SkillsGui:
         self._build_custom_talismans_tab(talismans_tab)
 
     def _build_skills_tab(self, parent: ttk.Frame) -> None:
-        file_row = ttk.Frame(parent, padding=(8, 8, 8, 0))
-        file_row.pack(side=tk.TOP, fill=tk.X)
+        """Five titled sections, each laid out the same way: hint, then controls.
 
+        Order matters to pack(). The two BOTTOM sections are packed before the
+        body so they claim their height first, and 'run' before 'save' so the
+        primary action sits at the very bottom edge.
+        """
+        files = self._section(parent, "Skills File", side=tk.TOP, fill=tk.X)
+        file_row = ttk.Frame(files)
+        file_row.pack(side=tk.TOP, fill=tk.X)
         ttk.Button(file_row, text="Open...", command=self._open_file).pack(side=tk.LEFT)
         self.file_label_var = tk.StringVar(value="")
-        ttk.Label(file_row, textvariable=self.file_label_var, foreground="#555555").pack(
-            side=tk.LEFT, padx=(8, 0)
-        )
+        ttk.Label(
+            file_row, textvariable=self.file_label_var, style="Hint.TLabel"
+        ).pack(side=tk.LEFT, padx=(8, 0))
 
-        custom_row = ttk.Frame(parent, padding=(8, 4, 8, 0))
-        custom_row.pack(side=tk.TOP, fill=tk.X)
+        talismans = self._section(parent, "Custom Talismans", side=tk.TOP, fill=tk.X)
+        _hint(talismans, "talismans", wrap=900).pack(side=tk.TOP, anchor=tk.W)
+        talisman_row = ttk.Frame(talismans)
+        talisman_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, 0))
         ttk.Button(
-            custom_row,
+            talisman_row,
             text="Load Custom Talismans...",
             command=self._load_custom_talismans_for_optimiser,
         ).pack(side=tk.LEFT)
         ttk.Button(
-            custom_row, text="Clear", command=self._clear_loaded_custom_talismans
+            talisman_row, text="Clear", command=self._clear_loaded_custom_talismans
         ).pack(side=tk.LEFT, padx=(4, 0))
-        self.custom_talismans_status_var = tk.StringVar(value="Custom talismans: none loaded")
+        self.custom_talismans_status_var = tk.StringVar(
+            value="Custom talismans: none loaded"
+        )
         ttk.Label(
-            custom_row, textvariable=self.custom_talismans_status_var, foreground="#555555"
+            talisman_row,
+            textvariable=self.custom_talismans_status_var,
+            style="Hint.TLabel",
         ).pack(side=tk.LEFT, padx=(8, 0))
 
-        top = ttk.Frame(parent, padding=8)
-        top.pack(side=tk.TOP, fill=tk.X)
+        run = self._section(parent, "Run", side=tk.BOTTOM, fill=tk.X)
+        options = ttk.Frame(run)
+        options.pack(side=tk.TOP, fill=tk.X)
 
-        ttk.Label(top, text="Type:").pack(side=tk.LEFT)
-        self.type_var = tk.StringVar(value="All")
-        self.type_combo = ttk.Combobox(
-            top, textvariable=self.type_var, values=["All"], state="readonly", width=15
+        reserved_group = ttk.Frame(options)
+        reserved_group.pack(side=tk.LEFT, anchor=tk.N)
+        _hint(reserved_group, "reserved", wrap=260).pack(side=tk.TOP, anchor=tk.W)
+        reserved_row = ttk.Frame(reserved_group)
+        reserved_row.pack(side=tk.TOP, anchor=tk.W, pady=(GAP, 0))
+        ttk.Label(reserved_row, text="Reserved Level-1 Slots:").pack(side=tk.LEFT)
+        self.reserved_slots_var = tk.StringVar(value=str(RESERVED_SLOTS))
+        ttk.Spinbox(
+            reserved_row,
+            from_=0,
+            to=10,
+            textvariable=self.reserved_slots_var,
+            width=3,
+            justify=tk.CENTER,
+        ).pack(side=tk.LEFT, padx=(8, 0))
+
+        relax_group = ttk.Frame(options)
+        relax_group.pack(side=tk.LEFT, anchor=tk.N, padx=(24, 0))
+        _hint(relax_group, "relax", wrap=420).pack(side=tk.TOP, anchor=tk.W)
+        self.relax_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(
+            relax_group,
+            text="Allow sets missing a required skill",
+            variable=self.relax_var,
+        ).pack(side=tk.TOP, anchor=tk.W, pady=(GAP, 0))
+
+        self.run_button = ttk.Button(
+            options, text="Run Optimiser", command=self._run_optimiser
         )
-        self.type_combo.pack(side=tk.LEFT, padx=(4, 0))
-        self.type_combo.bind("<<ComboboxSelected>>", lambda _e: self._refresh_listbox())
+        self.run_button.pack(side=tk.RIGHT, anchor=tk.N)
+        self.status_var = tk.StringVar(value="")
+        ttk.Label(options, textvariable=self.status_var, style="Status.TLabel").pack(
+            side=tk.RIGHT, anchor=tk.N, padx=(12, 12)
+        )
 
-        gogma = ttk.LabelFrame(parent, text="Gogma weapon skills", padding=8)
-        gogma.pack(side=tk.TOP, fill=tk.X, padx=8, pady=(0, 8))
-        ttk.Label(gogma, text="Set Bonus:").pack(side=tk.LEFT)
+        save = self._section(parent, "Save Weights", side=tk.BOTTOM, fill=tk.X)
+        _hint(save, "output", wrap=900).pack(side=tk.TOP, anchor=tk.W)
+        save_row = ttk.Frame(save)
+        save_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, 0))
+        ttk.Label(save_row, text="Output File:").pack(side=tk.LEFT)
+        self.output_name_var = tk.StringVar(value="skills_weighted.yaml")
+        ttk.Entry(save_row, textvariable=self.output_name_var, width=28).pack(
+            side=tk.LEFT, padx=(4, 4)
+        )
+        ttk.Button(save_row, text="Browse...", command=self._browse_save).pack(
+            side=tk.LEFT
+        )
+        ttk.Button(save_row, text="Save", command=self._save).pack(
+            side=tk.LEFT, padx=(4, 0)
+        )
+
+        body = ttk.Frame(parent)
+        body.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=8)
+
+        self._build_gear_section(body)
+        self._build_skill_list_section(body)
+        self._build_weighting_section(body)
+
+    def _section(self, parent: tk.Widget, title: str, **pack_options) -> ttk.LabelFrame:
+        """One titled box, padded the same as every other box."""
+        frame = ttk.LabelFrame(parent, text=title, padding=SECTION_PAD)
+        frame.pack(padx=8, pady=(6, 0), **pack_options)
+        return frame
+
+    def _build_gear_section(self, body: ttk.Frame) -> None:
+        """Pinned armour and the Gogma bonus point, as one group.
+
+        Both answer the same question - which gear is fixed before the search
+        starts - and the Gogma selectors are in effect a sixth piece's worth of
+        set bonus, so they belong together rather than in separate places.
+
+        Packed first, so it is the leftmost column and the skill list sits
+        against it. Anchored north rather than filling, so the box ends where
+        its controls do instead of bordering a column of empty space.
+        """
+        gear = ttk.LabelFrame(body, text="Fixed Gear", padding=SECTION_PAD)
+        gear.pack(side=tk.LEFT, anchor=tk.N, pady=(6, 0))
+
+        _hint(gear, "pins", wrap=280).pack(side=tk.TOP, anchor=tk.W)
+        pins = ttk.Frame(gear)
+        pins.pack(side=tk.TOP, anchor=tk.W, pady=(GAP, 0))
+
+        self.pin_vars: dict[str, tk.StringVar] = {}
+        self.pin_detail_labels: dict[str, ttk.Label] = {}
+        for index, piece_type in enumerate(PIECE_TYPES):
+            ttk.Label(pins, text=f"{piece_type.capitalize()}:", width=7).grid(
+                row=index * 2, column=0, sticky=tk.W, pady=(2, 0)
+            )
+            var = tk.StringVar(value=NONE_OPTION)
+            combo = ttk.Combobox(
+                pins,
+                textvariable=var,
+                values=[NONE_OPTION] + self.sets_by_slot[piece_type],
+                state="readonly",
+                width=24,
+            )
+            combo.grid(row=index * 2, column=1, sticky=tk.W, padx=(4, 0), pady=(2, 0))
+            detail = ttk.Label(pins, text="", style="Hint.TLabel", wraplength=280)
+            detail.grid(row=index * 2 + 1, column=0, columnspan=2, sticky=tk.W)
+            # Hold the row open whether or not a pin is set, so choosing one
+            # doesn't grow the panel and push the Gogma selectors off the bottom.
+            pins.grid_rowconfigure(index * 2 + 1, minsize=PIN_DETAIL_HEIGHT)
+            var.trace_add(
+                "write", lambda *_a, slot=piece_type: self._on_pin_change(slot)
+            )
+            self.pin_vars[piece_type] = var
+            self.pin_detail_labels[piece_type] = detail
+
+        ttk.Separator(gear, orient=tk.HORIZONTAL).pack(
+            side=tk.TOP, fill=tk.X, pady=(10, 6)
+        )
+
+        ttk.Label(gear, text="Gogma Weapon Skills").pack(side=tk.TOP, anchor=tk.W)
+        _hint(gear, "gogma", wrap=280).pack(side=tk.TOP, anchor=tk.W, pady=(2, 0))
+        gogma = ttk.Frame(gear)
+        gogma.pack(side=tk.TOP, anchor=tk.W, pady=(GAP, 0))
+
+        ttk.Label(gogma, text="Set Bonus:").grid(row=0, column=0, sticky=tk.W, pady=2)
         self.gogma_set_var = tk.StringVar(value=NONE_OPTION)
         self.gogma_set_combo = ttk.Combobox(
             gogma,
             textvariable=self.gogma_set_var,
             values=[NONE_OPTION],
             state="readonly",
-            width=26,
+            width=22,
         )
-        self.gogma_set_combo.pack(side=tk.LEFT, padx=(4, 16))
+        self.gogma_set_combo.grid(row=0, column=1, sticky=tk.W, padx=(4, 0), pady=2)
 
-        ttk.Label(gogma, text="Group Skill:").pack(side=tk.LEFT)
+        ttk.Label(gogma, text="Group Skill:").grid(row=1, column=0, sticky=tk.W, pady=2)
         self.gogma_group_var = tk.StringVar(value=NONE_OPTION)
         self.gogma_group_combo = ttk.Combobox(
             gogma,
             textvariable=self.gogma_group_var,
             values=[NONE_OPTION],
             state="readonly",
-            width=26,
+            width=22,
         )
-        self.gogma_group_combo.pack(side=tk.LEFT, padx=(4, 0))
+        self.gogma_group_combo.grid(row=1, column=1, sticky=tk.W, padx=(4, 0), pady=2)
 
-        body = ttk.Frame(parent, padding=8)
-        body.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+    def _build_skill_list_section(self, body: ttk.Frame) -> None:
+        """The skill list and the filter that drives it, in one box.
 
-        list_frame = ttk.Frame(body)
-        list_frame.pack(side=tk.LEFT, fill=tk.Y)
+        The type filter used to sit in its own row above the body, where it read
+        as a page-level control rather than what it is: a filter on this list.
+        """
+        skills = ttk.LabelFrame(body, text="Skills", padding=SECTION_PAD)
+        skills.pack(side=tk.LEFT, anchor=tk.N, fill=tk.Y, padx=(8, 0), pady=(6, 0))
 
-        self.listbox = tk.Listbox(list_frame, width=35, exportselection=False)
-        self.listbox.pack(side=tk.LEFT, fill=tk.Y)
-        scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.listbox.yview)
+        _hint(skills, "type", wrap=250).pack(side=tk.TOP, anchor=tk.W)
+        type_row = ttk.Frame(skills)
+        type_row.pack(side=tk.TOP, anchor=tk.W, pady=(GAP, GAP))
+        ttk.Label(type_row, text="Type:").pack(side=tk.LEFT)
+        self.type_var = tk.StringVar(value="All")
+        self.type_combo = ttk.Combobox(
+            type_row, textvariable=self.type_var, values=["All"], state="readonly", width=15
+        )
+        self.type_combo.pack(side=tk.LEFT, padx=(4, 0))
+        self.type_combo.bind("<<ComboboxSelected>>", lambda _e: self._refresh_listbox())
+
+        list_frame = ttk.Frame(skills)
+        list_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.listbox = tk.Listbox(
+            list_frame, width=30, height=LIST_ROWS, exportselection=False
+        )
+        self.listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar = ttk.Scrollbar(
+            list_frame, orient=tk.VERTICAL, command=self.listbox.yview
+        )
         scrollbar.pack(side=tk.LEFT, fill=tk.Y)
         self.listbox.config(yscrollcommand=scrollbar.set)
         self.listbox.bind("<<ListboxSelect>>", self._on_select)
 
-        detail = ttk.Frame(body, padding=(16, 0))
-        detail.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    def _build_weighting_section(self, body: ttk.Frame) -> None:
+        detail = ttk.LabelFrame(body, text="Skill Weighting", padding=SECTION_PAD)
+        detail.pack(side=tk.LEFT, anchor=tk.N, fill=tk.BOTH, expand=True,
+                    padx=(8, 0), pady=(6, 0))
+
+        ttk.Label(detail, text="Skill Information:").pack(anchor=tk.W, pady=(0, 2))
 
         self.name_label = ttk.Label(detail, text="", font=("Segoe UI", 12, "bold"))
         self.name_label.pack(anchor=tk.W)
 
-        self.info_label = ttk.Label(detail, text="", foreground="#555555")
-        self.info_label.pack(anchor=tk.W, pady=(0, 4))
+        self.info_frame = ttk.Frame(detail)
+        self.info_frame.pack(anchor=tk.W, pady=(0, GAP))
+        self.info_value_labels: dict[str, ttk.Label] = {}
+        for column, (caption, field) in enumerate(INFO_FIELDS):
+            ttk.Label(self.info_frame, text=caption, style="Hint.TLabel").grid(
+                row=0, column=column * 2, sticky=tk.W, padx=(0 if column == 0 else 12, 4)
+            )
+            value = ttk.Label(self.info_frame, text="", style="Hint.TLabel")
+            value.grid(row=0, column=column * 2 + 1, sticky=tk.W)
+            self.info_value_labels[field] = value
 
-        self.desc_label = ttk.Label(detail, text="", wraplength=380, justify=tk.LEFT)
-        self.desc_label.pack(anchor=tk.W, pady=(0, 16))
+        # The description sits in a frame whose height is fixed and whose
+        # children cannot resize it, so a three-line description occupies the
+        # same space as a one-line one and the dials below never move. Without
+        # this, clicking through the list shuffles the controls up and down
+        # under the pointer.
+        ttk.Label(detail, text="Description:").pack(anchor=tk.W, pady=(0, 2))
 
-        form = ttk.Frame(detail)
-        form.pack(anchor=tk.W)
+        self.desc_holder = ttk.Frame(detail)
+        self.desc_holder.pack(anchor=tk.W, fill=tk.X, pady=(0, 10))
+        self.desc_holder.pack_propagate(False)
+        self.desc_label = ttk.Label(
+            self.desc_holder, text="", wraplength=DESC_WRAP, justify=tk.LEFT
+        )
+        self.desc_label.pack(anchor=tk.NW)
 
-        ttk.Label(form, text="Weight:").grid(row=0, column=0, sticky=tk.W, pady=4)
+        # Both dials share one grid so their captions share column 0, which
+        # sizes itself to the longer of them. Packed separately, each dropdown
+        # started wherever its own caption ended and the two sat at different
+        # offsets - "Weight:" being shorter than "Level Focus:".
+        dials = ttk.Frame(detail)
+        dials.pack(side=tk.TOP, anchor=tk.W, fill=tk.X)
+
+        _hint(dials, "weight", wrap=DESC_WRAP).grid(
+            row=0, column=0, columnspan=2, sticky=tk.W
+        )
+        _scale_table(dials, WEIGHT_SCALE).grid(
+            row=1, column=0, columnspan=2, sticky=tk.W, pady=(2, 0)
+        )
+        ttk.Label(dials, text="Weight:").grid(
+            row=2, column=0, sticky=tk.W, pady=(GAP, GAP + 6)
+        )
         self.weight_var = tk.StringVar()
-        self.weight_entry = ttk.Entry(form, textvariable=self.weight_var, width=12)
-        self.weight_entry.grid(row=0, column=1, padx=(8, 0))
+        self.weight_entry = ttk.Combobox(
+            dials,
+            textvariable=self.weight_var,
+            values=WEIGHT_CHOICES,
+            state="readonly",
+            width=6,
+        )
+        self.weight_entry.grid(
+            row=2, column=1, sticky=tk.W, padx=(8, 0), pady=(GAP, GAP + 6)
+        )
         self.weight_var.trace_add("write", self._on_weight_change)
 
-        ttk.Label(form, text="Level Weight:").grid(row=1, column=0, sticky=tk.W, pady=4)
+        _hint(dials, "level_focus", wrap=DESC_WRAP).grid(
+            row=3, column=0, columnspan=2, sticky=tk.W
+        )
+        _scale_table(dials, LEVEL_FOCUS_SCALE).grid(
+            row=4, column=0, columnspan=2, sticky=tk.W, pady=(2, 0)
+        )
+        ttk.Label(dials, text="Level Focus:").grid(
+            row=5, column=0, sticky=tk.W, pady=(GAP, 0)
+        )
         self.level_weight_var = tk.StringVar()
-        self.level_weight_entry = ttk.Entry(form, textvariable=self.level_weight_var, width=12)
-        self.level_weight_entry.grid(row=1, column=1, padx=(8, 0))
+        self.level_weight_entry = ttk.Combobox(
+            dials,
+            textvariable=self.level_weight_var,
+            values=LEVEL_WEIGHT_CHOICES,
+            state="readonly",
+            width=6,
+        )
+        self.level_weight_entry.grid(
+            row=5, column=1, sticky=tk.W, padx=(8, 0), pady=(GAP, 0)
+        )
         self.level_weight_var.trace_add("write", self._on_level_weight_change)
 
         self.weight_entry.config(state=tk.DISABLED)
         self.level_weight_entry.config(state=tk.DISABLED)
 
-        # Packed side=BOTTOM in this order so 'bottom' lands at the very
-        # bottom edge and 'output_row' stacks just above it.
-        bottom = ttk.Frame(parent, padding=8)
-        bottom.pack(side=tk.BOTTOM, fill=tk.X)
-        self.status_var = tk.StringVar(value="")
-        ttk.Label(bottom, textvariable=self.status_var, foreground="#2a7f2a").pack(
-            side=tk.LEFT, fill=tk.X, expand=True
-        )
-        self.run_button = ttk.Button(
-            bottom, text="Run Optimiser", command=self._run_optimiser
-        )
-        self.run_button.pack(side=tk.RIGHT)
+    def _on_pin_change(self, piece_type: str) -> None:
+        piece = self._pinned_piece(piece_type)
+        label = self.pin_detail_labels[piece_type]
+        if piece is None:
+            label.config(text="")
+            return
+        slots = ",".join(str(s) for s in piece.slots if s) or "-"
+        label.config(text=f"{piece.name}  def {piece.defense.max}  [{slots}]")
 
-        self.reserved_slots_var = tk.StringVar(value=str(RESERVED_SLOTS))
-        ttk.Spinbox(
-            bottom,
-            from_=0,
-            to=10,
-            textvariable=self.reserved_slots_var,
-            width=3,
-            justify=tk.CENTER,
-        ).pack(side=tk.RIGHT, padx=(0, 8))
-        ttk.Label(bottom, text="Reserved level-1 slots:").pack(side=tk.RIGHT, padx=(8, 0))
+    def _pinned_piece(self, piece_type: str):
+        set_name = self.pin_vars[piece_type].get()
+        if not set_name or set_name == NONE_OPTION:
+            return None
+        return self.piece_by_slot_set.get((piece_type, set_name))
 
-        output_row = ttk.Frame(parent, padding=(8, 0, 8, 4))
-        output_row.pack(side=tk.BOTTOM, fill=tk.X)
-        ttk.Label(output_row, text="Output file:").pack(side=tk.LEFT)
-        self.output_name_var = tk.StringVar(value="skills_weighted.yaml")
-        ttk.Entry(output_row, textvariable=self.output_name_var, width=28).pack(
-            side=tk.LEFT, padx=(4, 4)
-        )
-        ttk.Button(output_row, text="Browse...", command=self._browse_save).pack(side=tk.LEFT)
-        ttk.Button(output_row, text="Save", command=self._save).pack(side=tk.LEFT, padx=(4, 0))
+    def _pinned_pieces(self) -> dict[str, str]:
+        pinned = {}
+        for piece_type in PIECE_TYPES:
+            piece = self._pinned_piece(piece_type)
+            if piece is not None:
+                pinned[piece_type] = piece.name
+        return pinned
 
     def _build_custom_talismans_tab(self, parent: ttk.Frame) -> None:
-        file_row = ttk.Frame(parent, padding=8)
+        files = self._section(parent, "Talisman File", side=tk.TOP, fill=tk.X)
+        file_row = ttk.Frame(files)
         file_row.pack(side=tk.TOP, fill=tk.X)
         ttk.Label(file_row, text="File:").pack(side=tk.LEFT)
         self.ct_file_var = tk.StringVar(value="(none selected)")
-        ttk.Label(file_row, textvariable=self.ct_file_var, foreground="#555555").pack(
+        ttk.Label(file_row, textvariable=self.ct_file_var, style="Hint.TLabel").pack(
             side=tk.LEFT, padx=(4, 8)
         )
         ttk.Button(
             file_row, text="Select/Create File...", command=self._select_custom_talisman_file
         ).pack(side=tk.LEFT)
 
-        body = ttk.Frame(parent, padding=8)
-        body.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        body = ttk.Frame(parent)
+        body.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=8)
 
-        list_frame = ttk.Frame(body)
+        list_box = ttk.LabelFrame(body, text="Talismans", padding=SECTION_PAD)
+        list_box.pack(side=tk.LEFT, anchor=tk.N, fill=tk.Y, pady=(6, 0))
+        list_frame = ttk.Frame(list_box)
         list_frame.pack(side=tk.LEFT, fill=tk.Y)
-        self.ct_listbox = tk.Listbox(list_frame, width=30, exportselection=False)
+        self.ct_listbox = tk.Listbox(
+            list_frame, width=30, height=LIST_ROWS, exportselection=False
+        )
         self.ct_listbox.pack(side=tk.TOP, fill=tk.Y, expand=True)
         ct_scroll = ttk.Scrollbar(
             list_frame, orient=tk.VERTICAL, command=self.ct_listbox.yview
@@ -264,22 +879,32 @@ class SkillsGui:
         )
         self.ct_delete_button.pack(side=tk.TOP, fill=tk.X, pady=(8, 0))
 
-        form = ttk.Frame(body, padding=(16, 0))
-        form.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        form = ttk.LabelFrame(body, text="Talisman Details", padding=SECTION_PAD)
+        form.pack(side=tk.LEFT, anchor=tk.N, fill=tk.BOTH, expand=True,
+                  padx=(8, 0), pady=(6, 0))
 
-        ttk.Label(form, text="Name:").grid(row=0, column=0, sticky=tk.W, pady=4)
+        _hint(form, "ct_name", wrap=420).grid(
+            row=0, column=0, columnspan=4, sticky=tk.W
+        )
+        ttk.Label(form, text="Name:").grid(row=1, column=0, sticky=tk.W, pady=4)
         self.ct_name_var = tk.StringVar()
         self.ct_name_entry = ttk.Entry(form, textvariable=self.ct_name_var, width=30)
-        self.ct_name_entry.grid(row=0, column=1, columnspan=3, sticky=tk.W, padx=(8, 0))
+        self.ct_name_entry.grid(row=1, column=1, columnspan=3, sticky=tk.W, padx=(8, 0))
 
-        ttk.Label(form, text="Rarity:").grid(row=1, column=0, sticky=tk.W, pady=4)
+        _hint(form, "ct_rarity", wrap=420).grid(
+            row=2, column=0, columnspan=4, sticky=tk.W, pady=(8, 0)
+        )
+        ttk.Label(form, text="Rarity:").grid(row=3, column=0, sticky=tk.W, pady=4)
         self.ct_rarity_var = tk.StringVar(value="5")
         self.ct_rarity_spin = ttk.Spinbox(
             form, from_=1, to=8, textvariable=self.ct_rarity_var, width=5, justify=tk.CENTER
         )
-        self.ct_rarity_spin.grid(row=1, column=1, sticky=tk.W, padx=(8, 0))
+        self.ct_rarity_spin.grid(row=3, column=1, sticky=tk.W, padx=(8, 0))
 
-        ttk.Label(form, text="Skills:").grid(row=2, column=0, sticky=tk.NW, pady=(8, 4))
+        _hint(form, "ct_skills", wrap=420).grid(
+            row=4, column=0, columnspan=4, sticky=tk.W, pady=(8, 0)
+        )
+        ttk.Label(form, text="Skills:").grid(row=5, column=0, sticky=tk.NW, pady=(4, 4))
         self.ct_skill_widgets: list[tuple[ttk.Combobox, ttk.Spinbox]] = []
         skill_row_vars: list[tuple[tk.StringVar, tk.StringVar]] = []
         for i in range(MAX_TALISMAN_SKILLS):
@@ -288,18 +913,21 @@ class SkillsGui:
             name_combo = ttk.Combobox(
                 form, textvariable=name_var, values=[NONE_OPTION], state="readonly", width=26
             )
-            name_combo.grid(row=2 + i, column=1, sticky=tk.W, padx=(8, 4), pady=2)
+            name_combo.grid(row=5 + i, column=1, sticky=tk.W, padx=(8, 4), pady=2)
             level_spin = ttk.Spinbox(
                 form, from_=1, to=5, textvariable=level_var, width=4, justify=tk.CENTER
             )
-            level_spin.grid(row=2 + i, column=2, sticky=tk.W, pady=2)
+            level_spin.grid(row=5 + i, column=2, sticky=tk.W, pady=2)
             self.ct_skill_widgets.append((name_combo, level_spin))
             skill_row_vars.append((name_var, level_var))
         self.ct_skill_rows = skill_row_vars
 
-        slot_row = 2 + MAX_TALISMAN_SKILLS
+        slot_row = 6 + MAX_TALISMAN_SKILLS
+        _hint(form, "ct_armour_slots", wrap=420).grid(
+            row=slot_row - 1, column=0, columnspan=4, sticky=tk.W, pady=(12, 0)
+        )
         ttk.Label(form, text="Armour Slots:").grid(
-            row=slot_row, column=0, sticky=tk.W, pady=(12, 4)
+            row=slot_row, column=0, sticky=tk.W, pady=(4, 4)
         )
         self.ct_armour_slot_widgets: list[ttk.Combobox] = []
         self.ct_armour_slot_vars: list[tk.StringVar] = []
@@ -312,8 +940,11 @@ class SkillsGui:
             self.ct_armour_slot_widgets.append(combo)
             self.ct_armour_slot_vars.append(var)
 
+        _hint(form, "ct_weapon_slots", wrap=420).grid(
+            row=slot_row + 1, column=0, columnspan=4, sticky=tk.W, pady=(8, 0)
+        )
         ttk.Label(form, text="Weapon Slots:").grid(
-            row=slot_row + 1, column=0, sticky=tk.W, pady=(4, 4)
+            row=slot_row + 2, column=0, sticky=tk.W, pady=(4, 4)
         )
         self.ct_weapon_slot_widgets: list[ttk.Combobox] = []
         self.ct_weapon_slot_vars: list[tk.StringVar] = []
@@ -322,11 +953,11 @@ class SkillsGui:
             combo = ttk.Combobox(
                 form, textvariable=var, values=["0", "1", "2", "3"], state="readonly", width=4
             )
-            combo.grid(row=slot_row + 1, column=1 + i, sticky=tk.W, padx=(8 if i == 0 else 4, 0))
+            combo.grid(row=slot_row + 2, column=1 + i, sticky=tk.W, padx=(8 if i == 0 else 4, 0))
             self.ct_weapon_slot_widgets.append(combo)
             self.ct_weapon_slot_vars.append(var)
 
-        button_row = slot_row + 2
+        button_row = slot_row + 3
         buttons = ttk.Frame(form)
         buttons.grid(row=button_row, column=0, columnspan=4, sticky=tk.W, pady=(16, 0))
         self.ct_new_button = ttk.Button(
@@ -338,10 +969,10 @@ class SkillsGui:
         )
         self.ct_save_button.pack(side=tk.LEFT, padx=(8, 0))
 
-        status_row = ttk.Frame(parent, padding=8)
+        status_row = ttk.Frame(parent, padding=(16, 4, 16, 8))
         status_row.pack(side=tk.BOTTOM, fill=tk.X)
         self.ct_status_var = tk.StringVar(value="")
-        ttk.Label(status_row, textvariable=self.ct_status_var, foreground="#2a7f2a").pack(
+        ttk.Label(status_row, textvariable=self.ct_status_var, style="Status.TLabel").pack(
             side=tk.LEFT
         )
 
@@ -379,7 +1010,10 @@ class SkillsGui:
         self.skills = skills
         self.skills_by_name = {s.name: s for s in self.skills}
         self.cache = {
-            s.name: {"weight": str(s.weight), "level_weight": str(s.level_weight)}
+            s.name: {
+                "weight": _weight_text(s.weight),
+                "level_weight": _weight_text(s.level_weight),
+            }
             for s in self.skills
         }
         self.selected_name = None
@@ -390,9 +1024,43 @@ class SkillsGui:
         self.type_combo.config(values=types)
         self.type_var.set("All")
 
+        self._size_description_box()
+        self._size_info_columns()
         self._refresh_gogma_options()
         self._refresh_listbox()
         self._refresh_custom_talisman_skill_options()
+
+    def _size_description_box(self) -> None:
+        """Reserve the height the longest description in this file needs.
+
+        Tk owns the font metrics, so the line count is measured rather than
+        written down: a constant here would be wrong at a different display
+        scaling, in a different theme, or against a skills file whose text runs
+        longer. measure() reports the width of an unbroken string, so dividing
+        by the wrap width undercounts wherever a word is pushed onto the next
+        line - hence the extra line.
+        """
+        font = tkfont.nametofont("TkDefaultFont")
+        lines = 1
+        for skill in self.skills:
+            width = font.measure(skill.description)
+            lines = max(lines, math.ceil(width / DESC_WRAP) + 1)
+        self.desc_holder.config(height=lines * font.metrics("linespace"))
+
+    def _size_info_columns(self) -> None:
+        """Hold each info value's column at its widest value in this file.
+
+        Without it the captions after a value slide left and right as you move
+        down the list - "Set Bonus" is more than twice the width of "Food" - and
+        the row jitters on every selection.
+        """
+        font = tkfont.nametofont("TkDefaultFont")
+        for column, (_caption, field) in enumerate(INFO_FIELDS):
+            widest = max(
+                (font.measure(str(getattr(skill, field))) for skill in self.skills),
+                default=0,
+            )
+            self.info_frame.grid_columnconfigure(column * 2 + 1, minsize=widest)
 
     def _refresh_gogma_options(self) -> None:
         set_names = [NONE_OPTION] + sorted(
@@ -433,8 +1101,11 @@ class SkillsGui:
         self._suppress_trace = True
         try:
             if name is None:
-                self.name_label.config(text="")
-                self.info_label.config(text="")
+                # Blank values, not blank labels: the captions above stay put,
+                # so nothing in the section moves when a skill is chosen.
+                self.name_label.config(text=" ")
+                for value in self.info_value_labels.values():
+                    value.config(text="")
                 self.desc_label.config(text="")
                 self.weight_var.set("")
                 self.level_weight_var.set("")
@@ -444,16 +1115,15 @@ class SkillsGui:
 
             skill = self.skills_by_name[name]
             self.name_label.config(text=skill.name)
-            self.info_label.config(
-                text=f"Type: {skill.type}   Max Level: {skill.max_level}   Scaling: {skill.scaling}"
-            )
+            for field, value in self.info_value_labels.items():
+                value.config(text=str(getattr(skill, field)))
             self.desc_label.config(text=skill.description)
 
             cached = self.cache[name]
             self.weight_var.set(cached["weight"])
             self.level_weight_var.set(cached["level_weight"])
-            self.weight_entry.config(state=tk.NORMAL)
-            self.level_weight_entry.config(state=tk.NORMAL)
+            self.weight_entry.config(state="readonly")
+            self.level_weight_entry.config(state="readonly")
         finally:
             self._suppress_trace = False
 
@@ -805,6 +1475,8 @@ class SkillsGui:
                 reserved_slots,
                 extra_bonus_pieces,
                 custom_talismans,
+                self._pinned_pieces(),
+                not self.relax_var.get(),
                 self._optimiser_queue,
             ),
             daemon=True,
@@ -818,45 +1490,62 @@ class SkillsGui:
         reserved_slots: int,
         extra_bonus_pieces: dict[str, int],
         custom_talismans: list[Talisman],
+        pinned_pieces: dict[str, str],
+        strict: bool,
         result_queue: queue.Queue,
     ) -> None:
         try:
-            if self.game_data is None:
-                self.game_data = load_game_data()
             game_data = self.game_data
             if custom_talismans:
                 game_data = replace(
                     game_data, talismans=list(game_data.talismans) + custom_talismans
                 )
             scoring = Scoring(skills)
-            sets, _constraint_level, _optimiser = optimise(
+            sets, _constraint_level, optimiser = optimise(
                 game_data,
                 scoring,
                 reserved_slots=reserved_slots,
                 extra_bonus_pieces=extra_bonus_pieces,
+                pinned_pieces=pinned_pieces,
+                strict=strict,
             )
+            # Why nothing came back, gathered on this thread while the optimiser
+            # is still in scope: impossible_requirements is a proof, so it wins
+            # over unmet_requirements, which only reports what was not found.
+            reasons = []
+            if not sets:
+                reasons = (
+                    optimiser.impossible_requirements()
+                    or optimiser.unmet_requirements()
+                )
+                if not optimiser.impossible_requirements():
+                    reasons = reasons + [
+                        "The search is a heuristic, so this is what it did not "
+                        "find, not proof that nothing exists."
+                    ]
         except Exception as exc:  # noqa: BLE001
-            result_queue.put(("error", exc, None))
+            result_queue.put(("error", exc, None, None))
             return
-        result_queue.put(("ok", sets, scoring))
+        result_queue.put(("ok", sets, scoring, reasons))
 
     def _poll_optimiser_queue(self) -> None:
         try:
-            kind, first, second = self._optimiser_queue.get_nowait()
+            kind, first, second, third = self._optimiser_queue.get_nowait()
         except queue.Empty:
             self.root.after(100, self._poll_optimiser_queue)
             return
 
         if kind == "error":
-            self._optimiser_done(None, None, first)
+            self._optimiser_done(None, None, first, None)
         else:
-            self._optimiser_done(first, second, None)
+            self._optimiser_done(first, second, None, third)
 
     def _optimiser_done(
         self,
         sets: list[GearSet] | None,
         scoring: Scoring | None,
         error: Exception | None,
+        reasons: list[str] | None,
     ) -> None:
         self._optimiser_running = False
         self.run_button.config(state=tk.NORMAL, text="Run Optimiser")
@@ -868,8 +1557,16 @@ class SkillsGui:
 
         if not sets:
             self.status_var.set("")
+            # The reason matters more here than anywhere: strict mode means an
+            # empty result is a normal outcome, not a malfunction, and without
+            # this the user is told only that nothing worked.
+            detail = "\n".join(f"\u2022 {line}" for line in reasons or [])
             messagebox.showinfo(
-                "Optimiser", "No gear sets could be built for this skill weighting."
+                "Optimiser",
+                "No gear set meets these requirements."
+                + (f"\n\n{detail}" if detail else "")
+                + "\n\nTick 'Allow sets missing a required skill' to search "
+                "without the requirement.",
             )
             return
 
@@ -911,6 +1608,7 @@ class SkillsGui:
             )
             yscroll.pack(side=tk.RIGHT, fill=tk.Y)
             self.results_text.config(yscrollcommand=yscroll.set)
+            self._theme_results_window()
         else:
             self.results_window.deiconify()
             self.results_window.lift()

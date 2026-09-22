@@ -1,107 +1,133 @@
-# MHWilds-build-optimiser
+# Monster Hunter Wilds Build Optimiser
 
-Gear set optimiser for Monster Hunter Wilds high rank. You give each skill a weight; it searches for complete builds (five armour pieces, one talisman, decorations) that maximise the weighted total, and returns ten deliberately different sets instead of ten near-copies of the best one.
+Build your own gear loadouts for *Monster Hunter Wilds* by describing what you want instead of picking pieces by hand. You assign a **weight** to each skill ("how much do I care about this?") and a **level weight** ("how important is the level vs just having it at all?"), and the optimiser searches through every High Rank armor piece, craftable talisman and decoration for combinations that score best against your weighting.
+
+It deliberately does not return ten near-identical builds: results are banded into *closest variants*, *distinct builds* (different pieces) and *distinct bonuses* (new set/group bonus effects).
 
 ## Requirements
 
-Python (developed on 3.13), PyYAML (`pip install pyyaml`), and Tkinter for the GUI, which the python.org Windows installer includes. The search engine itself needs nothing beyond PyYAML.
+- Python 3 with `tkinter` — tested on Python 3.13; the GUI needs the tkinter package, which standard CPython installers include
+- PyYAML: `pip install pyyaml`. The search engine itself needs nothing beyond PyYAML
 
-## Running it
+The GUI (`launch_gui.bat`) launches it with `pythonw`, so no console window appears — but that also means a missing dependency fails silently and nothing opens. If double-clicking does nothing, run `python skills_gui.py` from a terminal to see the traceback.
 
-**GUI.** Double-click `launch_gui.bat`. It starts `skills_gui.py` with `pythonw`, which has no console, so a missing dependency fails silently and nothing opens. Run `python skills_gui.py` from a terminal to see the traceback.
+## Quick start (GUI)
 
-The **Skill Weights** tab loads a skills file, filters it by type, and edits `weight` and `level_weight` per skill. **Run Optimiser** works from the edited values whether or not they have been saved, and opens a results window that steps through the sets one at a time. **Save** writes the edited skills file. The **Custom Talismans** tab builds talismans and saves them to their own file (see [Data scope](#data-scope)).
+1. Double-click `launch_gui.bat`.
+2. On the **Skill Weights** tab, select skills and give each a weight / level weight (see [How scoring works](#how-scoring-works)). Filter with the *Type* dropdown to work through armor/weapon/set bonus/group/food skills in order.
+3. **Run Optimiser** works straight off your edited values, saved or not — saving is only for keeping the weighting around afterwards. When you do save, the default filename is `skills_weighted.yaml`, written next to whichever file you opened (usually the repo root, so it will show as an untracked git file unless you use *Browse…* to put it in `skills_outputs/`). Keep separate weighted copies side by side for different build goals instead of overwriting each time; `skills_default.yaml` itself stays untouched.
+4. Optionally:
+   - pick a **Gogma weapon** set bonus / group skill in the "Gogma weapon skills" box if your weapon contributes pieces toward one of them — see [How it works](#result-bands) for what that credit does;
+   - load custom talismans built on the other tab, so they join the optimiser's charm pool without touching `craftable_talismans.yaml`;
+   - adjust *Reserved level-1 slots* (defaults to 2) for resistance jewels you plan to slot yourself.
+5. Results open in a second window with Previous/Next navigation.
 
-**CLI.**
+### Custom Talismans tab
+
+Build charms the game doesn't have: up to three skills plus up to three armour and three weapon decoration slots per talisman, saved under `custom_talismans_outputs/`. Only armor-type skills are offered — the optimiser builds armor sets only. Load them on the main tab when you want them considered (e.g. a charm equivalent of your best appraised one).
+
+## Command line
 
 ```
 python optimiser.py --skills-db skills_weighted.yaml --count 10
 ```
 
-| Flag | Default | Effect |
-|---|---|---|
-| `--skills-db` | `skills_outputs/skills_DB_burst.yaml` | Weighted skills file to optimise against |
-| `--count` | `10` | Number of sets to return |
-| `--beam` | `5000` | Beam width; see [How the search works](#how-the-search-works) |
-| `--reserve` | `2` | Decoration slots held back for resistance jewels |
-| `--output` | `optimiser_outputs/<name>_gear_sets.yaml` | Where to write the results |
+| Flag | Default | Meaning |
+| --- | --- | --- |
+| `--skills-db` | `skills_outputs/skills_DB_burst.yaml` | Weighted skills YAML to optimise against |
+| `--count` | `10` | Number of sets returned (distributed round-robin across the diversity bands) |
+| `--beam` | `5000` | Beam-search width; see [How it works](#how-it-works) for why that number |
+| `--reserve` | `2` | Level-1 slots held back for resistance jewels |
+| `--output` | in `optimiser_outputs/`, named from the input with any `skills_` prefix stripped | Where sets are written, so a results file can never be mistaken for a skills DB (`load_data.py` refuses to load one as weights anyway) |
+| `--pin-head` … `--pin-legs` | none | Force that slot to a named armour piece; see [Pinning armour](#pinning-armour) |
+| `--relax` | off | Allow sets that miss a mandatory skill rather than returning fewer |
 
-**Always pass `--skills-db`.** The default points at a file that is not in the repo, so a bare `python optimiser.py` dies with `FileNotFoundError`. Results are written with the `skills_` prefix stripped from the input name (`skills_weighted.yaml` becomes `weighted_gear_sets.yaml`) so a results file is never named like a skills file.
+**Always pass `--skills-db`.** The default points at a weighted file that isn't committed (everything under the output folders is gitignored), so a bare `python optimiser.py` dies with `FileNotFoundError`. Example: input `skills_weighted.yaml` writes results to `optimiser_outputs/weighted_gear_sets.yaml`.
 
-## Weights
+The console render includes a header naming your mandatory skills and any pinned pieces. With `--relax` it also names the constraint tier it ended on and adds a "constraints were relaxed" note (see [How scoring works](#how-scoring-works)); without it there is nothing to relax, so a run either meets your requirements or says why it couldn't. Weighted skills that armour, talismans and armour jewels simply cannot supply (mostly weapon and food skills) are ignored with a warning naming them; the GUI doesn't show this warning.
 
-Every skill in `skills_default.yaml` ships with `weight: 0` and `level_weight: 0`, and a weight of 0 means the skill is ignored. Copy the file, or edit in the GUI and save under a new name, rather than changing `skills_default.yaml`: it is what `load_data.py` loads for the skill list when the optimiser runs from the CLI.
+## How scoring works
 
-| Field | Meaning |
-|---|---|
-| `weight` | How much the skill matters. Negative values actively avoid it. **5 or above makes the skill mandatory.** |
-| `level_weight` | How much of that value sits in the levels rather than in having the skill at all. At 0, level 1 earns the full value; at 5, value climbs in proportion to progress toward max level. |
+Both values sit on roughly a 0–5 scale; anything at or above 5 has special meaning:
 
-A skill needs both at 5 to be mandatory-max, meaning it must reach its maximum level.
+- **weight ≥ 5** → the skill is *mandatory*: a build missing it is not returned at all.
+- **level_weight ≥ 5 (with weight ≥ 5)** → mandatory-max: the build must reach the skill's max level if achievable at all.
 
-**Mandatory is a ranking tier, not a hard filter.** If fewer sets meet the requirement than were asked for, the optimiser relaxes it (all mandatory skills at max, then all mandatory skills present, then nothing) rather than returning short. The CLI prints the tier it ended on and a `NOTE: constraints were relaxed` line. The GUI discards the tier, so relaxation is silent there; the `[mandatory]` tags on each skill line in the results window are the only sign a requirement was missed.
+Below those thresholds, weights are continuous. A high-weight skill earns value for every point of progress toward its max level; `level_weight` decides how much of the score lives in *having levels* vs merely *owning the skill*. At 0, even a lone level-1 counts for full credit; at 5, the whole value sits in climbing to max. Negative values actively penalise skills you don't want (e.g. resistances eating your slots); zero ignores them entirely.
 
-### Scoring
+The GUI offers −1 to 5 as a dropdown: −1 avoids, 0 ignores, 1–4 scale how much you want the skill, 5 makes it mandatory. The file itself still accepts any number, so a hand-edited value outside that range is kept and shown rather than snapped onto the list. −1 sounds too mild to do anything — one point of it scores −1 against a weight-4 skill's 16 — but a skill you are avoiding is normally incidental to whatever piece carries it, so any penalty at all tips the choice. Two skills that appear in all ten default sets vanish completely at −1. Where it will *not* help is a skill riding on a piece you want for other reasons; nothing in this range outweighs a weight-4 skill sitting on the same armour.
 
-A skill's value is `weight ** 2`, sign preserved, scaled by how far up its levels the set gets. Squaring is deliberate: at an exponent of 1, a weight-2 skill at level 1 outscored a further level of a weight-4 skill, and sets filled up with shallow level-1 filler. Above about 2.5 the gap becomes extreme enough that mid-weight skills start losing their depth again. The constants are `WEIGHT_EXPONENT`, `LEVEL_WEIGHT_EXPONENT` and `DEFENSE_EXPONENT` at the top of `optimiser.py`, each with the reasoning for its value beside it.
+Mandatory is a **hard filter**. A set that misses a mandatory skill is never returned, even when that means fewer sets than you asked for, or none. Relaxing is opt-in — `--relax`, or the **Allow sets missing a required skill** checkbox in the GUI — and only then does the old ranking-tier behaviour apply, dropping max-levels first and then the requirement entirely. The filter is deliberate: relaxing by default meant the GUI, which never showed the tier, presented a set list that had quietly abandoned a requirement as though it had met one.
 
-Whole-set defence is scored as worth about one weight-2 skill. Each piece's max defence is normalised between 62 and 94 and raised to the 2.5th power, so a low-defence piece is penalised well beyond its linear share.
+When nothing qualifies you get the reason at one of two strengths. Required set bonuses and group skills are checked arithmetically **before the search runs**: no piece carries more than one set bonus, and none carries more than one group skill, so the pieces several of them need add up rather than overlapping, and a total above the slots left free after pinning is unreachable outright. Anything that survives that check and still finds nothing reports how far short each requirement fell, worded as what the search didn't find rather than what doesn't exist — the beam is a heuristic and hasn't earned the stronger claim.
 
-## How the search works
+### Set bonuses as requirements
 
-A beam search over the five equipment slots, keeping 5000 partial sets per stage and 2000 complete armour combinations for full evaluation. It is a heuristic, not an exhaustive search. The width is 5000 because the result plateaus there: 3000/1200 left about 1% of score on the table, and 9000/15000 found nothing better at several times the runtime.
+Set bonuses and group skills are ordinary rows in the skills file, so they take weights like anything else and need no separate mechanism. `weight: 5` requires the bonus at level 1; `weight: 5` with `level_weight: 5` requires it at max. For Gore Magala's Tyranny that's the 2-piece and 4-piece effects. Every set bonus in the data has exactly two levels and every group skill has one, so those two settings already cover every requirement the game can express.
 
-Several choices exist to stop the beam collapsing or wasting effort:
+### Pinning armour
 
-- Pieces that another piece beats or ties on every relevant skill, slot and defence value are pruned first, but only within the same weighted set-bonus group, since a piece carrying a weighted bonus is never interchangeable with one that lacks it.
-- The beam caps how many states share a set-bonus signature. Without the cap it converges on one build neighbourhood and the distinct-bonus results have nothing to draw from.
-- Each complete armour combination is tried with the five best talismans for that combination, and decorations are then placed by an exact search over the free slots, using the cheapest armour gem for each skill and only where it raises a weighted skill.
-- The smallest `--reserve` slots are left empty for resistance jewels, and released only if holding them back would miss a mandatory skill.
+Any of the five slots can be fixed to a specific piece, leaving the rest to the search — for asking what's possible around a set you've already decided on. On the CLI that's `--pin-waist "Gore Coil α"`; in the GUI it's the **Fixed gear** panel on the Skill Weights tab, where each slot lists the armour sets that have a piece for it. A set plus a slot identifies a piece uniquely across the whole armour data, so picking the set is enough and there's no second dropdown. The Gogma weapon selectors live in that same panel, being in effect a sixth piece's worth of set bonus.
+
+A pinned slot skips dominated-piece pruning, since pruning only chooses between alternatives and a pinned slot has none. Its single candidate also sorts it first in the search's stage order, so every later choice is ranked with the pinned piece already counted. Pinned pieces are marked `*` in the results.
+
+Pinning narrows the diversity bands: *distinct builds* wants a 2-piece difference, which four pins make impossible, so it relaxes and tags its results `(relaxed)`. That's arithmetic, not a warning worth acting on.
+
+Defense is also worth something: each piece's maximum defense is normalized between 62 and 94 and raised to the power 2.5 (so low-defense pieces are penalized well beyond their linear share), with whole-set defense worth about one weight-2 skill.
+
+The exponents matter: skill value scales as `weight²`, deliberately, because at exponent 1 a weight-2 skill sitting at level 1 outscored a further level of a weight-4 skill and sets filled up with shallow filler; above ~2.5 the gap becomes extreme enough that mid-weight skills lose their depth again. The constants (`WEIGHT_EXPONENT`, `LEVEL_WEIGHT_EXPONENT`, `DEFENSE_EXPONENT`) sit at the top of [optimiser.py](optimiser.py) with the reasoning for each value written beside it if you want to push quality or speed in a different direction.
+
+## How it works
+
+A beam search over the five equipment slots: one piece per slot plus exactly one talisman (each complete armour combination is tried against the five best talismans), then decorations placed by an *exact* search over the free slots using the cheapest armor jewel for each skill — and only where a gem raises a weighted skill, never to fill space. The smallest `--reserve` slots stay open for per-hunt resistance jewels; they're released automatically only if holding them back would miss a mandatory skill.
+
+Several choices keep the beam from collapsing or wasting effort:
+
+- Pieces that another piece beats or ties on every relevant skill, slot count and defense are pruned first — but only within the same set-bonus group, since a piece carrying a weighted bonus is never interchangeable with one that lacks it.
+- The beam caps how many partial states share a given set/group-bonus signature. Without the cap it converges on one build neighborhood and the *distinct bonuses* band has nothing to draw from.
+- The width of 5000 (and 2000 final combinations) is where quality plateaus: 3000/1200 left about 1% of score on the table, while 9000/15000 found nothing better at several times the runtime.
+
+The Gogma selectors credit **one extra piece** toward a chosen set bonus and one toward a chosen group skill — standing in for the bonus point your weapon carries — which can complete a bonus that no chosen armor pieces carry at all.
 
 ### Result bands
 
-| Band | Count | Rule |
-|---|---|---|
+| Band | Count (at `--count 10`) | Rule |
+| --- | --- | --- |
 | closest variants | 3 | Differs from every chosen set by at least 1 piece |
 | distinct builds | 3 | Differs from every chosen set by at least 2 pieces |
 | distinct bonuses | 4 | Set/group bonus combination not already in the results |
 
-A band that cannot fill itself relaxes its own rule and labels the sets `(relaxed)`, so the requested count is met whenever the pool can supply it. `--count` below 10 spreads the sets round-robin across the three bands.
-
-The GUI's **Gogma weapon skills** selectors credit one extra piece toward a chosen set bonus and one toward a chosen group skill, standing in for the bonus point a Gogma weapon carries.
+A band that can't fill itself relaxes its own rule and tags those sets `(relaxed)`, so you still get the count requested. `--count` below 10 spreads the sets round-robin across the three bands instead of shorting one of them.
 
 ## Data scope
 
-The optimiser sees a deliberately narrow slice of the game.
+The optimiser sees a deliberately narrow slice of the game:
 
 | Included | Excluded | Why |
-|---|---|---|
-| High rank armour | Low rank armour | Not the target of the tool |
-| Craftable talismans | Appraised talismans | Their skills and slots are random, so they can't be enumerated; build them in the Custom Talismans tab instead |
-| Armour decorations | Weapon decorations | Loaded, but only armour decorations are placed |
+| --- | --- | --- |
+| High Rank armor only | Low Rank armor | Not the tool's target |
+| Craftable talismans | Appraised talismans | Random skills and slots can't be enumerated — build equivalents in the Custom Talismans tab instead |
+| Armor jewels (loaded) | Weapon jewels | Loaded into memory but never placed; builds assume you equip your own weapons |
 
-Custom talismans are loaded through **Load Custom Talismans...** on the main tab and added to the pool for that run only; `craftable_talismans.yaml` is never modified. The builder allows up to 3 skills, 3 armour slots and 3 weapon slots per talisman, and only offers armour-type skills.
+All game data was compiled by hand from the community wiki at [game8.co](https://game8.co/games/Monster-Hunter-Wilds). Every record carries a `source_url` back to its page, and file headers list the source archives. Set bonus skills use their 2-piece/4-piece tiers as levels; group and food skills are on/off (no levels). The skill file also records each skill's *scaling* class (linear/geometric/etc.), inferred from how the numeric effect grows across levels — useful context when choosing weights, though it doesn't feed the optimiser directly.
 
-A weighted skill that armour, talismans and armour decorations cannot supply (weapon and food skills, mostly) is ignored. The CLI prints a warning naming them; the GUI does not.
+Need current record counts? Run `python load_data.py` rather than trusting any number written down; the data files get updated more often than this document does.
 
-All data was scraped from game8.co. The URLs are in each YAML file's header comment, and every record carries its own `source_url`. Run `python load_data.py` for the current record counts rather than trusting a number here; the data files are updated more often than this file is.
+## Repository layout
 
-## Files
+| File | Purpose |
+| --- | --- |
+| `skills_gui.py` | Tkinter GUI: skill weighting, custom talismans, optimiser runner with results window |
+| `optimiser.py` | Beam-search engine and scoring model (`Scoring`, `Optimiser`, `GearSet`) plus the CLI entry point. Deliberately print-free so the GUI reuses it directly |
+| `optimiser_report.py` | Rendering only: console text, inline result view for the GUI window, and YAML export of results |
+| `load_data.py` | Typed dataclasses (`Skill`, `ArmorPiece`, `Talisman`, `Decoration`) and loaders with validation (e.g. refuses to treat a results file as a skills DB). Run it directly for record counts |
+| `skills_default.yaml` | Every skill: armor, weapon, set bonus, group and food — descriptions, max level, scaling class, per-source URLs. `weight`/`level_weight` start at 0 placeholders |
+| `high_rank_armor.yaml` | All High Rank pieces with defense, resistances, skills, transcended slot values where applicable (`slots_source` says which are listed) and the set/group bonuses each piece participates in |
+| `craftable_talismans.yaml` | Smithy-crafted charms only. Craftables carry no decoration slots, but the schema keeps a placeholder for custom ones built in the GUI |
+| `decorations.yaml` | Armor and weapon jewels with their slot sizes and skills |
+| `launch_gui.bat` | Windows launcher: runs `pythonw skills_gui.py` from the repo folder |
+| `skills_outputs/`, `optimiser_outputs/`, `custom_talismans_outputs/` | Your generated files. Contents are gitignored, but each folder keeps a tracked `.keepempty` marker so they exist on clone |
 
-| Path | Purpose |
-|---|---|
-| `optimiser.py` | Scoring, search and the CLI. Free of printing, so the GUI imports `optimise()` directly |
-| `optimiser_report.py` | Console rendering, the GUI's inline renderer, and the results YAML writer |
-| `skills_gui.py` | Tkinter GUI: weights, custom talismans, optimiser runner |
-| `load_data.py` | Loads the four data files into dataclasses |
-| `skills_default.yaml` | All skills, every weight at 0 |
-| `high_rank_armor.yaml` | Armour pieces |
-| `craftable_talismans.yaml` | Craftable talismans |
-| `decorations.yaml` | Decorations |
-| `skills_outputs/`, `optimiser_outputs/`, `custom_talismans_outputs/` | Gitignored output folders, kept in the repo by `.keepempty` |
+## License
 
-**The GUI's Save writes beside the file you loaded**, which by default is the repo root, not `skills_outputs/`. The root is not gitignored, so a saved weights file shows up as untracked. Use **Browse...** to save into `skills_outputs/`.
-
-## Licence
-
-PolyForm Noncommercial 1.0.0. See `license.txt`.
+[PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0) — see [license.txt](license.txt). Free to use and share for anything non-commercial; commercial use requires a separate agreement with the licensor.
