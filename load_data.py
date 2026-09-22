@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, fields
+from dataclasses import MISSING, asdict, dataclass, field, fields
 from pathlib import Path
 
 import yaml
@@ -16,6 +16,17 @@ DECORATIONS_PATH = DATA_DIR / "decorations.yaml"
 
 
 @dataclass
+class SkillRank:
+    """What one level of a skill does, in the game's own wording."""
+
+    level: int
+    effect: str
+    # Set bonuses and group skills name each tier ("Black Eclipse I"); ordinary
+    # skills do not, and an empty string keeps them out of saved files.
+    name: str = ""
+
+
+@dataclass
 class Skill:
     name: str
     type: str
@@ -25,6 +36,9 @@ class Skill:
     weight: float
     level_weight: float
     source_url: str
+    # Defaulted, and so last, because food skills have no per-level text and a
+    # weighted file saved before this field existed must still load.
+    levels: list[SkillRank] = field(default_factory=list)
 
 
 @dataclass
@@ -121,19 +135,39 @@ def _skill_levels(raw: list[dict]) -> list[SkillLevel]:
 
 def load_skills(path: Path = SKILLS_PATH) -> list[Skill]:
     raw = _load_yaml(path)
-    expected = {f.name for f in fields(Skill)}
+    allowed = {f.name for f in fields(Skill)}
+    required = {
+        f.name
+        for f in fields(Skill)
+        if f.default is MISSING and f.default_factory is MISSING
+    }
 
     if isinstance(raw, dict) and "sets" in raw:
         raise ValueError(f"{path.name} is an optimiser results file, not a skills file.")
     if not isinstance(raw, list) or not raw or not isinstance(raw[0], dict):
         raise ValueError(f"{path.name} is not a skills file: expected a list of skills.")
-    if set(raw[0]) != expected:
+    if not required <= set(raw[0]) <= allowed:
         raise ValueError(
             f"{path.name} is not a skills file: entries should have the fields "
-            f"{', '.join(sorted(expected))}."
+            f"{', '.join(sorted(required))}, and optionally levels."
         )
 
-    return [Skill(**entry) for entry in raw]
+    skills = []
+    for entry in raw:
+        levels = [SkillRank(**rank) for rank in entry.pop("levels", None) or []]
+        skills.append(Skill(**entry, levels=levels))
+    return skills
+
+
+def skill_record(skill: Skill) -> dict:
+    """A skill as it is written to YAML: unnamed tiers drop the empty name."""
+    record = asdict(skill)
+    for rank in record["levels"]:
+        if not rank["name"]:
+            del rank["name"]
+    if not record["levels"]:
+        del record["levels"]
+    return record
 
 
 def load_armor() -> list[ArmorPiece]:

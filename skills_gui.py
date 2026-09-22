@@ -13,9 +13,8 @@ from __future__ import annotations
 import json
 import queue
 import threading
-import math
 import tkinter as tk
-from dataclasses import asdict, replace
+from dataclasses import replace
 from pathlib import Path
 from tkinter import filedialog, font as tkfont, messagebox, ttk
 
@@ -32,6 +31,7 @@ from load_data import (
     load_game_data,
     load_skills,
     load_talismans,
+    skill_record,
 )
 from optimiser import PIECE_TYPES, RESERVED_SLOTS, GearSet, Scoring, optimise
 from optimiser_report import render_set_inline
@@ -77,18 +77,19 @@ THEMES = {
 }
 
 # Tuning the layout means tuning these, not hunting through the builders. The
-# window is sized to the skill list and the gear panel; the detail pane between
-# them holds a few short controls and only ever gets the slack.
-# The window is NOT given a fixed size. Two attempts at hard-coding one both
-# clipped the Gogma selectors and left the weighting column too wide, because
-# the right numbers depend on font metrics and display scaling that only Tk can
-# measure at runtime. _size_to_content asks Tk instead. The skill list is the
-# one thing that has no natural height of its own, so it names its own here and
-# the rest of the window follows from it.
+# skill list is the one thing that has no natural height of its own, so it names
+# its own here and the rest of the layout follows from it.
 LIST_ROWS = 18
 GAP = 4  # vertical breathing room between a hint and the control it describes
 SCREEN_MARGIN = 80  # px left for the title bar and taskbar when sizing to fit
-GUI_STATE_PATH = DATA_DIR / "gui_state.json"  # remembered window size; gitignored
+# The window opens at this size every time; resizing it is not remembered.
+# It is a target, not a guarantee: two earlier hard-coded sizes clipped the
+# Gogma selectors, because what the widgets need depends on font metrics and
+# display scaling that only Tk knows at runtime. So Tk's requested size is the
+# floor, and this only ever adds room beyond it. Change it here, not by
+# dragging the window.
+WINDOW_SIZE = (1600, 1000)
+GUI_STATE_PATH = DATA_DIR / "gui_state.json"  # remembered theme only; gitignored
 SECTION_PAD = (8, 4, 8, 8)  # inside every titled box, so they all read alike
 PIN_DETAIL_HEIGHT = 18  # px reserved per pinned-piece line, set or not
 
@@ -156,7 +157,8 @@ LEVEL_FOCUS_SCALE = (
     ("5", "Only max level is worth full value"),
 )
 
-DESC_WRAP = 380  # px; the description column's wrap width, and its own measure
+DESC_WRAP = 520  # px; the description column's wrap width, and its own measure
+LEVEL_GAP = 2  # px between one level's effect and the next
 
 # Field labels stay on screen with nothing beside them when no skill is chosen,
 # so the section keeps its shape and reads as waiting rather than broken. Each
@@ -229,6 +231,20 @@ class SkillsGui:
         self.piece_by_slot_set = {
             (p.piece_type, p.set): p for p in self.game_data.armor
         }
+        # Set bonus and group tiers are named in both the armour data and the
+        # skills file ("Black Eclipse II"), which is how a tier finds out how
+        # many pieces it needs without the skills file repeating it.
+        self._pieces_by_tier = {
+            effect.skill: effect.pieces_required
+            for piece in self.game_data.armor
+            for bonus in piece.set_bonuses
+            for effect in bonus.effects
+        }
+        # game_data.skills is always skills_default.yaml, whatever file the
+        # weighting tab has open; see _levels_for.
+        self._default_levels = {
+            s.name: s.levels for s in self.game_data.skills if s.levels
+        }
 
         self.current_path: Path = Path(SKILLS_PATH)
         self.skills: list[Skill] = []
@@ -273,41 +289,33 @@ class SkillsGui:
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
 
     def _apply_window_size(self) -> None:
-        """Open at the size last closed at, or at the size the widgets ask for.
+        """Open at WINDOW_SIZE, or larger if the widgets need more than that.
 
-        Neither half is enough alone. A size written into the source cannot be
-        right on every display, because character widths, theme padding and the
-        desktop's scaling only exist at runtime - two attempts at hard-coding one
-        clipped the Gogma selectors here. But Tk's requested size is only the
-        smallest that fits, and preferring a roomier window is not something it
-        can know. So Tk supplies the floor and the last session supplies the
-        size, and resizing the window once is how you set it.
+        The fixed size alone is not enough: character widths, theme padding and
+        the desktop's scaling only exist at runtime, and two earlier hard-coded
+        sizes clipped the Gogma selectors. So Tk's requested size is the floor
+        and WINDOW_SIZE only adds room above it. Nothing about the size is read
+        from or written to gui_state.json, so every launch opens the same.
 
         update_idletasks forces the pending layout pass first; before it, a
         window reports a requested size of 1x1.
         """
         self.root.update_idletasks()
+        max_width = self.root.winfo_screenwidth()
         max_height = self.root.winfo_screenheight() - SCREEN_MARGIN
-        width = self.root.winfo_reqwidth()
-        height = min(self.root.winfo_reqheight(), max_height)
-        self.root.minsize(width, height)
-
-        state = self._read_state()
-        remembered = None
-        try:
-            remembered = int(state["width"]), int(state["height"])
-        except (KeyError, TypeError, ValueError):
-            pass
-        if remembered is not None:
-            # Clamped to this screen: a size saved on a larger monitor would
-            # otherwise open partly off it, with no way to drag it back.
-            width = max(width, min(remembered[0], self.root.winfo_screenwidth()))
-            height = max(height, min(remembered[1], max_height))
+        width = min(max(self.root.winfo_reqwidth(), WINDOW_SIZE[0]), max_width)
+        height = min(max(self.root.winfo_reqheight(), WINDOW_SIZE[1]), max_height)
+        self.root.minsize(
+            min(self.root.winfo_reqwidth(), max_width),
+            min(self.root.winfo_reqheight(), max_height),
+        )
         self.root.geometry(f"{width}x{height}")
 
     @staticmethod
     def _read_state() -> dict:
-        """Remembered window size and theme, or {} if there is nothing usable.
+        """Remembered theme, or {} if there is nothing usable.
+
+        An older file may still carry width and height; they are ignored.
 
         A missing file is the normal first run and a corrupt one is someone's
         stray edit; both fall back to the computed defaults, so neither is worth
@@ -322,13 +330,7 @@ class SkillsGui:
     def _write_state(self) -> None:
         try:
             GUI_STATE_PATH.write_text(
-                json.dumps(
-                    {
-                        "width": self.root.winfo_width(),
-                        "height": self.root.winfo_height(),
-                        "dark": bool(self.dark_var.get()),
-                    }
-                ),
+                json.dumps({"dark": bool(self.dark_var.get())}),
                 encoding="utf-8",
             )
         except OSError:
@@ -385,6 +387,10 @@ class SkillsGui:
             self.root.option_add(option, value)
 
         self._set_dark_title_bar(bool(palette["ttk_theme"]))
+        # clam and the native theme pad labels differently, so the height held
+        # for descriptions is re-measured in the theme now in force.
+        if self.skills:
+            self._size_description_box()
 
     def _theme_results_window(self) -> None:
         """Colour the results Toplevel, if it is open.
@@ -753,20 +759,27 @@ class SkillsGui:
             value.grid(row=0, column=column * 2 + 1, sticky=tk.W)
             self.info_value_labels[field] = value
 
-        # The description sits in a frame whose height is fixed and whose
-        # children cannot resize it, so a three-line description occupies the
-        # same space as a one-line one and the dials below never move. Without
-        # this, clicking through the list shuffles the controls up and down
-        # under the pointer.
+        # The description and the per-level effects sit in a frame whose height
+        # is fixed and whose children cannot resize it, so Adaptability's two
+        # short levels occupy the same space as Defense Boost's seven and the
+        # dials below never move. Without this, clicking through the list
+        # shuffles the controls up and down under the pointer. The height is
+        # measured from the loaded file in _size_description_box.
         ttk.Label(detail, text="Description:").pack(anchor=tk.W, pady=(0, 2))
 
-        self.desc_holder = ttk.Frame(detail)
+        self.desc_holder = ttk.Frame(detail, width=DESC_WRAP)
         self.desc_holder.pack(anchor=tk.W, fill=tk.X, pady=(0, 10))
         self.desc_holder.pack_propagate(False)
+        self.desc_content = ttk.Frame(self.desc_holder)
+        self.desc_content.pack(anchor=tk.NW, fill=tk.X)
         self.desc_label = ttk.Label(
-            self.desc_holder, text="", wraplength=DESC_WRAP, justify=tk.LEFT
+            self.desc_content, text="", wraplength=DESC_WRAP, justify=tk.LEFT
         )
         self.desc_label.pack(anchor=tk.NW)
+        # Rebuilt per skill by _fill_levels: one row per level, the level (or
+        # set pieces) in a narrow column and the game's effect text beside it.
+        self.levels_frame = ttk.Frame(self.desc_content)
+        self.levels_frame.pack(anchor=tk.NW, fill=tk.X, pady=(6, 0))
 
         # Both dials share one grid so their captions share column 0, which
         # sizes itself to the longer of them. Packed separately, each dropdown
@@ -1031,21 +1044,59 @@ class SkillsGui:
         self._refresh_custom_talisman_skill_options()
 
     def _size_description_box(self) -> None:
-        """Reserve the height the longest description in this file needs.
+        """Reserve the height the tallest skill in this file needs.
 
-        Tk owns the font metrics, so the line count is measured rather than
-        written down: a constant here would be wrong at a different display
-        scaling, in a different theme, or against a skills file whose text runs
-        longer. measure() reports the width of an unbroken string, so dividing
-        by the wrap width undercounts wherever a word is pushed onto the next
-        line - hence the extra line.
+        Every skill is laid out in the real widgets once and Tk reports the
+        height it asked for. Estimating from font.measure() instead undercounts
+        wherever a word wraps early, and with up to seven wrapped level lines
+        the error compounds into clipped text. A constant would be wrong at a
+        different display scaling, in a different theme, or against a file whose
+        text runs longer. Laying out a couple of hundred skills once per load
+        is cheap next to that.
         """
-        font = tkfont.nametofont("TkDefaultFont")
-        lines = 1
+        tallest = 1
         for skill in self.skills:
-            width = font.measure(skill.description)
-            lines = max(lines, math.ceil(width / DESC_WRAP) + 1)
-        self.desc_holder.config(height=lines * font.metrics("linespace"))
+            self._fill_description(skill)
+            self.desc_content.update_idletasks()
+            tallest = max(tallest, self.desc_content.winfo_reqheight())
+        self._fill_description(self.skills_by_name.get(self.selected_name))
+        self.desc_holder.config(height=tallest)
+
+    def _levels_for(self, skill: Skill):
+        """This skill's per-level effects, borrowed from the default file if
+        the loaded one predates them - a weighted file saved before levels
+        existed still shows them, without having to be re-saved first."""
+        return skill.levels or self._default_levels.get(skill.name, [])
+
+    def _level_caption(self, rank) -> str:
+        """'Lv 3', or the piece count a set bonus or group tier needs."""
+        pieces = self._pieces_by_tier.get(rank.name) if rank.name else None
+        return f"{pieces} pieces" if pieces else f"Lv {rank.level}"
+
+    def _fill_description(self, skill: Skill | None) -> None:
+        for child in self.levels_frame.winfo_children():
+            child.destroy()
+        if skill is None:
+            self.desc_label.config(text="")
+            return
+        self.desc_label.config(text=skill.description)
+
+        levels = self._levels_for(skill)
+        captions = [self._level_caption(rank) for rank in levels]
+        font = tkfont.nametofont("TkDefaultFont")
+        caption_width = max((font.measure(c) for c in captions), default=0) + 10
+        for row, (rank, caption) in enumerate(zip(levels, captions)):
+            text = f"{rank.name}: {rank.effect}" if rank.name else rank.effect
+            ttk.Label(self.levels_frame, text=caption, style="Hint.TLabel").grid(
+                row=row, column=0, sticky=tk.NW, pady=(0, LEVEL_GAP)
+            )
+            ttk.Label(
+                self.levels_frame,
+                text=text,
+                wraplength=DESC_WRAP - caption_width,
+                justify=tk.LEFT,
+            ).grid(row=row, column=1, sticky=tk.NW, pady=(0, LEVEL_GAP))
+        self.levels_frame.grid_columnconfigure(0, minsize=caption_width)
 
     def _size_info_columns(self) -> None:
         """Hold each info value's column at its widest value in this file.
@@ -1106,7 +1157,7 @@ class SkillsGui:
                 self.name_label.config(text=" ")
                 for value in self.info_value_labels.values():
                     value.config(text="")
-                self.desc_label.config(text="")
+                self._fill_description(None)
                 self.weight_var.set("")
                 self.level_weight_var.set("")
                 self.weight_entry.config(state=tk.DISABLED)
@@ -1117,7 +1168,7 @@ class SkillsGui:
             self.name_label.config(text=skill.name)
             for field, value in self.info_value_labels.items():
                 value.config(text=str(getattr(skill, field)))
-            self.desc_label.config(text=skill.description)
+            self._fill_description(skill)
 
             cached = self.cache[name]
             self.weight_var.set(cached["weight"])
@@ -1154,7 +1205,7 @@ class SkillsGui:
         return result
 
     def _write_skills(self, output_path: Path) -> None:
-        output = [asdict(skill) for skill in self._effective_skills()]
+        output = [skill_record(skill) for skill in self._effective_skills()]
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with output_path.open("w", encoding="utf-8") as f:
             yaml.dump(output, f, sort_keys=False, allow_unicode=True, default_flow_style=False)
