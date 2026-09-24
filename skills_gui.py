@@ -33,7 +33,14 @@ from load_data import (
     load_talismans,
     skill_record,
 )
-from optimiser import PIECE_TYPES, RESERVED_SLOTS, GearSet, Scoring, optimise
+from optimiser import (
+    PIECE_TYPES,
+    RESERVED_SLOTS,
+    GearSet,
+    Scoring,
+    bonus_base_name,
+    optimise,
+)
 from optimiser_report import render_set_inline
 
 NONE_OPTION = "(None)"
@@ -112,7 +119,12 @@ HINTS = {
         "Credits one extra piece toward this bonus, standing in for the bonus "
         "point a Gogma weapon carries."
     ),
-    "reserved": "Decoration slots left empty for resistance jewels.",
+    # Not "level-1 slots": the smallest slots are the ones held back, which
+    # are size 2 or 3 on a set that runs out of size-1 slots.
+    "reserved": (
+        "Decoration slots left empty for resistance jewels. The smallest slots "
+        "are held back, so size 1 while the set has them."
+    ),
     "relax": (
         "Return the full ten sets even if some miss a required skill. Off by "
         "default: a short list that meets your requirements beats a full one "
@@ -240,6 +252,15 @@ class SkillsGui:
             for bonus in piece.set_bonuses
             for effect in bonus.effects
         }
+        # The Gogma selectors offer only bonuses some armour piece carries. The
+        # optimiser learns a bonus's piece thresholds from the armour data, so
+        # a bonus no armour carries (Soul of the Dark Knight) has none, and a
+        # weapon point credited to it would silently do nothing.
+        self._armour_bonus_names = {
+            bonus_base_name(bonus.name)
+            for piece in self.game_data.armor
+            for bonus in piece.set_bonuses
+        }
         # game_data.skills is always skills_default.yaml, whatever file the
         # weighting tab has open; see _levels_for.
         self._default_levels = {
@@ -278,6 +299,7 @@ class SkillsGui:
         self.custom_talisman_path: Path | None = None
         self.custom_talismans: list[Talisman] = []
         self.ct_selected_index: int | None = None
+        self._ct_file_prompted = False
 
         self._build_widgets()
         self._load_file(self.current_path)
@@ -337,6 +359,8 @@ class SkillsGui:
             pass  # a read-only checkout must still be able to quit
 
     def _on_close(self) -> None:
+        if not self._discard_changes_ok():
+            return
         self._write_state()
         self.root.destroy()
 
@@ -571,7 +595,7 @@ class SkillsGui:
         _hint(reserved_group, "reserved", wrap=260).pack(side=tk.TOP, anchor=tk.W)
         reserved_row = ttk.Frame(reserved_group)
         reserved_row.pack(side=tk.TOP, anchor=tk.W, pady=(GAP, 0))
-        ttk.Label(reserved_row, text="Reserved Level-1 Slots:").pack(side=tk.LEFT)
+        ttk.Label(reserved_row, text="Reserved Slots:").pack(side=tk.LEFT)
         self.reserved_slots_var = tk.StringVar(value=str(RESERVED_SLOTS))
         ttk.Spinbox(
             reserved_row,
@@ -992,15 +1016,22 @@ class SkillsGui:
         self._set_custom_talisman_controls_enabled(False)
 
     def _on_tab_changed(self, _event: object) -> None:
+        # Offered once, on the first visit. Cancelling means "not now", and
+        # re-asking on every tab switch after that only gets in the way; the
+        # Select/Create button is still there.
         if (
             self.notebook.index(self.notebook.select()) == 1
             and self.custom_talisman_path is None
+            and not self._ct_file_prompted
         ):
+            self._ct_file_prompted = True
             self._select_custom_talisman_file()
 
     # --- skills tab: file handling ------------------------------------------
 
     def _open_file(self) -> None:
+        if not self._discard_changes_ok():
+            return
         path_str = filedialog.askopenfilename(
             title="Open skills file",
             initialdir=str(self.current_path.parent),
@@ -1114,11 +1145,12 @@ class SkillsGui:
             self.info_frame.grid_columnconfigure(column * 2 + 1, minsize=widest)
 
     def _refresh_gogma_options(self) -> None:
+        offered = [s for s in self.skills if s.name in self._armour_bonus_names]
         set_names = [NONE_OPTION] + sorted(
-            s.name for s in self.skills if s.type == "Set Bonus"
+            s.name for s in offered if s.type == "Set Bonus"
         )
         group_names = [NONE_OPTION] + sorted(
-            s.name for s in self.skills if s.type == "Group"
+            s.name for s in offered if s.type == "Group"
         )
         self.gogma_set_combo.config(values=set_names)
         self.gogma_group_combo.config(values=group_names)
@@ -1204,11 +1236,49 @@ class SkillsGui:
             result.append(replace(skill, weight=weight, level_weight=level_weight))
         return result
 
-    def _write_skills(self, output_path: Path) -> None:
-        output = [skill_record(skill) for skill in self._effective_skills()]
+    def _has_unsaved_changes(self) -> bool:
+        """True if any weight differs from the file it was loaded from."""
+        return any(
+            self.cache[skill.name]["weight"] != _weight_text(skill.weight)
+            or self.cache[skill.name]["level_weight"] != _weight_text(skill.level_weight)
+            for skill in self.skills
+        )
+
+    def _discard_changes_ok(self) -> bool:
+        """Ask before throwing away edited weights; True means go ahead."""
+        if not self._has_unsaved_changes():
+            return True
+        return messagebox.askokcancel(
+            "Unsaved weights",
+            "Some weights have been changed but not saved. Discard them?",
+        )
+
+    def _write_skills(self, output_path: Path) -> bool:
+        """Write the edited weights; False if the target was refused.
+
+        skills_default.yaml is refused outright. It is the data every weighted
+        file is built from, and the Save box writes beside whatever file is
+        loaded - usually that one - so typing its name would replace the
+        master copy with no way back short of git.
+        """
+        if output_path.resolve() == Path(SKILLS_PATH).resolve():
+            messagebox.showerror(
+                "Save",
+                f"{output_path.name} holds the default skill data and is never "
+                "overwritten. Choose another file name.",
+            )
+            return False
+
+        effective = self._effective_skills()
+        output = [skill_record(skill) for skill in effective]
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with output_path.open("w", encoding="utf-8") as f:
             yaml.dump(output, f, sort_keys=False, allow_unicode=True, default_flow_style=False)
+
+        # What was just written is the new baseline for "unsaved changes".
+        self.skills = effective
+        self.skills_by_name = {s.name: s for s in self.skills}
+        return True
 
     def _save(self) -> None:
         filename = self.output_name_var.get().strip()
@@ -1220,7 +1290,14 @@ class SkillsGui:
             self.output_name_var.set(filename)
 
         output_path = self.output_dir / filename
-        self._write_skills(output_path)
+        # Browse gets this prompt from the OS dialog; the plain Save button
+        # has no dialog, so it asks here instead.
+        if output_path.exists() and not messagebox.askyesno(
+            "Save", f"{output_path.name} already exists. Replace it?"
+        ):
+            return
+        if not self._write_skills(output_path):
+            return
         self.status_var.set(f"Saved to {output_path.name}")
         messagebox.showinfo("Saved", f"Saved weights to {output_path}")
 
@@ -1235,10 +1312,10 @@ class SkillsGui:
         if not path_str:
             return
         output_path = Path(path_str)
+        if not self._write_skills(output_path):
+            return
         self.output_dir = output_path.parent
         self.output_name_var.set(output_path.name)
-
-        self._write_skills(output_path)
         self.status_var.set(f"Saved to {output_path.name}")
         messagebox.showinfo("Saved", f"Saved weights to {output_path}")
 
@@ -1304,12 +1381,18 @@ class SkillsGui:
 
     def _select_custom_talisman_file(self) -> None:
         CUSTOM_TALISMANS_DIR.mkdir(parents=True, exist_ok=True)
+        # A save dialog, because it is the only one that can name a file that
+        # does not exist yet. confirmoverwrite is off because choosing an
+        # existing file here opens it for editing and writes nothing, so
+        # Windows' "replace it?" prompt would be asking about something that
+        # never happens.
         path_str = filedialog.asksaveasfilename(
             title="Select or create a custom talismans file",
             initialdir=str(CUSTOM_TALISMANS_DIR),
             initialfile="my_talismans.yaml",
             defaultextension=".yaml",
             filetypes=[("YAML files", "*.yaml *.yml"), ("All files", "*.*")],
+            confirmoverwrite=False,
         )
         if not path_str:
             return
@@ -1411,6 +1494,18 @@ class SkillsGui:
                     "Save Talisman", f"'{skill_name}' has an invalid level."
                 )
                 return
+            if level < 1:
+                messagebox.showerror(
+                    "Save Talisman", f"'{skill_name}' needs a level of at least 1."
+                )
+                return
+            # Two rows of one skill would stack past what a single row allows,
+            # getting round the max-level check below.
+            if any(existing.name == skill_name for existing in skills):
+                messagebox.showerror(
+                    "Save Talisman", f"'{skill_name}' is chosen more than once."
+                )
+                return
             skill = self.skills_by_name.get(skill_name)
             if skill is not None and level > skill.max_level:
                 messagebox.showerror(
@@ -1458,6 +1553,13 @@ class SkillsGui:
     def _delete_custom_talisman(self) -> None:
         if self.ct_selected_index is None:
             return
+        # The file is rewritten straight away, so there is no undo.
+        name = self.custom_talismans[self.ct_selected_index].name
+        if not messagebox.askyesno(
+            "Delete Talisman",
+            f"Delete '{name}' from {self.custom_talisman_path.name}?",
+        ):
+            return
         removed = self.custom_talismans.pop(self.ct_selected_index)
         self._write_custom_talismans(self.custom_talisman_path)
         self._refresh_custom_talisman_listbox()
@@ -1498,7 +1600,7 @@ class SkillsGui:
                 raise ValueError
         except ValueError:
             messagebox.showerror(
-                "Run Optimiser", "Reserved level-1 slots must be a non-negative integer."
+                "Run Optimiser", "Reserved slots must be a non-negative integer."
             )
             return
 
@@ -1565,12 +1667,9 @@ class SkillsGui:
             # over unmet_requirements, which only reports what was not found.
             reasons = []
             if not sets:
-                reasons = (
-                    optimiser.impossible_requirements()
-                    or optimiser.unmet_requirements()
-                )
-                if not optimiser.impossible_requirements():
-                    reasons = reasons + [
+                reasons = optimiser.impossible_requirements()
+                if not reasons:
+                    reasons = optimiser.unmet_requirements() + [
                         "The search is a heuristic, so this is what it did not "
                         "find, not proof that nothing exists."
                     ]

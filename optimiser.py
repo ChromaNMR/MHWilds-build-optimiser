@@ -607,6 +607,174 @@ class Optimiser:
         self.extra_bonus_pieces = {k: v for k, v in (extra_bonus_pieces or {}).items() if v}
         self._slot_potential = self._build_slot_potential()
         self._talisman_levels = self._best_talisman_levels()
+        # Every complete set the last run() evaluated, kept so
+        # unmet_requirements can say how close the search came.
+        self._evaluated: list[GearSet] = []
+
+    def _required_level(self, name: str) -> int:
+        """Level a mandatory skill or bonus must reach: max, or just 1."""
+        if name in self.scoring.mandatory_max:
+            return self.scoring.max_level(name)
+        return 1
+
+    def impossible_requirements(self) -> list[str]:
+        """Requirements no gear set can meet, found without searching.
+
+        Each line is a proof, not a search result, so it may be worded as
+        'cannot'. Three kinds are caught. A required skill nothing in the data
+        grants at all (a weapon skill, or a bonus no armour carries). Required
+        set bonuses, or required group skills, needing more pieces than the
+        free slots hold: no piece carries more than one set bonus or more than
+        one group skill, so within each kind the pieces add up rather than
+        overlap. And, when neither of those fires, required bonuses that no
+        choice of pieces satisfies together - see _bonus_combination_exists.
+        """
+        context = self.context
+        reasons: list[str] = []
+        reachable = context._gear_reachable_skills(self.game)
+
+        free_types = [t for t in PIECE_TYPES if t not in context.pinned]
+        needed_by_type: dict[str, list[int]] = {}
+        needs: dict[str, int] = {}  # required bonus -> pieces still to find
+        targets: dict[str, int] = {}
+        for name in sorted(self.scoring.mandatory):
+            info = context.bonus_registry.get(name)
+            if info is None:
+                if name not in reachable:
+                    reasons.append(
+                        f"{name} is required, but no armour piece, talisman or "
+                        "armour decoration provides it."
+                    )
+                continue
+
+            target = self._required_level(name)
+            threshold = info.thresholds[min(target, len(info.thresholds)) - 1]
+            pinned_count = sum(
+                1
+                for piece in context.pinned.values()
+                if any(bonus_base_name(b.name) == name for b in piece.set_bonuses)
+            )
+            extra = self.extra_bonus_pieces.get(name, 0)
+            need = max(0, threshold - pinned_count - extra)
+            if need == 0:
+                continue
+
+            carriers = sum(
+                1
+                for piece_type in free_types
+                if any(
+                    piece.piece_type == piece_type
+                    and any(bonus_base_name(b.name) == name for b in piece.set_bonuses)
+                    for piece in self.game.armor
+                )
+            )
+            if need > carriers:
+                reasons.append(
+                    f"{name} level {target} needs {need} more piece(s), but only "
+                    f"{carriers} free slot(s) have a piece carrying it."
+                )
+            needed_by_type.setdefault(info.bonus_type, []).append(need)
+            needs[name] = need
+            targets[name] = target
+
+        # One bonus on its own is already covered by the carriers check above;
+        # the sum only says something new when two or more compete for slots.
+        for bonus_type, type_needs in sorted(needed_by_type.items()):
+            needed = sum(type_needs)
+            if len(type_needs) > 1 and needed > len(free_types):
+                kind = "group skills" if bonus_type == "group_skill" else "set bonuses"
+                reasons.append(
+                    f"The required {kind} need {needed} pieces between them, but "
+                    f"only {len(free_types)} slot(s) are free and no piece carries "
+                    f"more than one of them."
+                )
+
+        # The checks above only ever count one kind at a time. A set bonus and
+        # a group skill can share a piece, so their sum proves nothing - but
+        # whether enough pieces actually carry both is a question the data can
+        # answer exactly. Only asked when nothing above has fired, so a
+        # simpler reason is never buried under this one.
+        if not reasons and len(needs) > 1 and not self._bonus_combination_exists(
+            needs, free_types
+        ):
+            wanted = ", ".join(
+                f"{name} level {targets[name]} ({need} more piece(s))"
+                for name, need in needs.items()
+            )
+            reasons.append(
+                f"No choice of armour for the {len(free_types)} free slot(s) "
+                f"gives all of these at once: {wanted}. Too few pieces carry more "
+                "than one of them for the counts to fit."
+            )
+        return reasons
+
+    def _bonus_combination_exists(
+        self, needs: dict[str, int], free_types: list[str]
+    ) -> bool:
+        """Can some piece per free slot supply every required bonus together?
+
+        Exact, by exhaustive search over what each slot can contribute, and
+        cheap because only the required bonuses count. A slot is reduced to
+        the sets of them its pieces carry, keeping only the maximal sets: a
+        threshold is a minimum, so a piece carrying more of the required
+        bonuses is never worse than one carrying fewer. Skills are ignored
+        entirely, so True does not mean a valid set exists - only that the
+        bonuses do not rule one out.
+        """
+        names = tuple(needs)
+        options: list[list[frozenset[str]]] = []
+        for piece_type in free_types:
+            signatures = {
+                frozenset(
+                    name
+                    for name in names
+                    if any(bonus_base_name(b.name) == name for b in piece.set_bonuses)
+                )
+                for piece in self.game.armor
+                if piece.piece_type == piece_type
+            }
+            options.append([s for s in signatures if not any(s < o for o in signatures)])
+
+        def search(index: int, remaining: dict[str, int]) -> bool:
+            if all(count <= 0 for count in remaining.values()):
+                return True
+            # Each slot adds at most one piece toward any single bonus.
+            if max(remaining.values()) > len(options) - index:
+                return False
+            return any(
+                search(
+                    index + 1,
+                    {name: count - (name in signature) for name, count in remaining.items()},
+                )
+                for signature in options[index]
+            )
+
+        return search(0, dict(needs))
+
+    def unmet_requirements(self) -> list[str]:
+        """How far short of each requirement the last run() fell.
+
+        Worded as what the search did not find rather than what cannot exist:
+        the beam is a heuristic, so a miss here is not a proof.
+        """
+        if not self._evaluated:
+            return ["The search did not build any complete gear set."]
+
+        reasons: list[str] = []
+        for name in sorted(self.scoring.mandatory):
+            target = self._required_level(name)
+            best = max(s.skill_levels.get(name, 0) for s in self._evaluated)
+            if best < target:
+                reasons.append(
+                    f"{name}: the best set found reached level {best} of the "
+                    f"{target} required."
+                )
+        if not reasons:
+            reasons.append(
+                "Each requirement was met by some set found, but no set met all "
+                "of them at once."
+            )
+        return reasons
 
     def _build_slot_potential(self) -> tuple[float, float, float]:
         """Optimistic value of one free slot of each size, for beam ranking."""
@@ -869,6 +1037,16 @@ class Optimiser:
 
         options = decoration_options(levels, context)
 
+        # Bonus levels depend only on the pieces, so they are known before any
+        # gem is placed - and must be, because the reservation loop below
+        # judges each trial by constraint_level_met. Left out, a required set
+        # bonus reads as missing on every trial, no trial ever improves on the
+        # first, and the reserved slots are never released for the skills
+        # that need them.
+        active_bonuses = self._active_bonuses(pieces)
+        for bonus in active_bonuses:
+            levels[bonus.name] = bonus.level
+
         chosen_counts: tuple[int, ...] = ()
         reserved = 0
         final_levels: dict[str, int] = {}
@@ -894,10 +1072,6 @@ class Optimiser:
         placements, free_slots = self._assign_decorations(
             pieces, talisman, talisman_sizes, options, chosen_counts, reserved
         )
-
-        active_bonuses = self._active_bonuses(pieces)
-        for bonus in active_bonuses:
-            final_levels[bonus.name] = bonus.level
 
         # Pieces alone can push a skill past its cap; report the effective level.
         for name, level in final_levels.items():
@@ -1015,7 +1189,18 @@ class Optimiser:
         active.sort(key=lambda b: (b.bonus_type, -b.level, b.name))
         return active
 
-    def run(self, tiers=DEFAULT_TIERS) -> tuple[list[GearSet], int]:
+    def run(self, tiers=DEFAULT_TIERS, strict: bool = True) -> tuple[list[GearSet], int]:
+        """Search and pick the result bands.
+
+        strict makes mandatory a hard filter: only sets meeting every
+        requirement (tier 0) are returned, even if that is fewer than asked for
+        or none. With strict off, the tier loosens until the bands can be
+        filled, which is how the --relax option behaves.
+        """
+        self._evaluated = []
+        if strict and self.impossible_requirements():
+            return [], 0
+
         states = self._search_armour()
 
         evaluated: list[GearSet] = []
@@ -1025,6 +1210,10 @@ class Optimiser:
                 evaluated.append(gear_set)
 
         evaluated.sort(key=lambda s: (s.constraint_level, -s.total_score))
+        self._evaluated = evaluated
+        if strict:
+            pool = [s for s in evaluated if s.constraint_level == 0]
+            return select_diverse(pool, tiers), 0
         if not evaluated:
             return [], 2
 
@@ -1097,6 +1286,7 @@ def optimise(
     tiers=DEFAULT_TIERS,
     extra_bonus_pieces: dict[str, int] | None = None,
     pinned_pieces: dict[str, str] | None = None,
+    strict: bool = True,
 ) -> tuple[list[GearSet], int, Optimiser]:
     optimiser = Optimiser(
         game,
@@ -1107,16 +1297,24 @@ def optimise(
         extra_bonus_pieces=extra_bonus_pieces,
         pinned_pieces=pinned_pieces,
     )
-    sets, constraint_level = optimiser.run(tiers)
+    sets, constraint_level = optimiser.run(tiers, strict=strict)
     return sets, constraint_level, optimiser
 
 
 def build_tiers(count: int) -> tuple[DiversityTier, ...]:
-    """Scale the default 3/3/4 banding to the requested number of sets."""
-    if count >= 10:
-        return DEFAULT_TIERS
-    shares = [0, 0, 0]
-    for i in range(count):
+    """Scale the default 3/3/4 banding to the requested number of sets.
+
+    Below ten the sets are dealt round-robin across the bands; above it the
+    3/3/4 split is kept and the extra sets are dealt round-robin on top, so
+    --count 20 returns twenty rather than silently stopping at ten.
+    """
+    if count < 10:
+        shares = [0, 0, 0]
+        extra = count
+    else:
+        shares = [tier.count for tier in DEFAULT_TIERS]
+        extra = count - sum(shares)
+    for i in range(extra):
         shares[i % 3] += 1
     return tuple(
         DiversityTier(t.label, share, t.min_piece_diff, t.require_new_bonuses)
@@ -1157,7 +1355,21 @@ def main() -> None:
             metavar="PIECE",
             help=f"force the {piece_type} slot to this armour piece, by name",
         )
+    parser.add_argument(
+        "--relax",
+        action="store_true",
+        help="allow sets that miss a mandatory skill rather than returning fewer",
+    )
     args = parser.parse_args()
+    # Each of these otherwise fails quietly: a count or beam of 0, or a
+    # negative reserve (every set then fails to build), returns no sets and no
+    # reason.
+    if args.count < 1:
+        parser.error("--count must be at least 1")
+    if args.beam < 1:
+        parser.error("--beam must be at least 1")
+    if args.reserve < 0:
+        parser.error("--reserve cannot be negative")
 
     from optimiser_report import render_console, write_yaml
 
@@ -1176,6 +1388,10 @@ def main() -> None:
         parser.error(str(exc))
 
     unreachable = Context(game, scoring).unreachable_weighted_skills()
+    # A required one is not ignored under the hard filter: it empties the
+    # result, and the no-sets message below names it as the reason.
+    if not args.relax:
+        unreachable = [n for n in unreachable if n not in scoring.mandatory]
     if unreachable:
         print(
             "Warning: these weighted skills cannot come from armour, talismans or "
@@ -1189,9 +1405,31 @@ def main() -> None:
         reserved_slots=args.reserve,
         tiers=build_tiers(args.count),
         pinned_pieces=pinned_pieces,
+        strict=not args.relax,
     )
 
-    print(render_console(sets, scoring, constraint_level, db_path, pinned=pinned))
+    # impossible_requirements is a proof, so it wins over unmet_requirements,
+    # which only reports what the search did not find.
+    reasons: list[str] = []
+    if not sets:
+        reasons = optimiser.impossible_requirements()
+        if not reasons:
+            reasons = optimiser.unmet_requirements() + [
+                "The search is a heuristic, so this is what it did not find, "
+                "not proof that nothing exists."
+            ]
+
+    print(
+        render_console(
+            sets,
+            scoring,
+            constraint_level,
+            db_path,
+            pinned=pinned,
+            strict=not args.relax,
+            reasons=reasons,
+        )
+    )
 
     output = Path(args.output) if args.output else Path("optimiser_outputs") / (
         gear_set_filename(db_path)

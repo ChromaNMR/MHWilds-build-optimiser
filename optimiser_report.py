@@ -250,12 +250,16 @@ def render_console(
     db_path: Path,
     pinned: dict[str, ArmorPiece] | None = None,
     strict: bool = True,
+    reasons: list[str] | None = None,
 ) -> str:
-    header = [
-        "=" * WIDTH,
-        f"MH Wilds gear sets for {db_path}",
-        f"Constraint tier {constraint_level}: {CONSTRAINT_DESCRIPTIONS[constraint_level]}",
-    ]
+    header = ["=" * WIDTH, f"MH Wilds gear sets for {db_path}"]
+    # In strict mode the tier is always 0 by construction, so naming it would
+    # only repeat the requirement line below.
+    if not strict:
+        header.append(
+            f"Constraint tier {constraint_level}: "
+            f"{CONSTRAINT_DESCRIPTIONS[constraint_level]}"
+        )
     mandatory = sorted(scoring.mandatory)
     if mandatory:
         header.append("Mandatory skills: " + ", ".join(mandatory))
@@ -268,16 +272,23 @@ def render_console(
                 if piece_type in pinned
             )
         )
-    if strict:
+    if strict and mandatory:
         header.append("Mandatory skills are required: sets missing one are not shown.")
-    elif constraint_level > 0:
+    elif constraint_level > 0 and mandatory:
         header.append(
             "NOTE: constraints were relaxed to fill the requested number of sets."
         )
 
     if not sets:
         header.append("")
-        header.append("No gear sets could be built.")
+        header.append(
+            "No gear set meets these requirements."
+            if strict and mandatory
+            else "No gear sets could be built."
+        )
+        header.extend(f"  - {reason}" for reason in reasons or [])
+        if strict and mandatory:
+            header.append("Pass --relax to search without the requirement.")
         return "\n".join(header)
 
     body = [render_set(s, i, scoring) for i, s in enumerate(sets, start=1)]
