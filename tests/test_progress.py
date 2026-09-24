@@ -137,8 +137,8 @@ class GuiPoll(unittest.TestCase):
         stub._optimiser_done.assert_not_called()
 
     def test_result_after_progress_finishes(self):
-        stub = self.make_stub(("progress", 0.9, "x", None), ("ok", ["set"], "scoring", []))
-        stub._optimiser_done.assert_called_once_with(["set"], "scoring", None, [])
+        stub = self.make_stub(("progress", 0.9, "x", None), ("ok", "result", None, None))
+        stub._optimiser_done.assert_called_once_with("result", None)
         stub.root.after.assert_not_called()
 
     def test_cancelled_resets_quietly(self):

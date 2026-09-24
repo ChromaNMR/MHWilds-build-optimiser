@@ -61,14 +61,14 @@ class OptimiserCall(unittest.TestCase):
         results: queue.Queue = queue.Queue()
         easy = weighted({"Antivirus": (5, 0), "Weakness Exploit": (5, 0)})
         G.SkillsGui._optimiser_thread(stub, G.RunRequest(skills=easy), results)
-        kind, sets, _scoring, reasons = last_message(results)
-        self.assertEqual((kind, len(sets), reasons), ("ok", 10, []))
+        kind, result, _, _ = last_message(results)
+        self.assertEqual((kind, len(result.sets), result.reasons), ("ok", 10, []))
 
         impossible = weighted({"Airborne": (5, 0)})
         G.SkillsGui._optimiser_thread(stub, G.RunRequest(skills=impossible), results)
-        kind, sets, _scoring, reasons = last_message(results)
-        self.assertEqual((kind, sets), ("ok", []))
-        self.assertIn("Airborne", reasons[0])
+        kind, result, _, _ = last_message(results)
+        self.assertEqual((kind, result.sets), ("ok", []))
+        self.assertIn("Airborne", result.reasons[0])
 
 
 class GogmaOptions(unittest.TestCase):

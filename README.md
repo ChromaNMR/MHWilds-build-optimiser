@@ -22,7 +22,7 @@ The GUI (`launch_gui.bat`) launches it with `pythonw`, so no console window appe
    - rule armour out with **Exclude Gear…** — see [Excluding armour](#excluding-armour);
    - load custom talismans built on the other tab, so they join the optimiser's charm pool without touching `craftable_talismans.yaml`;
    - adjust *Reserved slots* (defaults to 2) for resistance jewels you plan to slot yourself. The smallest slots in the set are the ones held back, so they're size 1 unless the set runs out of those.
-5. While it runs, a progress bar under the Run button shows which phase the search is in, and **Cancel** stops it within a fraction of a second. Results open in a second window with Previous/Next navigation.
+5. While it runs, a progress bar under the Run button shows which phase the search is in, and **Cancel** stops it within a fraction of a second. Results open in a second window with Previous/Next navigation. **Copy This Set** puts the set on screen on the clipboard; **Save All Sets…** writes every set to `optimiser_outputs/` — as YAML, the same structure the CLI writes, or with a `.txt` name as the CLI's console text, header included. The header records which skills file the weights came from, and says so when the run used edits you hadn't saved yet, because otherwise the export names a file that doesn't hold those weights.
 
 ### Custom Talismans tab
 

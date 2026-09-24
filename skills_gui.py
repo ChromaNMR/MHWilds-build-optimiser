@@ -41,12 +41,14 @@ from optimiser import (
     Scoring,
     SearchCancelled,
     bonus_base_name,
+    gear_set_filename,
     optimise,
 )
-from optimiser_report import render_set_inline
+from optimiser_report import render_console, render_set_inline, write_yaml
 
 NONE_OPTION = "(None)"
 CUSTOM_TALISMANS_DIR = DATA_DIR / "custom_talismans_outputs"
+OPTIMISER_OUTPUTS_DIR = DATA_DIR / "optimiser_outputs"
 MAX_TALISMAN_SKILLS = 3
 MAX_TALISMAN_SLOTS = 3
 
@@ -257,6 +259,20 @@ class RunRequest:
     excluded_pieces: list[str] = field(default_factory=list)
     strict: bool = True
     weapon_slots: tuple[int, ...] = ()
+    # What the weights came from, for export headers: the loaded file's path,
+    # marked when the run used edits not yet saved to it.
+    source_label: str = ""
+
+
+@dataclass
+class RunResult:
+    """A finished run, as the worker hands it back to the main thread."""
+
+    sets: list[GearSet]
+    scoring: Scoring
+    reasons: list[str]
+    constraint_level: int
+    request: RunRequest
 
 
 class SkillsGui:
@@ -322,6 +338,7 @@ class SkillsGui:
         # Optimiser integration state.
         self._optimiser_running = False
         self.gear_sets: list[GearSet] = []
+        self.gear_result: RunResult | None = None
         self.gear_scoring: Scoring | None = None
         self.gear_set_index = 0
         self.results_window: tk.Toplevel | None = None
@@ -1924,6 +1941,8 @@ class SkillsGui:
             excluded_pieces=sorted(self.excluded_pieces),
             strict=not self.relax_var.get(),
             weapon_slots=self._weapon_slots(),
+            source_label=str(self.current_path)
+            + (" (with unsaved edits)" if self._has_unsaved_changes() else ""),
         )
 
         self._optimiser_running = True
@@ -1971,7 +1990,7 @@ class SkillsGui:
                     talismans=list(game_data.talismans) + request.custom_talismans,
                 )
             scoring = Scoring(request.skills)
-            sets, _constraint_level, optimiser = optimise(
+            sets, constraint_level, optimiser = optimise(
                 game_data,
                 scoring,
                 reserved_slots=request.reserved_slots,
@@ -2001,7 +2020,9 @@ class SkillsGui:
         except Exception as exc:  # noqa: BLE001
             result_queue.put(("error", exc, None, None))
             return
-        result_queue.put(("ok", sets, scoring, reasons))
+        result_queue.put(
+            ("ok", RunResult(sets, scoring, reasons, constraint_level, request), None, None)
+        )
 
     def _poll_optimiser_queue(self) -> None:
         """Drain the worker's queue: progress updates, then at most one end.
@@ -2030,16 +2051,12 @@ class SkillsGui:
             self.run_button.config(state=tk.NORMAL, text="Run Optimiser")
             self.status_var.set("Cancelled.")
         elif kind == "error":
-            self._optimiser_done(None, None, first, None)
+            self._optimiser_done(None, first)
         else:
-            self._optimiser_done(first, second, None, third)
+            self._optimiser_done(first, None)
 
     def _optimiser_done(
-        self,
-        sets: list[GearSet] | None,
-        scoring: Scoring | None,
-        error: Exception | None,
-        reasons: list[str] | None,
+        self, result: RunResult | None, error: Exception | None
     ) -> None:
         self._optimiser_running = False
         self.run_button.config(state=tk.NORMAL, text="Run Optimiser")
@@ -2049,6 +2066,7 @@ class SkillsGui:
             messagebox.showerror("Optimiser failed", str(error))
             return
 
+        sets, reasons = result.sets, result.reasons
         if not sets:
             self.status_var.set("")
             # The reason matters more here than anywhere: strict mode means an
@@ -2065,9 +2083,13 @@ class SkillsGui:
             return
 
         self.status_var.set(f"Optimiser found {len(sets)} gear sets.")
+        self.gear_result = result
         self.gear_sets = sets
-        self.gear_scoring = scoring
+        self.gear_scoring = result.scoring
         self.gear_set_index = 0
+        status = getattr(self, "results_status_var", None)
+        if status is not None:
+            status.set("")  # an export message from the previous run
         self._show_results_window()
 
     def _show_results_window(self) -> None:
@@ -2090,6 +2112,19 @@ class SkillsGui:
             )
             self.next_button = ttk.Button(nav, text="Next >", command=self._show_next_set)
             self.next_button.pack(side=tk.RIGHT)
+
+            exports = ttk.Frame(window, padding=(8, 0, 8, 8))
+            exports.pack(side=tk.BOTTOM, fill=tk.X)
+            ttk.Button(exports, text="Copy This Set", command=self._copy_current_set).pack(
+                side=tk.LEFT
+            )
+            ttk.Button(exports, text="Save All Sets...", command=self._save_results).pack(
+                side=tk.LEFT, padx=(8, 0)
+            )
+            self.results_status_var = tk.StringVar(value="")
+            ttk.Label(
+                exports, textvariable=self.results_status_var, style="Status.TLabel"
+            ).pack(side=tk.LEFT, padx=(12, 0))
 
             text_frame = ttk.Frame(window)
             text_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=8, pady=(0, 8))
@@ -2135,6 +2170,77 @@ class SkillsGui:
         self.next_button.config(
             state=tk.NORMAL if self.gear_set_index < total - 1 else tk.DISABLED
         )
+
+    # --- exporting results ----------------------------------------------------
+
+    def _current_set_text(self) -> str:
+        return render_set_inline(
+            self.gear_sets[self.gear_set_index],
+            self.gear_set_index + 1,
+            len(self.gear_sets),
+            self.gear_scoring,
+        )
+
+    def _copy_current_set(self) -> None:
+        if not self.gear_sets:
+            return
+        self.root.clipboard_clear()
+        self.root.clipboard_append(self._current_set_text())
+        self.results_status_var.set(f"Set {self.gear_set_index + 1} copied.")
+
+    def _results_as_text(self) -> str:
+        """Every set in the console layout, header included - the same text
+        optimiser.py prints, so a GUI export and a CLI run read alike."""
+        result = self.gear_result
+        request = result.request
+        by_name = {p.name: p for p in self.game_data.armor}
+        pinned = {slot: by_name[name] for slot, name in request.pinned_pieces.items()}
+        return render_console(
+            result.sets,
+            result.scoring,
+            result.constraint_level,
+            request.source_label,
+            pinned=pinned,
+            strict=request.strict,
+            excluded=request.excluded_sets + request.excluded_pieces,
+        )
+
+    def _write_results(self, path: Path) -> None:
+        """YAML for .yaml/.yml, the console text for anything else.
+
+        YAML is the same structure optimiser.py writes, for anything reading
+        results back; text is for reading or pasting.
+        """
+        result = self.gear_result
+        if path.suffix.lower() in (".yaml", ".yml"):
+            write_yaml(
+                result.sets,
+                result.scoring,
+                result.constraint_level,
+                result.request.source_label,
+                path,
+            )
+        else:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(self._results_as_text() + "\n", encoding="utf-8")
+
+    def _save_results(self) -> None:
+        if not self.gear_sets:
+            return
+        OPTIMISER_OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+        path_str = filedialog.asksaveasfilename(
+            parent=self.results_window,
+            title="Save optimiser results",
+            initialdir=str(OPTIMISER_OUTPUTS_DIR),
+            initialfile=gear_set_filename(self.current_path),
+            defaultextension=".yaml",
+            filetypes=[("YAML results", "*.yaml *.yml"), ("Text", "*.txt")],
+        )
+        if not path_str:
+            return
+        path = Path(path_str)
+        self._write_results(path)
+        self.results_status_var.set(f"Saved {len(self.gear_sets)} sets to {path.name}.")
 
     def _show_prev_set(self) -> None:
         if self.gear_set_index > 0:
