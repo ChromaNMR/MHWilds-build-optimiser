@@ -251,6 +251,7 @@ def render_console(
     pinned: dict[str, ArmorPiece] | None = None,
     strict: bool = True,
     reasons: list[str] | None = None,
+    excluded: list[str] | None = None,
 ) -> str:
     header = ["=" * WIDTH, f"MH Wilds gear sets for {db_path}"]
     # In strict mode the tier is always 0 by construction, so naming it would
@@ -272,6 +273,8 @@ def render_console(
                 if piece_type in pinned
             )
         )
+    if excluded:
+        header.append("Excluded: " + ", ".join(excluded))
     if strict and mandatory:
         header.append("Mandatory skills are required: sets missing one are not shown.")
     elif constraint_level > 0 and mandatory:

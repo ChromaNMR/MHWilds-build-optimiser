@@ -14,7 +14,7 @@ import json
 import queue
 import threading
 import tkinter as tk
-from dataclasses import replace
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from tkinter import filedialog, font as tkfont, messagebox, ttk
 
@@ -114,6 +114,14 @@ HINTS = {
     "pins": (
         "Force a slot to a specific set's piece. Slots left empty are chosen "
         "freely."
+    ),
+    "exclude": (
+        "Armour the search must never use: sets you have not unlocked, or "
+        "pieces you refuse to wear."
+    ),
+    "exclude_dialog": (
+        "Double-click, or select and press Space, to exclude or include. A set "
+        "row covers every piece in it; pieces can also be excluded one by one."
     ),
     "gogma": (
         "Credits one extra piece toward this bonus, standing in for the bonus "
@@ -224,6 +232,25 @@ def _slot_sizes(value, default_size: int = 1) -> list[int]:
     return [default_size] * int(value or 0)
 
 
+@dataclass
+class RunRequest:
+    """Everything one optimiser run reads, captured on the main thread.
+
+    The worker thread gets this and nothing else, which is what keeps it off
+    Tk entirely: Tk is not thread-safe, and a worker reading a StringVar
+    mid-run would be reading it from the wrong thread.
+    """
+
+    skills: list[Skill]
+    reserved_slots: int = RESERVED_SLOTS
+    extra_bonus_pieces: dict[str, int] = field(default_factory=dict)
+    custom_talismans: list[Talisman] = field(default_factory=list)
+    pinned_pieces: dict[str, str] = field(default_factory=dict)
+    excluded_sets: list[str] = field(default_factory=list)
+    excluded_pieces: list[str] = field(default_factory=list)
+    strict: bool = True
+
+
 class SkillsGui:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
@@ -243,6 +270,7 @@ class SkillsGui:
         self.piece_by_slot_set = {
             (p.piece_type, p.set): p for p in self.game_data.armor
         }
+        self.set_of_piece = {p.name: p.set for p in self.game_data.armor}
         # Set bonus and group tiers are named in both the armour data and the
         # skills file ("Black Eclipse II"), which is how a tier finds out how
         # many pieces it needs without the skills file repeating it.
@@ -294,6 +322,13 @@ class SkillsGui:
         # kept separate from craftable_talismans.yaml entirely.
         self.custom_talismans_loaded: list[Talisman] = []
         self.custom_talismans_source: Path | None = None
+
+        # Armour left out of the search. Sets and pieces are kept apart, as the
+        # optimiser takes them, so excluding a set and later including it again
+        # does not lose pieces excluded one by one inside it.
+        self.excluded_sets: set[str] = set()
+        self.excluded_pieces: set[str] = set()
+        self.exclusions_window: tk.Toplevel | None = None
 
         # Custom Talismans tab editing state.
         self.custom_talisman_path: Path | None = None
@@ -397,6 +432,7 @@ class SkillsGui:
                 selectforeground=palette["select_fg"],
             )
         self._theme_results_window()
+        self._theme_exclusions_window()
 
         # A combobox builds its drop-down list the first time it is opened, from
         # the option database rather than from the style, so these have to be
@@ -494,6 +530,22 @@ class SkillsGui:
             "TScrollbar", background=surface, troughcolor=window, bordercolor=border
         )
         style.configure("TSeparator", background=border)
+        # The Exclude Gear tree. Unlike the Listboxes, Treeview is ttk, so it
+        # follows the style - but clam's default Treeview is white, so it
+        # needs colours of its own like every other ttk widget here.
+        style.configure(
+            "Treeview",
+            background=palette["text_bg"],
+            fieldbackground=palette["text_bg"],
+            foreground=palette["text_fg"],
+            bordercolor=border,
+        )
+        style.map(
+            "Treeview",
+            background=[("selected", palette["select_bg"])],
+            foreground=[("selected", palette["select_fg"])],
+        )
+        style.configure("Treeview.Heading", background=surface, foreground=text)
 
     def _set_dark_title_bar(self, dark: bool) -> None:
         """Ask Windows for a dark title bar. Cosmetic, so failure is ignored.
@@ -702,6 +754,21 @@ class SkillsGui:
             side=tk.TOP, fill=tk.X, pady=(10, 6)
         )
 
+        _hint(gear, "exclude", wrap=280).pack(side=tk.TOP, anchor=tk.W)
+        exclude_row = ttk.Frame(gear)
+        exclude_row.pack(side=tk.TOP, anchor=tk.W, pady=(GAP, 0))
+        ttk.Button(
+            exclude_row, text="Exclude Gear...", command=self._open_exclusions
+        ).pack(side=tk.LEFT)
+        self.exclusion_summary_var = tk.StringVar(value=self._exclusion_summary())
+        ttk.Label(
+            exclude_row, textvariable=self.exclusion_summary_var, style="Hint.TLabel"
+        ).pack(side=tk.LEFT, padx=(8, 0))
+
+        ttk.Separator(gear, orient=tk.HORIZONTAL).pack(
+            side=tk.TOP, fill=tk.X, pady=(10, 6)
+        )
+
         ttk.Label(gear, text="Gogma Weapon Skills").pack(side=tk.TOP, anchor=tk.W)
         _hint(gear, "gogma", wrap=280).pack(side=tk.TOP, anchor=tk.W, pady=(2, 0))
         gogma = ttk.Frame(gear)
@@ -881,6 +948,176 @@ class SkillsGui:
             if piece is not None:
                 pinned[piece_type] = piece.name
         return pinned
+
+    # --- exclusions ----------------------------------------------------------
+
+    def _exclusion_summary(self) -> str:
+        if not self.excluded_sets and not self.excluded_pieces:
+            return "Nothing excluded"
+        parts = []
+        if self.excluded_sets:
+            parts.append(f"{len(self.excluded_sets)} set(s)")
+        if self.excluded_pieces:
+            parts.append(f"{len(self.excluded_pieces)} piece(s)")
+        return "Excluded: " + ", ".join(parts)
+
+    def _exclusion_state(self, iid: str) -> str:
+        """What the Status column says for one tree row."""
+        kind, name = iid.split(":", 1)
+        if kind == "set":
+            return "excluded" if name in self.excluded_sets else ""
+        if name in self.excluded_pieces:
+            return "excluded"
+        if self.set_of_piece.get(name) in self.excluded_sets:
+            return "excluded (set)"
+        return ""
+
+    def _toggle_exclusions(self, iids) -> None:
+        """Flip each row between excluded and included.
+
+        A piece row whose set is excluded is left alone: including it on its
+        own would need a per-piece override of the set, which is a third state
+        the optimiser has no notion of. Include the set instead.
+        """
+        for iid in iids:
+            kind, name = iid.split(":", 1)
+            target = self.excluded_sets if kind == "set" else self.excluded_pieces
+            if kind == "piece" and self.set_of_piece.get(name) in self.excluded_sets:
+                continue
+            if name in target:
+                target.discard(name)
+            else:
+                target.add(name)
+        self.exclusion_summary_var.set(self._exclusion_summary())
+
+    def _open_exclusions(self) -> None:
+        window = self.exclusions_window
+        if window is not None and window.winfo_exists():
+            window.deiconify()
+            window.lift()
+            return
+
+        window = tk.Toplevel(self.root)
+        window.title("Exclude Gear")
+        window.geometry("560x680")
+        window.transient(self.root)
+        self.exclusions_window = window
+
+        frame = ttk.Frame(window, padding=8)
+        frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        _hint(frame, "exclude_dialog", wrap=520).pack(side=tk.TOP, anchor=tk.W)
+
+        filter_row = ttk.Frame(frame)
+        filter_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, GAP))
+        ttk.Label(filter_row, text="Filter:").pack(side=tk.LEFT)
+        self.exclusion_filter_var = tk.StringVar()
+        ttk.Entry(filter_row, textvariable=self.exclusion_filter_var, width=30).pack(
+            side=tk.LEFT, padx=(4, 0)
+        )
+        self.exclusion_filter_var.trace_add(
+            "write", lambda *_a: self._fill_exclusion_tree()
+        )
+
+        tree_frame = ttk.Frame(frame)
+        tree_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        tree = ttk.Treeview(
+            tree_frame, columns=("state",), show=("tree", "headings"),
+            selectmode="extended",
+        )
+        tree.heading("#0", text="Armour")
+        tree.heading("state", text="Status")
+        tree.column("#0", width=360)
+        tree.column("state", width=120, anchor=tk.W)
+        tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scroll = ttk.Scrollbar(tree_frame, orient=tk.VERTICAL, command=tree.yview)
+        scroll.pack(side=tk.LEFT, fill=tk.Y)
+        tree.config(yscrollcommand=scroll.set)
+        self.exclusion_tree = tree
+
+        def toggle_selected(_event=None):
+            self._toggle_exclusions(tree.selection())
+            self._refresh_exclusion_states()
+            # Returning "break" stops Treeview's own double-click handler,
+            # which would also expand or collapse a set row on every toggle.
+            return "break"
+
+        tree.bind("<Double-1>", toggle_selected)
+        tree.bind("<space>", toggle_selected)
+
+        buttons = ttk.Frame(frame)
+        buttons.pack(side=tk.TOP, fill=tk.X, pady=(8, 0))
+        ttk.Button(buttons, text="Exclude / Include Selected", command=toggle_selected).pack(
+            side=tk.LEFT
+        )
+
+        def clear_all():
+            self.excluded_sets.clear()
+            self.excluded_pieces.clear()
+            self.exclusion_summary_var.set(self._exclusion_summary())
+            self._refresh_exclusion_states()
+
+        ttk.Button(buttons, text="Include Everything", command=clear_all).pack(
+            side=tk.LEFT, padx=(8, 0)
+        )
+        ttk.Button(buttons, text="Close", command=window.destroy).pack(side=tk.RIGHT)
+
+        self._theme_exclusions_window()
+        self._fill_exclusion_tree()
+
+    def _fill_exclusion_tree(self) -> None:
+        """Rebuild the tree for the current filter text.
+
+        A set whose name matches keeps all its pieces; otherwise it is shown
+        with only the pieces that match, and opened, so a search for one
+        piece does not leave it hidden inside a collapsed set.
+        """
+        tree = self.exclusion_tree
+        tree.delete(*tree.get_children())
+        needle = self.exclusion_filter_var.get().strip().lower()
+        pieces_by_set: dict[str, list] = {}
+        for piece in self.game_data.armor:
+            pieces_by_set.setdefault(piece.set, []).append(piece)
+
+        for set_name in sorted(pieces_by_set):
+            pieces = sorted(
+                pieces_by_set[set_name], key=lambda p: PIECE_TYPES.index(p.piece_type)
+            )
+            if needle and needle not in set_name.lower():
+                pieces = [p for p in pieces if needle in p.name.lower()]
+                if not pieces:
+                    continue
+            set_iid = f"set:{set_name}"
+            tree.insert(
+                "", tk.END, iid=set_iid, text=set_name, open=bool(needle),
+                values=(self._exclusion_state(set_iid),),
+            )
+            for piece in pieces:
+                piece_iid = f"piece:{piece.name}"
+                tree.insert(
+                    set_iid, tk.END, iid=piece_iid,
+                    text=f"{piece.piece_type:<6} {piece.name}",
+                    values=(self._exclusion_state(piece_iid),),
+                )
+        self._refresh_exclusion_states()
+
+    def _refresh_exclusion_states(self) -> None:
+        """Rewrite the Status column in place, keeping selection and scroll."""
+        tree = self.exclusion_tree
+        palette = THEMES["dark" if self.dark_var.get() else "light"]
+        tree.tag_configure("excluded", foreground=palette["hint"])
+        for set_iid in tree.get_children():
+            for iid in (set_iid, *tree.get_children(set_iid)):
+                state = self._exclusion_state(iid)
+                tree.item(iid, values=(state,), tags=("excluded",) if state else ())
+
+    def _theme_exclusions_window(self) -> None:
+        palette = THEMES["dark" if self.dark_var.get() else "light"]
+        window = getattr(self, "exclusions_window", None)
+        if window is None or not window.winfo_exists():
+            return
+        if palette["window"]:
+            window.configure(background=palette["window"])
+        self._refresh_exclusion_states()
 
     def _build_custom_talismans_tab(self, parent: ttk.Frame) -> None:
         files = self._section(parent, "Talisman File", side=tk.TOP, fill=tk.X)
@@ -1612,6 +1849,30 @@ class SkillsGui:
         if group_skill and group_skill != NONE_OPTION:
             extra_bonus_pieces[group_skill] = extra_bonus_pieces.get(group_skill, 0) + 1
 
+        # Caught here rather than left to the optimiser's ValueError so the
+        # message names the fix in GUI terms, not the engine's.
+        pinned_pieces = self._pinned_pieces()
+        for piece_type, name in pinned_pieces.items():
+            piece_set = self.set_of_piece.get(name)
+            if name in self.excluded_pieces or piece_set in self.excluded_sets:
+                messagebox.showerror(
+                    "Run Optimiser",
+                    f"{name} is pinned to {piece_type} but also excluded. Unpin "
+                    "it or include it again under Exclude Gear.",
+                )
+                return
+
+        request = RunRequest(
+            skills=self._effective_skills(),
+            reserved_slots=reserved_slots,
+            extra_bonus_pieces=extra_bonus_pieces,
+            custom_talismans=list(self.custom_talismans_loaded),
+            pinned_pieces=pinned_pieces,
+            excluded_sets=sorted(self.excluded_sets),
+            excluded_pieces=sorted(self.excluded_pieces),
+            strict=not self.relax_var.get(),
+        )
+
         self._optimiser_running = True
         self.run_button.config(state=tk.DISABLED, text="Working...")
         self.status_var.set("Running optimiser - this can take up to a minute...")
@@ -1619,48 +1880,32 @@ class SkillsGui:
         # Tkinter is not thread-safe: the worker only ever writes to this queue,
         # never touches self.root, and the main thread polls it via after().
         self._optimiser_queue: queue.Queue = queue.Queue()
-        skills = self._effective_skills()
-        custom_talismans = list(self.custom_talismans_loaded)
         thread = threading.Thread(
             target=self._optimiser_thread,
-            args=(
-                skills,
-                reserved_slots,
-                extra_bonus_pieces,
-                custom_talismans,
-                self._pinned_pieces(),
-                not self.relax_var.get(),
-                self._optimiser_queue,
-            ),
+            args=(request, self._optimiser_queue),
             daemon=True,
         )
         thread.start()
         self.root.after(100, self._poll_optimiser_queue)
 
-    def _optimiser_thread(
-        self,
-        skills: list[Skill],
-        reserved_slots: int,
-        extra_bonus_pieces: dict[str, int],
-        custom_talismans: list[Talisman],
-        pinned_pieces: dict[str, str],
-        strict: bool,
-        result_queue: queue.Queue,
-    ) -> None:
+    def _optimiser_thread(self, request: RunRequest, result_queue: queue.Queue) -> None:
         try:
             game_data = self.game_data
-            if custom_talismans:
+            if request.custom_talismans:
                 game_data = replace(
-                    game_data, talismans=list(game_data.talismans) + custom_talismans
+                    game_data,
+                    talismans=list(game_data.talismans) + request.custom_talismans,
                 )
-            scoring = Scoring(skills)
+            scoring = Scoring(request.skills)
             sets, _constraint_level, optimiser = optimise(
                 game_data,
                 scoring,
-                reserved_slots=reserved_slots,
-                extra_bonus_pieces=extra_bonus_pieces,
-                pinned_pieces=pinned_pieces,
-                strict=strict,
+                reserved_slots=request.reserved_slots,
+                extra_bonus_pieces=request.extra_bonus_pieces,
+                pinned_pieces=request.pinned_pieces,
+                strict=request.strict,
+                excluded_sets=request.excluded_sets,
+                excluded_pieces=request.excluded_pieces,
             )
             # Why nothing came back, gathered on this thread while the optimiser
             # is still in scope: impossible_requirements is a proof, so it wins

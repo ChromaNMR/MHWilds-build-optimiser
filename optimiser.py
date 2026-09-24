@@ -281,6 +281,33 @@ def resolve_pins(
     return resolved
 
 
+def resolve_exclusions(
+    game: GameData,
+    excluded_sets: list[str] | set[str] | None = None,
+    excluded_pieces: list[str] | set[str] | None = None,
+) -> set[str]:
+    """Names of every armour piece ruled out, by set or individually.
+
+    Validated for the same reason pins are: an unknown name would otherwise
+    exclude nothing, and a typo would quietly search with the piece still in.
+    """
+    all_sets = {piece.set for piece in game.armor}
+    all_pieces = {piece.name for piece in game.armor}
+    for name in excluded_sets or ():
+        if name not in all_sets:
+            raise ValueError(f"No armour set is named {name!r}.")
+    for name in excluded_pieces or ():
+        if name not in all_pieces:
+            raise ValueError(f"No armour piece is named {name!r}.")
+
+    sets = set(excluded_sets or ())
+    return {
+        piece.name
+        for piece in game.armor
+        if piece.set in sets or piece.name in set(excluded_pieces or ())
+    }
+
+
 class Context:
     """Precomputed, weight-profile-specific view of the game data."""
 
@@ -289,16 +316,33 @@ class Context:
         game: GameData,
         scoring: Scoring,
         pinned_pieces: dict[str, str] | None = None,
+        excluded_sets: list[str] | set[str] | None = None,
+        excluded_pieces: list[str] | set[str] | None = None,
     ) -> None:
         self.game = game
         self.scoring = scoring
         self.pinned = resolve_pins(game, pinned_pieces)
+        self.excluded = resolve_exclusions(game, excluded_sets, excluded_pieces)
+        # Both are the user saying opposite things about one piece. Refused
+        # rather than resolved either way, because each resolution silently
+        # ignores one of the two instructions.
+        for piece_type, piece in self.pinned.items():
+            if piece.name in self.excluded:
+                raise ValueError(
+                    f"{piece.name!r} is pinned to the {piece_type} slot but also "
+                    "excluded."
+                )
+        # Everything below that asks what armour can supply asks this list,
+        # not game.armor, so exclusions reach the search, the reachability
+        # warning and the pre-search proofs alike.
+        self.available_armor = [a for a in game.armor if a.name not in self.excluded]
 
+        # The registry keeps every bonus, excluded carriers or not: it only
+        # records each bonus's thresholds, which exclusions do not change.
         self.bonus_registry = self._build_bonus_registry(game)
 
-        self.relevant_skills = [
-            name for name in scoring.relevant if name in self._gear_reachable_skills(game)
-        ]
+        reachable = self._gear_reachable_skills()
+        self.relevant_skills = [name for name in scoring.relevant if name in reachable]
         self.skill_index = {name: i for i, name in enumerate(self.relevant_skills)}
 
         self.relevant_bonuses = sorted(
@@ -316,7 +360,11 @@ class Context:
                 [self.profile(self.pinned[piece_type])]
                 if piece_type in self.pinned
                 else prune_dominated(
-                    [self.profile(a) for a in game.armor if a.piece_type == piece_type],
+                    [
+                        self.profile(a)
+                        for a in self.available_armor
+                        if a.piece_type == piece_type
+                    ],
                     scoring,
                     self.relevant_skills,
                 )
@@ -339,10 +387,10 @@ class Context:
                     )
         return registry
 
-    @staticmethod
-    def _gear_reachable_skills(game: GameData) -> set[str]:
-        """Skills actually obtainable from armour, talismans or armour gems."""
-        reachable = {s.name for a in game.armor for s in a.skills}
+    def _gear_reachable_skills(self) -> set[str]:
+        """Skills obtainable from non-excluded armour, talismans or armour gems."""
+        game = self.game
+        reachable = {s.name for a in self.available_armor for s in a.skills}
         reachable |= {s.name for t in game.talismans for s in t.skills}
         reachable |= {
             s.name for d in game.decorations if d.type == "armor" for s in d.skills
@@ -362,7 +410,7 @@ class Context:
         return best
 
     def unreachable_weighted_skills(self) -> list[str]:
-        reachable = self._gear_reachable_skills(self.game)
+        reachable = self._gear_reachable_skills()
         return [
             name
             for name in self.scoring.relevant
@@ -594,10 +642,18 @@ class Optimiser:
         reserved_slots: int = RESERVED_SLOTS,
         extra_bonus_pieces: dict[str, int] | None = None,
         pinned_pieces: dict[str, str] | None = None,
+        excluded_sets: list[str] | set[str] | None = None,
+        excluded_pieces: list[str] | set[str] | None = None,
     ) -> None:
         self.game = game
         self.scoring = scoring
-        self.context = Context(game, scoring, pinned_pieces=pinned_pieces)
+        self.context = Context(
+            game,
+            scoring,
+            pinned_pieces=pinned_pieces,
+            excluded_sets=excluded_sets,
+            excluded_pieces=excluded_pieces,
+        )
         self.beam_width = beam_width
         self.final_pool = final_pool
         self.reserved_slots = reserved_slots
@@ -632,16 +688,34 @@ class Optimiser:
         """
         context = self.context
         reasons: list[str] = []
-        reachable = context._gear_reachable_skills(self.game)
+        reachable = context._gear_reachable_skills()
+        from_excluded = {
+            s.name
+            for piece in self.game.armor
+            if piece.name in context.excluded
+            for s in piece.skills
+        }
 
         free_types = [t for t in PIECE_TYPES if t not in context.pinned]
+        # No set exists at all with an empty slot, requirements or not, so
+        # this is reported even for a run that requires nothing.
+        for piece_type in free_types:
+            if not any(a.piece_type == piece_type for a in context.available_armor):
+                reasons.append(f"Every {piece_type} piece is excluded.")
+
         needed_by_type: dict[str, list[int]] = {}
         needs: dict[str, int] = {}  # required bonus -> pieces still to find
         targets: dict[str, int] = {}
         for name in sorted(self.scoring.mandatory):
             info = context.bonus_registry.get(name)
             if info is None:
-                if name not in reachable:
+                if name in reachable:
+                    continue
+                if name in from_excluded:
+                    reasons.append(
+                        f"{name} is required, but only excluded armour provides it."
+                    )
+                else:
                     reasons.append(
                         f"{name} is required, but no armour piece, talisman or "
                         "armour decoration provides it."
@@ -666,7 +740,7 @@ class Optimiser:
                 if any(
                     piece.piece_type == piece_type
                     and any(bonus_base_name(b.name) == name for b in piece.set_bonuses)
-                    for piece in self.game.armor
+                    for piece in context.available_armor
                 )
             )
             if need > carriers:
@@ -731,7 +805,7 @@ class Optimiser:
                     for name in names
                     if any(bonus_base_name(b.name) == name for b in piece.set_bonuses)
                 )
-                for piece in self.game.armor
+                for piece in self.context.available_armor
                 if piece.piece_type == piece_type
             }
             options.append([s for s in signatures if not any(s < o for o in signatures)])
@@ -1288,6 +1362,8 @@ def optimise(
     extra_bonus_pieces: dict[str, int] | None = None,
     pinned_pieces: dict[str, str] | None = None,
     strict: bool = True,
+    excluded_sets: list[str] | set[str] | None = None,
+    excluded_pieces: list[str] | set[str] | None = None,
 ) -> tuple[list[GearSet], int, Optimiser]:
     optimiser = Optimiser(
         game,
@@ -1297,6 +1373,8 @@ def optimise(
         reserved_slots=reserved_slots,
         extra_bonus_pieces=extra_bonus_pieces,
         pinned_pieces=pinned_pieces,
+        excluded_sets=excluded_sets,
+        excluded_pieces=excluded_pieces,
     )
     sets, constraint_level = optimiser.run(tiers, strict=strict)
     return sets, constraint_level, optimiser
@@ -1365,6 +1443,20 @@ def main() -> None:
             help=f"force the {piece_type} slot to this armour piece, by name",
         )
     parser.add_argument(
+        "--exclude-set",
+        action="append",
+        default=[],
+        metavar="SET",
+        help="leave every piece of this armour set out of the search (repeatable)",
+    )
+    parser.add_argument(
+        "--exclude-piece",
+        action="append",
+        default=[],
+        metavar="PIECE",
+        help="leave this armour piece out of the search (repeatable)",
+    )
+    parser.add_argument(
         "--relax",
         action="store_true",
         help="allow sets that miss a mandatory skill rather than returning fewer",
@@ -1391,12 +1483,21 @@ def main() -> None:
         for piece_type in PIECE_TYPES
         if getattr(args, f"pin_{piece_type}")
     }
+    # Built here only to validate pins and exclusions before a search starts,
+    # so a typo is a usage error rather than a traceback.
     try:
-        pinned = resolve_pins(game, pinned_pieces)
+        context = Context(
+            game,
+            scoring,
+            pinned_pieces=pinned_pieces,
+            excluded_sets=args.exclude_set,
+            excluded_pieces=args.exclude_piece,
+        )
     except ValueError as exc:
         parser.error(str(exc))
+    pinned = context.pinned
 
-    unreachable = Context(game, scoring).unreachable_weighted_skills()
+    unreachable = context.unreachable_weighted_skills()
     # A required one is not ignored under the hard filter: it empties the
     # result, and the no-sets message below names it as the reason.
     if not args.relax:
@@ -1415,6 +1516,8 @@ def main() -> None:
         tiers=build_tiers(args.count),
         pinned_pieces=pinned_pieces,
         strict=not args.relax,
+        excluded_sets=args.exclude_set,
+        excluded_pieces=args.exclude_piece,
     )
 
     # impossible_requirements is a proof, so it wins over unmet_requirements,
@@ -1437,6 +1540,7 @@ def main() -> None:
             pinned=pinned,
             strict=not args.relax,
             reasons=reasons,
+            excluded=args.exclude_set + args.exclude_piece,
         )
     )
 

@@ -18,6 +18,7 @@ The GUI (`launch_gui.bat`) launches it with `pythonw`, so no console window appe
 3. **Run Optimiser** works straight off your edited values, saved or not — saving is only for keeping the weighting around afterwards. When you do save, the default filename is `skills_weighted.yaml`, written next to whichever file you opened (usually the repo root, so it will show as an untracked git file unless you use *Browse…* to put it in `skills_outputs/`). Keep separate weighted copies side by side for different build goals instead of overwriting each time. Save refuses `skills_default.yaml` outright: the Save box writes beside the loaded file, which is usually that one, so typing its name would otherwise replace the master data. Save also asks before replacing any other existing file, and closing the window or opening another skills file with edits unsaved asks before discarding them.
 4. Optionally:
    - pick a **Gogma weapon** set bonus / group skill in the "Gogma weapon skills" box if your weapon contributes pieces toward one of them — see [How it works](#how-it-works) for what that credit does;
+   - rule armour out with **Exclude Gear…** — see [Excluding armour](#excluding-armour);
    - load custom talismans built on the other tab, so they join the optimiser's charm pool without touching `craftable_talismans.yaml`;
    - adjust *Reserved slots* (defaults to 2) for resistance jewels you plan to slot yourself. The smallest slots in the set are the ones held back, so they're size 1 unless the set runs out of those.
 5. Results open in a second window with Previous/Next navigation.
@@ -42,6 +43,7 @@ python optimiser.py --skills-db skills_weighted.yaml --count 10
 | `--reserve` | `2` | Slots held back for resistance jewels, smallest first; 0 or more |
 | `--output` | in `optimiser_outputs/`, named from the input with any `skills_` prefix stripped | Where sets are written, so a results file can never be mistaken for a skills DB (`load_data.py` refuses to load one as weights anyway) |
 | `--pin-head` … `--pin-legs` | none | Force that slot to a named armour piece; see [Pinning armour](#pinning-armour) |
+| `--exclude-set`, `--exclude-piece` | none | Leave an armour set or a single piece out of the search; repeatable. See [Excluding armour](#excluding-armour) |
 | `--relax` | off | Allow sets that miss a mandatory skill rather than returning fewer |
 
 **Always pass `--skills-db`.** The default points at a weighted file that isn't committed (everything under the output folders is gitignored), so a bare `python optimiser.py` dies with `FileNotFoundError`. Example: input `skills_weighted.yaml` writes results to `optimiser_outputs/weighted_gear_sets.yaml`. A `--count` or `--beam` below 1, or a negative `--reserve`, is rejected up front: each used to return an empty result with no reason given.
@@ -78,6 +80,12 @@ Any of the five slots can be fixed to a specific piece, leaving the rest to the 
 A pinned slot skips dominated-piece pruning, since pruning only chooses between alternatives and a pinned slot has none. Its single candidate also sorts it first in the search's stage order, so every later choice is ranked with the pinned piece already counted. Pinned pieces are marked `*` in the results.
 
 Pinning narrows the diversity bands: *distinct builds* wants a 2-piece difference, which four pins make impossible, so it relaxes and tags its results `(relaxed)`. That's arithmetic, not a warning worth acting on.
+
+### Excluding armour
+
+The opposite of pinning: armour the search must never use, such as sets you haven't unlocked yet or pieces you won't wear. On the CLI that's `--exclude-set "Gore α"` or `--exclude-piece "Lagiacrus Helm β"`, each repeatable. In the GUI it's **Exclude Gear…** in the Fixed Gear panel, which opens a filterable tree of every set with its pieces underneath; double-click a row, or select rows and press Space, to toggle them. Sets and single pieces are kept separately, so excluding a set and including it again doesn't forget the pieces you'd excluded one by one inside it.
+
+Exclusions reach everything that asks what armour can supply, not just the search: the unreachable-skill warning, and the pre-search proofs, which say "only excluded armour provides it" rather than blaming the data. Excluding every piece for a slot is reported before the search starts, requirements or not. A piece that's both pinned and excluded is refused on both the CLI and the GUI rather than resolved either way, because either resolution silently ignores one of the two instructions.
 
 ## How it works
 
