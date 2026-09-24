@@ -103,13 +103,6 @@ THEMES = {
 LIST_ROWS = 18
 GAP = 4  # vertical breathing room between a hint and the control it describes
 SCREEN_MARGIN = 80  # px left for the title bar and taskbar when sizing to fit
-# The window opens at this size every time; resizing it is not remembered.
-# It is a target, not a guarantee: two earlier hard-coded sizes clipped the
-# Gogma selectors, because what the widgets need depends on font metrics and
-# display scaling that only Tk knows at runtime. So Tk's requested size is the
-# floor, and this only ever adds room beyond it. Change it here, not by
-# dragging the window.
-WINDOW_SIZE = (1600, 1000)
 GUI_STATE_PATH = DATA_DIR / "gui_state.json"  # remembered theme only; gitignored
 SECTION_PAD = (8, 4, 8, 8)  # inside every titled box, so they all read alike
 PIN_DETAIL_HEIGHT = 18  # px reserved per pinned-piece line, set or not
@@ -163,13 +156,15 @@ HINTS = {
     ),
     "profile": (
         "Open reads a weighted skills file. A profile instead holds the "
-        "weights and every setting on this tab - pins, exclusions, weapon "
-        "slots, Gogma, reserve, relax and custom talismans - in one file, "
-        "applied to the current skill data."
+        "weights and every setting on the Skill Weights tab - pins, "
+        "exclusions, weapon slots, Gogma, reserve and relax - plus the custom "
+        "talismans loaded for the optimiser, in one file, applied to the "
+        "current skill data."
     ),
     "talismans": (
-        "Talismans from a file, added to this run's pool only. "
-        "craftable_talismans.yaml is never modified."
+        "Talismans from a file, added to the optimiser's pool. Separate from "
+        "the file being edited above. craftable_talismans.yaml is never "
+        "modified."
     ),
     "ct_name": "Shown in results. Any name that is not already in the file.",
     "ct_rarity": "Cosmetic here - the optimiser does not read it.",
@@ -375,7 +370,6 @@ class SkillsGui:
         self.custom_talisman_path: Path | None = None
         self.custom_talismans: list[Talisman] = []
         self.ct_selected_index: int | None = None
-        self._ct_file_prompted = False
 
         self._build_widgets()
         self._load_file(self.current_path)
@@ -387,26 +381,24 @@ class SkillsGui:
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
 
     def _apply_window_size(self) -> None:
-        """Open at WINDOW_SIZE, or larger if the widgets need more than that.
+        """Open at the smallest size the widgets fit, which is also the minimum.
 
-        The fixed size alone is not enough: character widths, theme padding and
-        the desktop's scaling only exist at runtime, and two earlier hard-coded
-        sizes clipped the Gogma selectors. So Tk's requested size is the floor
-        and WINDOW_SIZE only adds room above it. Nothing about the size is read
-        from or written to gui_state.json, so every launch opens the same.
+        No hard-coded size: character widths, theme padding and the desktop's
+        scaling only exist at runtime, and two earlier fixed sizes clipped the
+        Gogma selectors. Tk's requested size is what the widgets actually need,
+        capped to the screen. Nothing about the size is read from or written to
+        gui_state.json, so every launch opens the same.
 
         update_idletasks forces the pending layout pass first; before it, a
         window reports a requested size of 1x1.
         """
         self.root.update_idletasks()
-        max_width = self.root.winfo_screenwidth()
-        max_height = self.root.winfo_screenheight() - SCREEN_MARGIN
-        width = min(max(self.root.winfo_reqwidth(), WINDOW_SIZE[0]), max_width)
-        height = min(max(self.root.winfo_reqheight(), WINDOW_SIZE[1]), max_height)
-        self.root.minsize(
-            min(self.root.winfo_reqwidth(), max_width),
-            min(self.root.winfo_reqheight(), max_height),
+        width = min(self.root.winfo_reqwidth(), self.root.winfo_screenwidth())
+        height = min(
+            self.root.winfo_reqheight(),
+            self.root.winfo_screenheight() - SCREEN_MARGIN,
         )
+        self.root.minsize(width, height)
         self.root.geometry(f"{width}x{height}")
 
     @staticmethod
@@ -625,7 +617,7 @@ class SkillsGui:
         chrome = ttk.Frame(self.root, padding=(8, 4, 8, 0))
         chrome.pack(side=tk.TOP, fill=tk.X)
         # Outside the notebook because it applies to the whole application
-        # rather than to either tab's contents.
+        # rather than to any one tab's contents.
         ttk.Checkbutton(
             chrome,
             text="Dark Mode",
@@ -635,60 +627,26 @@ class SkillsGui:
 
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        self.notebook.bind("<<NotebookTabChanged>>", self._on_tab_changed)
 
         skills_tab = ttk.Frame(self.notebook)
+        files_tab = ttk.Frame(self.notebook)
         talismans_tab = ttk.Frame(self.notebook)
         self.notebook.add(skills_tab, text="Skill Weights")
+        self.notebook.add(files_tab, text="Skills File")
         self.notebook.add(talismans_tab, text="Custom Talismans")
 
         self._build_skills_tab(skills_tab)
+        self._build_skills_file_tab(files_tab)
         self._build_custom_talismans_tab(talismans_tab)
 
     def _build_skills_tab(self, parent: ttk.Frame) -> None:
-        """Five titled sections, each laid out the same way: hint, then controls.
+        """Run and Save Weights along the bottom, the editing panels above.
 
-        Order matters to pack(). The two BOTTOM sections are packed before the
-        body so they claim their height first, and 'run' before 'save' so the
+        Each section is laid out the same way: hint, then controls. Order
+        matters to pack(). The two BOTTOM sections are packed before the body
+        so they claim their height first, and 'run' before 'save' so the
         primary action sits at the very bottom edge.
         """
-        files = self._section(parent, "Skills File", side=tk.TOP, fill=tk.X)
-        _hint(files, "profile", wrap=900).pack(side=tk.TOP, anchor=tk.W)
-        file_row = ttk.Frame(files)
-        file_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, 0))
-        ttk.Button(file_row, text="Open...", command=self._open_file).pack(side=tk.LEFT)
-        ttk.Button(file_row, text="Load Profile...", command=self._load_profile).pack(
-            side=tk.LEFT, padx=(8, 0)
-        )
-        ttk.Button(file_row, text="Save Profile...", command=self._save_profile).pack(
-            side=tk.LEFT, padx=(4, 0)
-        )
-        self.file_label_var = tk.StringVar(value="")
-        ttk.Label(
-            file_row, textvariable=self.file_label_var, style="Hint.TLabel"
-        ).pack(side=tk.LEFT, padx=(8, 0))
-
-        talismans = self._section(parent, "Custom Talismans", side=tk.TOP, fill=tk.X)
-        _hint(talismans, "talismans", wrap=900).pack(side=tk.TOP, anchor=tk.W)
-        talisman_row = ttk.Frame(talismans)
-        talisman_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, 0))
-        ttk.Button(
-            talisman_row,
-            text="Load Custom Talismans...",
-            command=self._load_custom_talismans_for_optimiser,
-        ).pack(side=tk.LEFT)
-        ttk.Button(
-            talisman_row, text="Clear", command=self._clear_loaded_custom_talismans
-        ).pack(side=tk.LEFT, padx=(4, 0))
-        self.custom_talismans_status_var = tk.StringVar(
-            value="Custom talismans: none loaded"
-        )
-        ttk.Label(
-            talisman_row,
-            textvariable=self.custom_talismans_status_var,
-            style="Hint.TLabel",
-        ).pack(side=tk.LEFT, padx=(8, 0))
-
         run = self._section(parent, "Run", side=tk.BOTTOM, fill=tk.X)
         options = ttk.Frame(run)
         options.pack(side=tk.TOP, fill=tk.X)
@@ -767,6 +725,24 @@ class SkillsGui:
         self._build_gear_section(body)
         self._build_skill_list_section(body)
         self._build_weighting_section(body)
+
+    def _build_skills_file_tab(self, parent: ttk.Frame) -> None:
+        """Which skills file is being weighted, and whole-goal profiles."""
+        files = self._section(parent, "Skills File", side=tk.TOP, fill=tk.X)
+        _hint(files, "profile", wrap=900).pack(side=tk.TOP, anchor=tk.W)
+        file_row = ttk.Frame(files)
+        file_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, 0))
+        ttk.Button(file_row, text="Open...", command=self._open_file).pack(side=tk.LEFT)
+        ttk.Button(file_row, text="Load Profile...", command=self._load_profile).pack(
+            side=tk.LEFT, padx=(8, 0)
+        )
+        ttk.Button(file_row, text="Save Profile...", command=self._save_profile).pack(
+            side=tk.LEFT, padx=(4, 0)
+        )
+        self.file_label_var = tk.StringVar(value="")
+        ttk.Label(
+            file_row, textvariable=self.file_label_var, style="Hint.TLabel"
+        ).pack(side=tk.LEFT, padx=(8, 0))
 
     def _section(self, parent: tk.Widget, title: str, **pack_options) -> ttk.LabelFrame:
         """One titled box, padded the same as every other box."""
@@ -1255,6 +1231,27 @@ class SkillsGui:
             file_row, text="Select/Create File...", command=self._select_custom_talisman_file
         ).pack(side=tk.LEFT)
 
+        talismans = self._section(parent, "Use in Optimiser", side=tk.TOP, fill=tk.X)
+        _hint(talismans, "talismans", wrap=900).pack(side=tk.TOP, anchor=tk.W)
+        talisman_row = ttk.Frame(talismans)
+        talisman_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, 0))
+        ttk.Button(
+            talisman_row,
+            text="Load Custom Talismans...",
+            command=self._load_custom_talismans_for_optimiser,
+        ).pack(side=tk.LEFT)
+        ttk.Button(
+            talisman_row, text="Clear", command=self._clear_loaded_custom_talismans
+        ).pack(side=tk.LEFT, padx=(4, 0))
+        self.custom_talismans_status_var = tk.StringVar(
+            value="Custom talismans: none loaded"
+        )
+        ttk.Label(
+            talisman_row,
+            textvariable=self.custom_talismans_status_var,
+            style="Hint.TLabel",
+        ).pack(side=tk.LEFT, padx=(8, 0))
+
         body = ttk.Frame(parent)
         body.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=8)
 
@@ -1374,18 +1371,6 @@ class SkillsGui:
         )
 
         self._set_custom_talisman_controls_enabled(False)
-
-    def _on_tab_changed(self, _event: object) -> None:
-        # Offered once, on the first visit. Cancelling means "not now", and
-        # re-asking on every tab switch after that only gets in the way; the
-        # Select/Create button is still there.
-        if (
-            self.notebook.index(self.notebook.select()) == 1
-            and self.custom_talisman_path is None
-            and not self._ct_file_prompted
-        ):
-            self._ct_file_prompted = True
-            self._select_custom_talisman_file()
 
     # --- skills tab: file handling ------------------------------------------
 
