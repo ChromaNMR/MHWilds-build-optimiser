@@ -145,6 +145,18 @@ All game data was compiled by hand from the community wiki at [game8.co](https:/
 
 Need current record counts? Run `python load_data.py` rather than trusting any number written down; the data files get updated more often than this document does.
 
+### Checking the data after a title update
+
+```
+python check_data.py
+```
+
+compares the local files with the [Wilds API](https://wilds.mhdb.io) and lists what differs: High Rank pieces, jewels and armour/weapon skills that exist on one side only, and records that disagree on slot type, slots, skills, jewel size or max level. **It reports and never writes.** The local files carry what the API doesn't give, transcended slot values and game8 source URLs among them, and where the two disagree it isn't known in advance which side is wrong, so the report says where to look rather than choosing. `--save-api DIR` keeps the fetched JSON and `--api-dir DIR` compares against it again offline. Exit status is 0 when nothing differs, 1 when something does, 2 when the API couldn't be read.
+
+Two things are deliberately not compared. Slots are skipped for transcended pieces, since the API gives base slots and every one would read as a difference; and defence, which the two sources measure differently (the local maximum runs higher than the API's for the same piece). Talismans, and set bonus, group and food skills, aren't checked yet.
+
+The first run against real data already found one: the local file lists *Sealed Dragon Cloth α* as a chest piece where the API has it as a head, and *Pinion Necklace α* as a head the API's head list doesn't contain. Worth checking in game before trusting either.
+
 ## Tests
 
 ```
@@ -162,6 +174,7 @@ The GUI tests never open a window: they call `SkillsGui` methods on stand-in obj
 | `skills_gui.py` | Tkinter GUI: skill weighting, custom talismans, optimiser runner with results window |
 | `optimiser.py` | Beam-search engine and scoring model (`Scoring`, `Optimiser`, `GearSet`) plus the CLI entry point. Deliberately print-free so the GUI reuses it directly |
 | `optimiser_report.py` | Rendering only: console text, inline result view for the GUI window, and YAML export of results |
+| `check_data.py` | Report-only comparison of the local data with the Wilds API; see [Checking the data](#checking-the-data-after-a-title-update) |
 | `search_profile.py` | Search profile format: load with shape checks, `profile_problems` against the game data, save |
 | `load_data.py` | Typed dataclasses (`Skill`, `ArmorPiece`, `Talisman`, `Decoration`) and loaders with validation (e.g. refuses to treat a results file as a skills DB). Run it directly for record counts |
 | `skills_default.yaml` | Every skill: armor, weapon, set bonus, group and food — descriptions, max level, per-level effects, scaling class, per-source URLs. `weight`/`level_weight` start at 0 placeholders |
