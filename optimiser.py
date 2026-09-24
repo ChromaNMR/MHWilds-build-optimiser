@@ -13,7 +13,7 @@ from __future__ import annotations
 import argparse
 import math
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from load_data import (
@@ -185,22 +185,21 @@ def slot_counts(sizes) -> tuple[int, int, int]:
     return counts[0], counts[1], counts[2]
 
 
-def talisman_slot_sizes(talisman: Talisman) -> tuple[list[int], int]:
-    """(armour slot sizes, weapon slot count) for a talisman.
+def talisman_slot_sizes(talisman: Talisman) -> tuple[list[int], list[int]]:
+    """(armour slot sizes, weapon slot sizes) for a talisman.
 
     Craftable talismans currently have none of either, but appraised ones are
     expected to, so both the count form and a list-of-sizes form are accepted.
+    A bare count carries no sizes, so it is read as that many size-1 slots.
     """
     deco = talisman.decoration_slots
-    armour = deco.armour
-    if isinstance(armour, (list, tuple)):
-        sizes = [s for s in armour if s]
-    else:
-        sizes = [TALISMAN_ARMOUR_SLOT_SIZE] * int(armour)
 
-    weapon = deco.weapon
-    weapon_count = len([w for w in weapon if w]) if isinstance(weapon, (list, tuple)) else int(weapon)
-    return sizes, weapon_count
+    def sizes_of(value) -> list[int]:
+        if isinstance(value, (list, tuple)):
+            return [int(s) for s in value if s]
+        return [TALISMAN_ARMOUR_SLOT_SIZE] * int(value or 0)
+
+    return sizes_of(deco.armour), sizes_of(deco.weapon)
 
 
 def consume_slot(slots: tuple[int, int, int], size: int, count: int = 1):
@@ -318,9 +317,11 @@ class Context:
         pinned_pieces: dict[str, str] | None = None,
         excluded_sets: list[str] | set[str] | None = None,
         excluded_pieces: list[str] | set[str] | None = None,
+        weapon_slots: tuple[int, ...] = (),
     ) -> None:
         self.game = game
         self.scoring = scoring
+        self.weapon_slots = tuple(weapon_slots)
         self.pinned = resolve_pins(game, pinned_pieces)
         self.excluded = resolve_exclusions(game, excluded_sets, excluded_pieces)
         # Both are the user saying opposite things about one piece. Refused
@@ -409,8 +410,24 @@ class Context:
                     best[granted.name] = deco
         return best
 
+    def weapon_jewel_skills(self) -> set[str]:
+        return {s.name for d in self.game.decorations if d.type == "weapon" for s in d.skills}
+
+    def weapon_slots_exist(self) -> bool:
+        """Is there anywhere at all a weapon jewel could go?
+
+        The weapon's own slots, or a talisman's - custom ones can carry them,
+        and a run with such a talisman loaded can use them even with no
+        weapon slots given.
+        """
+        return bool(self.weapon_slots) or any(
+            talisman_slot_sizes(t)[1] for t in self.game.talismans
+        )
+
     def unreachable_weighted_skills(self) -> list[str]:
         reachable = self._gear_reachable_skills()
+        if self.weapon_slots_exist():
+            reachable |= self.weapon_jewel_skills()
         return [
             name
             for name in self.scoring.relevant
@@ -561,14 +578,241 @@ def fill_slots(
     return solve(0, slots)
 
 
+# --- weapon decorations -----------------------------------------------------
+
+WEAPON_SOURCE = "weapon"  # SlotAssignment.source for the weapon's own slots
+MAX_WEAPON_SLOTS = 3
+# Search nodes solve_weapon_slots may visit before settling for the best
+# layout found. A weapon's own three slots finish in well under a second
+# even with every weapon skill weighted; it is a weapon plus a custom
+# talisman's three more, with most skills weighted, that grows by several
+# times per slot. Past this the answer is still good - jewels are tried
+# best-first - but no longer proven, and WeaponFill.exact says so.
+WEAPON_SEARCH_NODES = 100_000
+
+
+def parse_weapon_slots(text: str) -> tuple[int, ...]:
+    """'3,2,1' -> (3, 2, 1); '' -> (). Raises ValueError on anything else."""
+    parts = [p.strip() for p in text.split(",") if p.strip()]
+    try:
+        sizes = tuple(int(p) for p in parts)
+    except ValueError:
+        raise ValueError(f"weapon slots must be sizes 1-3 separated by commas, not {text!r}")
+    if len(sizes) > MAX_WEAPON_SLOTS or any(not 1 <= s <= 3 for s in sizes):
+        raise ValueError(
+            f"a weapon has at most {MAX_WEAPON_SLOTS} slots, each of size 1-3; "
+            f"got {text!r}"
+        )
+    return sizes
+
+
+@dataclass
+class WeaponFill:
+    """The best weapon-decoration layout for one list of weapon slot sizes."""
+
+    sizes: tuple[int, ...]  # largest first
+    decorations: tuple[Decoration | None, ...]  # one per entry in sizes
+    levels: dict[str, int]  # weapon skills granted, capped at max
+    tier: int  # constraint_level_met over the required weapon skills alone
+    score: float
+    exact: bool = True  # False if WEAPON_SEARCH_NODES ran out first
+
+
+def solve_weapon_slots(
+    sizes: tuple[int, ...], decorations: list[Decoration], scoring: Scoring
+) -> WeaponFill:
+    """Exact best weapon decorations for these slots.
+
+    Weapon jewels are the one place the armour-side model does not fit: many
+    carry two skills, or grant two or three levels at once, so fill_slots'
+    one-level-per-gem counts cannot express them. Nothing on the armour side
+    grants a weapon skill either, so the weapon is solved on its own, once
+    per distinct set of slot sizes, and the result is simply added on.
+
+    The search is a depth-first branch and bound over the slots, largest
+    first, trying the jewels that gain most at the current levels first. A
+    branch is cut when even an optimistic finish cannot beat the best layout
+    found so far: for the score, each remaining slot is credited with the
+    most any fitting jewel would gain right now, which never undercounts,
+    because every skill's value grows by the same or less with each further
+    level; for the required skills, with the most levels any fitting jewel
+    could add. Jewels another jewel matches or beats on every weighted skill,
+    at no larger size, are dropped first, and slots of equal size take jewels
+    in a fixed order, so the same pair in two orders is tried once. The
+    result is ranked on the required weapon skills first, then score, then
+    fewest gems, so no slot is filled with a jewel that adds nothing.
+
+    An earlier version memoised on the levels reached instead; with most
+    weapon skills weighted and six slots, that table outgrew memory.
+    """
+    order = tuple(sorted(sizes, reverse=True))
+    names = sorted(
+        {
+            s.name
+            for d in decorations
+            if d.type == "weapon"
+            for s in d.skills
+            if scoring.weight(s.name) != 0
+        }
+    )
+    index = {name: i for i, name in enumerate(names)}
+    caps = tuple(scoring.max_level(name) for name in names)
+
+    def vector(deco: Decoration) -> tuple[int, ...]:
+        levels = [0] * len(names)
+        for granted in deco.skills:
+            if granted.name in index:
+                levels[index[granted.name]] += granted.level
+        return tuple(levels)
+
+    wanted = [scoring.weight(n) > 0 for n in names]
+    candidates: list[tuple[Decoration, tuple[int, ...]]] = []
+    for deco in decorations:
+        if deco.type != "weapon":
+            continue
+        vec = vector(deco)
+        if any(v and more for v, more in zip(vec, wanted)):
+            candidates.append((deco, vec))
+
+    def dominates(a, b) -> bool:
+        (da, va), (db, vb) = a, b
+        if da.slot_level > db.slot_level:
+            return False
+        return all(
+            (x >= y) if more else (x <= y) for x, y, more in zip(va, vb, wanted)
+        )
+
+    # Sorted so a dominating jewel is always met before the ones it beats.
+    candidates.sort(key=lambda c: (c[0].slot_level, [-v for v in c[1]], c[0].name))
+    kept: list[tuple[Decoration, tuple[int, ...]]] = []
+    for candidate in candidates:
+        if not any(dominates(other, candidate) for other in kept):
+            kept.append(candidate)
+
+    mandatory = [
+        (index[n], caps[index[n]] if n in scoring.mandatory_max else 1)
+        for n in names
+        if n in scoring.mandatory
+    ]
+    # Per jewel, only the skills it touches: (index, levels) pairs, all of
+    # them for applying it, the wanted ones for the optimistic gain.
+    touched = [[(k, v) for k, v in enumerate(vec) if v] for _d, vec in kept]
+    touched_wanted = [[(k, v) for k, v in t if wanted[k]] for t in touched]
+    by_size = {
+        size: [i for i, (d, _v) in enumerate(kept) if d.slot_level <= size]
+        for size in (1, 2, 3)
+    }
+    # Most levels of each required skill one jewel of each size can carry;
+    # fixed, so worked out once rather than at every node.
+    most_levels = {
+        size: {i: max((kept[j][1][i] for j in by_size[size]), default=0) for i, _t in mandatory}
+        for size in (1, 2, 3)
+    }
+
+    def tier_of(levels: list[int]) -> int:
+        tier = 0
+        for i, target in mandatory:
+            if levels[i] < 1:
+                return 2
+            if levels[i] < target:
+                tier = 1
+        return tier
+
+    def delta(pairs, levels: list[int]) -> float:
+        """What adding these (skill, levels) pairs is worth at these levels."""
+        total = 0.0
+        for k, v in pairs:
+            have = levels[k]
+            if have < caps[k]:
+                total += scoring.score(names[k], min(caps[k], have + v))
+                total -= scoring.score(names[k], have)
+        return total
+
+    best_key = (3, 0.0, 0)
+    best_choice: list[Decoration | None] = [None] * len(order)
+    choice: list[Decoration | None] = [None] * len(order)
+    levels = [0] * len(names)
+    nodes = 0
+
+    def search(slot: int, start: int, gems: int, current: float) -> None:
+        nonlocal best_key, best_choice, nodes
+        nodes += 1
+        # Past the budget only the leaf is still taken: the empty-slot branch
+        # at the end of every level runs straight down to one, so the best
+        # layout found so far always gets compared before the search unwinds.
+        out_of_budget = nodes > WEAPON_SEARCH_NODES
+        if slot == len(order):
+            key = (tier_of(levels), -current, gems)
+            if key < best_key:
+                best_key, best_choice = key, list(choice)
+            return
+
+        remaining = order[slot:]
+        gains = [delta(pairs, levels) for pairs in touched_wanted]
+        best_gain = {
+            size: max((gains[j] for j in by_size[size]), default=0.0)
+            for size in set(remaining)
+        }
+        bound = current + sum(max(0.0, best_gain[size]) for size in remaining)
+        # The best tier still possible: each required skill can gain at most
+        # the most levels any jewel fitting each remaining slot carries.
+        tier_floor = 0
+        for i, target in mandatory:
+            reach = levels[i] + sum(most_levels[size][i] for size in remaining)
+            if reach < 1:
+                tier_floor = 2
+                break
+            if reach < target:
+                tier_floor = 1
+        if (tier_floor, -bound, gems) >= best_key:
+            return
+
+        same_size_next = slot + 1 < len(order) and order[slot + 1] == order[slot]
+        ranked = sorted(
+            (j for j in by_size[order[slot]] if j >= start), key=lambda j: -gains[j]
+        )
+        for j in ranked:
+            if gains[j] <= 0 or out_of_budget:
+                break  # every wanted skill on it is capped; useless from here on
+            step = delta(touched[j], levels)
+            before = list(levels)
+            for k, v in touched[j]:
+                levels[k] = min(caps[k], levels[k] + v)
+            choice[slot] = kept[j][0]
+            search(slot + 1, j if same_size_next else 0, gems + 1, current + step)
+            levels[:] = before
+            choice[slot] = None
+        # Empty last: a slot left empty ends its equal-size run, so every
+        # later slot of that size stays empty too (start past the end).
+        search(slot + 1, len(kept) if same_size_next else 0, gems, current)
+
+    search(0, 0, 0, 0.0)
+    tier, neg_value, _gems = best_key
+    chosen = tuple(best_choice)
+    totals = [0] * len(names)
+    for deco in chosen:
+        if deco is not None:
+            for i, v in enumerate(vector(deco)):
+                totals[i] = min(caps[i], totals[i] + v)
+    return WeaponFill(
+        sizes=order,
+        decorations=chosen,
+        levels={n: lv for n, lv in zip(names, totals) if lv},
+        tier=tier,
+        score=-neg_value,
+        exact=nodes <= WEAPON_SEARCH_NODES,
+    )
+
+
 # --- results ----------------------------------------------------------------
 
 
 @dataclass
 class SlotAssignment:
-    source: str  # armour piece or talisman the slot belongs to
+    source: str  # armour piece, talisman, or WEAPON_SOURCE
     size: int
     decoration: Decoration | None = None
+    weapon: bool = False  # a weapon-jewel slot, on the weapon or the talisman
 
 
 @dataclass
@@ -598,6 +842,14 @@ class GearSet:
     constraint_level: int
     tier: str = ""
     pinned_types: frozenset[str] = frozenset()
+    # Weapon-jewel slots, the weapon's own and the talisman's, kept apart from
+    # placements so free_slots and the reserve stay armour-only: resistance
+    # jewels are armour jewels and cannot go in a weapon slot.
+    weapon_placements: list[SlotAssignment] = field(default_factory=list)
+
+    @property
+    def weapon_free_slots(self) -> list[int]:
+        return sorted(p.size for p in self.weapon_placements if p.decoration is None)
 
     @property
     def piece_names(self) -> tuple[str, ...]:
@@ -644,15 +896,27 @@ class Optimiser:
         pinned_pieces: dict[str, str] | None = None,
         excluded_sets: list[str] | set[str] | None = None,
         excluded_pieces: list[str] | set[str] | None = None,
+        weapon_slots: tuple[int, ...] | list[int] | None = None,
     ) -> None:
         self.game = game
         self.scoring = scoring
+        weapon_slots = tuple(weapon_slots or ())
+        if len(weapon_slots) > MAX_WEAPON_SLOTS or any(
+            s not in (1, 2, 3) for s in weapon_slots
+        ):
+            raise ValueError(
+                f"A weapon has at most {MAX_WEAPON_SLOTS} slots, each of size 1-3; "
+                f"got {list(weapon_slots)}."
+            )
+        self.weapon_slots = weapon_slots
+        self._weapon_fills: dict[tuple[int, ...], WeaponFill] = {}
         self.context = Context(
             game,
             scoring,
             pinned_pieces=pinned_pieces,
             excluded_sets=excluded_sets,
             excluded_pieces=excluded_pieces,
+            weapon_slots=weapon_slots,
         )
         self.beam_width = beam_width
         self.final_pool = final_pool
@@ -667,6 +931,41 @@ class Optimiser:
         # Every complete set the last run() evaluated, kept so
         # unmet_requirements can say how close the search came.
         self._evaluated: list[GearSet] = []
+
+    def weapon_fill(self, talisman_weapon_sizes=()) -> WeaponFill:
+        """Best weapon jewels for the weapon's slots plus a talisman's.
+
+        Cached per distinct size list: nothing on the armour side changes the
+        answer, so every talisman without weapon slots - all the craftable
+        ones - shares a single solve for the whole run.
+        """
+        key = tuple(sorted((*self.weapon_slots, *talisman_weapon_sizes), reverse=True))
+        fill = self._weapon_fills.get(key)
+        if fill is None:
+            fill = solve_weapon_slots(key, self.game.decorations, self.scoring)
+            self._weapon_fills[key] = fill
+        return fill
+
+    def _weapon_placements(
+        self, talisman: Talisman, talisman_weapon_sizes: list[int], fill: WeaponFill
+    ) -> list[SlotAssignment]:
+        """Put the solved jewels into the physical weapon-side slots.
+
+        fill.decorations lines up with the slot sizes sorted largest first,
+        and each jewel fits the size it was solved for, so sorting the
+        physical slots the same way (weapon before talisman on a tie) and
+        pairing them off is always a valid placement.
+        """
+        slots = [
+            SlotAssignment(source=WEAPON_SOURCE, size=s, weapon=True)
+            for s in self.weapon_slots
+        ] + [
+            SlotAssignment(source=talisman.name, size=s, weapon=True)
+            for s in talisman_weapon_sizes
+        ]
+        for slot, deco in zip(sorted(slots, key=lambda s: -s.size), fill.decorations):
+            slot.decoration = deco
+        return slots
 
     def _required_level(self, name: str) -> int:
         """Level a mandatory skill or bonus must reach: max, or just 1."""
@@ -706,10 +1005,21 @@ class Optimiser:
         needed_by_type: dict[str, list[int]] = {}
         needs: dict[str, int] = {}  # required bonus -> pieces still to find
         targets: dict[str, int] = {}
+        weapon_skills = context.weapon_jewel_skills()
+        weapon_required: list[str] = []
         for name in sorted(self.scoring.mandatory):
             info = context.bonus_registry.get(name)
             if info is None:
                 if name in reachable:
+                    continue
+                if name in weapon_skills:
+                    if context.weapon_slots_exist():
+                        weapon_required.append(name)
+                    else:
+                        reasons.append(
+                            f"{name} is a weapon skill, which only weapon "
+                            "decorations grant, and no weapon slots are set."
+                        )
                     continue
                 if name in from_excluded:
                     reasons.append(
@@ -718,7 +1028,7 @@ class Optimiser:
                 else:
                     reasons.append(
                         f"{name} is required, but no armour piece, talisman or "
-                        "armour decoration provides it."
+                        "decoration provides it."
                     )
                 continue
 
@@ -781,6 +1091,30 @@ class Optimiser:
                 f"gives all of these at once: {wanted}. Too few pieces carry more "
                 "than one of them for the counts to fit."
             )
+
+        # The weapon side is solved exactly and depends on nothing else, so
+        # if its best layout misses a required weapon skill, every set does.
+        # Each distinct talisman weapon-slot list is tried, since a custom
+        # talisman's slots add to the weapon's own.
+        if weapon_required:
+            layouts = {tuple(talisman_slot_sizes(t)[1]) for t in self.game.talismans}
+            fills = [self.weapon_fill(extra) for extra in layouts | {()}]
+            # A fill that ran out of budget proves nothing; the search then
+            # runs and unmet_requirements reports the miss as a miss.
+            if all(f.exact for f in fills) and not any(
+                all(f.levels.get(n, 0) >= self._required_level(n) for n in weapon_required)
+                for f in fills
+            ):
+                best = min(fills, key=lambda f: (f.tier, -f.score))
+                reached = ", ".join(
+                    f"{n} {best.levels.get(n, 0)}/{self._required_level(n)}"
+                    for n in weapon_required
+                )
+                reasons.append(
+                    f"No layout of weapon decorations in weapon slots "
+                    f"{list(best.sizes)} reaches every required weapon skill; the "
+                    f"best reaches {reached}."
+                )
         return reasons
 
     def _bonus_combination_exists(
@@ -1076,9 +1410,14 @@ class Optimiser:
                 gain += scoring.score(granted.name, current + granted.level) - scoring.score(
                     granted.name, current
                 )
-            sizes, _ = talisman_slot_sizes(talisman)
+            sizes, weapon_sizes = talisman_slot_sizes(talisman)
             for size in sizes:
                 gain += self._slot_potential[min(size, 3) - 1]
+            # Exact, not an estimate: the weapon side is solved outright and
+            # cached, so a talisman's weapon slots are worth precisely what
+            # they add to the weapon's own layout.
+            if weapon_sizes:
+                gain += self.weapon_fill(weapon_sizes).score - self.weapon_fill().score
             scored.append((gain, index, talisman))
 
         scored.sort(key=lambda item: (-item[0], item[1]))
@@ -1098,7 +1437,15 @@ class Optimiser:
         for granted in talisman.skills:
             levels[granted.name] = levels.get(granted.name, 0) + granted.level
 
-        talisman_sizes, weapon_slots = talisman_slot_sizes(talisman)
+        talisman_sizes, talisman_weapon_sizes = talisman_slot_sizes(talisman)
+
+        # Weapon skills come only from weapon jewels and those only go in
+        # weapon slots, so the weapon's result is simply added before the
+        # reservation loop - which then judges required weapon skills along
+        # with everything else.
+        weapon = self.weapon_fill(talisman_weapon_sizes)
+        for name, level in weapon.levels.items():
+            levels[name] = levels.get(name, 0) + level
 
         # Every physical decoration slot's size. Reservation is decided on
         # this concrete list (smallest sizes first) rather than an abstract
@@ -1170,13 +1517,16 @@ class Optimiser:
             placements=placements,
             free_slots=free_slots,
             reserved_slots=reserved,
-            weapon_slots=weapon_slots,
+            weapon_slots=len(talisman_weapon_sizes),
             defense_total=defense_total,
             skill_score=skill_score,
             defense_score=defense_component,
             total_score=skill_score + defense_component,
             constraint_level=constraint_level_met(final_levels, scoring),
             pinned_types=frozenset(context.pinned),
+            weapon_placements=self._weapon_placements(
+                talisman, talisman_weapon_sizes, weapon
+            ),
         )
 
     def _assign_decorations(
@@ -1364,6 +1714,7 @@ def optimise(
     strict: bool = True,
     excluded_sets: list[str] | set[str] | None = None,
     excluded_pieces: list[str] | set[str] | None = None,
+    weapon_slots: tuple[int, ...] | list[int] | None = None,
 ) -> tuple[list[GearSet], int, Optimiser]:
     optimiser = Optimiser(
         game,
@@ -1375,6 +1726,7 @@ def optimise(
         pinned_pieces=pinned_pieces,
         excluded_sets=excluded_sets,
         excluded_pieces=excluded_pieces,
+        weapon_slots=weapon_slots,
     )
     sets, constraint_level = optimiser.run(tiers, strict=strict)
     return sets, constraint_level, optimiser
@@ -1457,6 +1809,13 @@ def main() -> None:
         help="leave this armour piece out of the search (repeatable)",
     )
     parser.add_argument(
+        "--weapon-slots",
+        default="",
+        metavar="SIZES",
+        help="your weapon's decoration slot sizes, e.g. 3,2,1; weapon jewels "
+        "are then placed for weighted weapon skills",
+    )
+    parser.add_argument(
         "--relax",
         action="store_true",
         help="allow sets that miss a mandatory skill rather than returning fewer",
@@ -1471,6 +1830,10 @@ def main() -> None:
         parser.error("--beam must be at least 1")
     if args.reserve < 0:
         parser.error("--reserve cannot be negative")
+    try:
+        weapon_slots = parse_weapon_slots(args.weapon_slots)
+    except ValueError as exc:
+        parser.error(f"--weapon-slots: {exc}")
 
     from optimiser_report import render_console, write_yaml
 
@@ -1492,6 +1855,7 @@ def main() -> None:
             pinned_pieces=pinned_pieces,
             excluded_sets=args.exclude_set,
             excluded_pieces=args.exclude_piece,
+            weapon_slots=weapon_slots,
         )
     except ValueError as exc:
         parser.error(str(exc))
@@ -1503,9 +1867,14 @@ def main() -> None:
     if not args.relax:
         unreachable = [n for n in unreachable if n not in scoring.mandatory]
     if unreachable:
+        hint = (
+            ""
+            if context.weapon_slots_exist()
+            else " (weapon skills need --weapon-slots)"
+        )
         print(
             "Warning: these weighted skills cannot come from armour, talismans or "
-            "armour decorations and were ignored: " + ", ".join(unreachable)
+            f"decorations and were ignored{hint}: " + ", ".join(unreachable)
         )
 
     sets, constraint_level, optimiser = optimise(
@@ -1518,6 +1887,7 @@ def main() -> None:
         strict=not args.relax,
         excluded_sets=args.exclude_set,
         excluded_pieces=args.exclude_piece,
+        weapon_slots=weapon_slots,
     )
 
     # impossible_requirements is a proof, so it wins over unmet_requirements,

@@ -34,6 +34,7 @@ from load_data import (
     skill_record,
 )
 from optimiser import (
+    MAX_WEAPON_SLOTS,
     PIECE_TYPES,
     RESERVED_SLOTS,
     GearSet,
@@ -123,6 +124,11 @@ HINTS = {
         "Double-click, or select and press Space, to exclude or include. A set "
         "row covers every piece in it; pieces can also be excluded one by one."
     ),
+    "weapon_slots": (
+        "Your weapon's decoration slot sizes, 0 for none. Weapon jewels are "
+        "then placed for weighted weapon skills; without slots those skills "
+        "are ignored."
+    ),
     "gogma": (
         "Credits one extra piece toward this bonus, standing in for the bonus "
         "point a Gogma weapon carries."
@@ -151,8 +157,8 @@ HINTS = {
     "ct_skills": "Up to three armour skills and the level each is granted at.",
     "ct_armour_slots": "Decoration slot sizes on the talisman. 0 means no slot.",
     "ct_weapon_slots": (
-        "Reported with the set but never filled: only armour decorations are "
-        "placed."
+        "Weapon-jewel slot sizes, filled alongside the weapon's own slots when "
+        "this talisman is chosen."
     ),
 }
 
@@ -249,6 +255,7 @@ class RunRequest:
     excluded_sets: list[str] = field(default_factory=list)
     excluded_pieces: list[str] = field(default_factory=list)
     strict: bool = True
+    weapon_slots: tuple[int, ...] = ()
 
 
 class SkillsGui:
@@ -769,6 +776,26 @@ class SkillsGui:
             side=tk.TOP, fill=tk.X, pady=(10, 6)
         )
 
+        ttk.Label(gear, text="Weapon Slots").pack(side=tk.TOP, anchor=tk.W)
+        _hint(gear, "weapon_slots", wrap=280).pack(side=tk.TOP, anchor=tk.W, pady=(2, 0))
+        weapon_row = ttk.Frame(gear)
+        weapon_row.pack(side=tk.TOP, anchor=tk.W, pady=(GAP, 0))
+        self.weapon_slot_vars: list[tk.StringVar] = []
+        for i in range(MAX_WEAPON_SLOTS):
+            var = tk.StringVar(value="0")
+            ttk.Combobox(
+                weapon_row,
+                textvariable=var,
+                values=["0", "1", "2", "3"],
+                state="readonly",
+                width=4,
+            ).pack(side=tk.LEFT, padx=(0 if i == 0 else 4, 0))
+            self.weapon_slot_vars.append(var)
+
+        ttk.Separator(gear, orient=tk.HORIZONTAL).pack(
+            side=tk.TOP, fill=tk.X, pady=(10, 6)
+        )
+
         ttk.Label(gear, text="Gogma Weapon Skills").pack(side=tk.TOP, anchor=tk.W)
         _hint(gear, "gogma", wrap=280).pack(side=tk.TOP, anchor=tk.W, pady=(2, 0))
         gogma = ttk.Frame(gear)
@@ -948,6 +975,10 @@ class SkillsGui:
             if piece is not None:
                 pinned[piece_type] = piece.name
         return pinned
+
+    def _weapon_slots(self) -> tuple[int, ...]:
+        """The weapon slot dropdowns as sizes, zeros ("no slot") dropped."""
+        return tuple(int(v.get()) for v in self.weapon_slot_vars if int(v.get() or 0))
 
     # --- exclusions ----------------------------------------------------------
 
@@ -1871,6 +1902,7 @@ class SkillsGui:
             excluded_sets=sorted(self.excluded_sets),
             excluded_pieces=sorted(self.excluded_pieces),
             strict=not self.relax_var.get(),
+            weapon_slots=self._weapon_slots(),
         )
 
         self._optimiser_running = True
@@ -1906,6 +1938,7 @@ class SkillsGui:
                 strict=request.strict,
                 excluded_sets=request.excluded_sets,
                 excluded_pieces=request.excluded_pieces,
+                weapon_slots=request.weapon_slots,
             )
             # Why nothing came back, gathered on this thread while the optimiser
             # is still in scope: impossible_requirements is a proof, so it wins

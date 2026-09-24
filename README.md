@@ -18,6 +18,7 @@ The GUI (`launch_gui.bat`) launches it with `pythonw`, so no console window appe
 3. **Run Optimiser** works straight off your edited values, saved or not — saving is only for keeping the weighting around afterwards. When you do save, the default filename is `skills_weighted.yaml`, written next to whichever file you opened (usually the repo root, so it will show as an untracked git file unless you use *Browse…* to put it in `skills_outputs/`). Keep separate weighted copies side by side for different build goals instead of overwriting each time. Save refuses `skills_default.yaml` outright: the Save box writes beside the loaded file, which is usually that one, so typing its name would otherwise replace the master data. Save also asks before replacing any other existing file, and closing the window or opening another skills file with edits unsaved asks before discarding them.
 4. Optionally:
    - pick a **Gogma weapon** set bonus / group skill in the "Gogma weapon skills" box if your weapon contributes pieces toward one of them — see [How it works](#how-it-works) for what that credit does;
+   - set your weapon's **Weapon Slots** so weapon skills get weapon jewels — see [Weapon slots](#weapon-slots);
    - rule armour out with **Exclude Gear…** — see [Excluding armour](#excluding-armour);
    - load custom talismans built on the other tab, so they join the optimiser's charm pool without touching `craftable_talismans.yaml`;
    - adjust *Reserved slots* (defaults to 2) for resistance jewels you plan to slot yourself. The smallest slots in the set are the ones held back, so they're size 1 unless the set runs out of those.
@@ -25,7 +26,7 @@ The GUI (`launch_gui.bat`) launches it with `pythonw`, so no console window appe
 
 ### Custom Talismans tab
 
-Build charms the game doesn't have: up to three skills plus up to three armour and three weapon decoration slots per talisman, saved under `custom_talismans_outputs/`. Only armor-type skills are offered — the optimiser builds armor sets only. Load them on the main tab when you want them considered (e.g. a charm equivalent of your best appraised one).
+Build charms the game doesn't have: up to three skills plus up to three armour and three weapon decoration slots per talisman, saved under `custom_talismans_outputs/`. Only armor-type skills are offered, because every talisman in the data carries armour skills only; weapon slots on a custom talisman get weapon jewels like the weapon's own (see [Weapon slots](#weapon-slots)). Load them on the main tab when you want them considered (e.g. a charm equivalent of your best appraised one).
 
 *Select/Create File…* either opens an existing file for editing or names a new one, and writes nothing by itself, so it doesn't ask to replace an existing file. It opens on its own the first time you visit the tab and after that only when clicked. A talisman can't list the same skill twice or take a level below 1: two rows of one skill would stack past the max-level check a single row gets. **Delete Selected rewrites the file immediately**, so it asks first; there is no undo.
 
@@ -43,12 +44,13 @@ python optimiser.py --skills-db skills_weighted.yaml --count 10
 | `--reserve` | `2` | Slots held back for resistance jewels, smallest first; 0 or more |
 | `--output` | in `optimiser_outputs/`, named from the input with any `skills_` prefix stripped | Where sets are written, so a results file can never be mistaken for a skills DB (`load_data.py` refuses to load one as weights anyway) |
 | `--pin-head` … `--pin-legs` | none | Force that slot to a named armour piece; see [Pinning armour](#pinning-armour) |
+| `--weapon-slots` | none | Your weapon's decoration slot sizes, e.g. `3,2,1`; see [Weapon slots](#weapon-slots) |
 | `--exclude-set`, `--exclude-piece` | none | Leave an armour set or a single piece out of the search; repeatable. See [Excluding armour](#excluding-armour) |
 | `--relax` | off | Allow sets that miss a mandatory skill rather than returning fewer |
 
 **Always pass `--skills-db`.** The default points at a weighted file that isn't committed (everything under the output folders is gitignored), so a bare `python optimiser.py` dies with `FileNotFoundError`. Example: input `skills_weighted.yaml` writes results to `optimiser_outputs/weighted_gear_sets.yaml`. A `--count` or `--beam` below 1, or a negative `--reserve`, is rejected up front: each used to return an empty result with no reason given.
 
-The console render includes a header naming your mandatory skills and any pinned pieces. With `--relax` it also names the constraint tier it ended on and adds a "constraints were relaxed" note (see [How scoring works](#how-scoring-works)); without it there is nothing to relax, so a run either meets your requirements or says why it couldn't. Weighted skills that armour, talismans and armour jewels simply cannot supply (mostly weapon and food skills) are ignored with a warning naming them; the GUI doesn't show this warning. A *required* one is not ignored: without `--relax` it empties the result, and the no-sets message names it as the reason, in the GUI too.
+The console render includes a header naming your mandatory skills and any pinned pieces. With `--relax` it also names the constraint tier it ended on and adds a "constraints were relaxed" note (see [How scoring works](#how-scoring-works)); without it there is nothing to relax, so a run either meets your requirements or says why it couldn't. Weighted skills that armour, talismans and jewels simply cannot supply (food skills, and weapon skills when no weapon slots are given) are ignored with a warning naming them; the GUI doesn't show this warning. A *required* one is not ignored: without `--relax` it empties the result, and the no-sets message names it as the reason, in the GUI too.
 
 ## How scoring works
 
@@ -80,6 +82,14 @@ Any of the five slots can be fixed to a specific piece, leaving the rest to the 
 A pinned slot skips dominated-piece pruning, since pruning only chooses between alternatives and a pinned slot has none. Its single candidate also sorts it first in the search's stage order, so every later choice is ranked with the pinned piece already counted. Pinned pieces are marked `*` in the results.
 
 Pinning narrows the diversity bands: *distinct builds* wants a 2-piece difference, which four pins make impossible, so it relaxes and tags its results `(relaxed)`. That's arithmetic, not a warning worth acting on.
+
+### Weapon slots
+
+Weapon skills (Attack Boost, Critical Eye, Artillery and the rest) come only from weapon jewels, and weapon jewels only fit weapon slots, so the optimiser needs to know your weapon's slots before it can do anything with them: `--weapon-slots 3,2,1` on the CLI, or the three **Weapon Slots** dropdowns in the Fixed Gear panel (0 means no slot). Without them a weighted weapon skill is ignored with a warning, and a required one is reported as impossible. A custom talisman's weapon slots are filled the same way whenever that talisman is chosen. Results show a `weapon` line, and in the GUI's slot brackets a weapon slot reads `[W3: …]`, so a talisman carrying both kinds can't be socketed wrong.
+
+The weapon is solved separately from the armour, and exactly. Nothing on the armour side grants a weapon skill, so the two can't trade off against each other and the weapon's answer is simply added to every set. Weapon jewels don't fit the armour model anyway: many grant two skills, or two or three levels at once, where every armour jewel is one skill at one level. The solver is a branch and bound over every jewel in every slot, checked against brute force in the tests, and is solved once per distinct slot layout, so it costs well under a second for a weapon's three slots even with every weapon skill weighted. The one case that grows is three weapon slots plus three more on a custom talisman with most weapon skills weighted; that stops after a fixed amount of searching (`WEAPON_SEARCH_NODES`, a few seconds) and keeps the best layout found, which is still good because the best jewels are tried first. Only a fully searched weapon layout is used as proof that a required weapon skill can't be reached.
+
+A weapon's own built-in skills aren't modelled yet; only its slots are.
 
 ### Excluding armour
 
@@ -117,7 +127,7 @@ The optimiser sees a deliberately narrow slice of the game:
 | --- | --- | --- |
 | High Rank armor only | Low Rank armor | Not the tool's target |
 | Craftable talismans | Appraised talismans | Random skills and slots can't be enumerated — build equivalents in the Custom Talismans tab instead |
-| Armor jewels (loaded) | Weapon jewels | Loaded into memory but never placed; builds assume you equip your own weapons |
+| Armor and weapon jewels | Weapons themselves | Give your weapon's slot sizes and weapon jewels are placed in them; the weapon's own built-in skills aren't modelled |
 
 All game data was compiled by hand from the community wiki at [game8.co](https://game8.co/games/Monster-Hunter-Wilds). Every record carries a `source_url` back to its page, and file headers list the source archives. Set bonus skills use their 2-piece/4-piece tiers as levels; group and food skills are on/off (no levels). The one exception is each skill's `levels` list — what every level actually does, in the game's own text (Fire Resistance 3 is "Fire resistance +20 Defense +10"), shown under the description when you click a skill. Game8 has no machine-readable export and keeps that text on one page per skill, so it was pulled in a single request from the [Wilds API](https://wilds.mhdb.io/en/skills), which carries the in-game strings; spot checks against game8's skill pages agree on every number. Food skills have no per-level text in either source. The skill file also records each skill's *scaling* class (linear/geometric/etc.), inferred from how the numeric effect grows across levels — useful context when choosing weights, though it doesn't feed the optimiser directly.
 

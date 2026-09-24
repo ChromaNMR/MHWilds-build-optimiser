@@ -11,7 +11,7 @@ from pathlib import Path
 import yaml
 
 from load_data import ArmorPiece
-from optimiser import PIECE_TYPES, GearSet, Scoring, SlotAssignment
+from optimiser import PIECE_TYPES, WEAPON_SOURCE, GearSet, Scoring, SlotAssignment
 
 CONSTRAINT_DESCRIPTIONS = {
     0: "all mandatory skills present, and mandatory max-level skills at max",
@@ -66,7 +66,33 @@ def _decorations_by_source(gear_set: GearSet) -> dict[str, list[str]]:
         if placement.decoration is None:
             continue
         grouped.setdefault(placement.source, []).append(placement.decoration.name)
+    for placement in gear_set.weapon_placements:
+        if placement.decoration is None:
+            continue
+        # A talisman can hold both kinds; its weapon jewels get their own row
+        # so nobody tries to socket one in an armour slot.
+        source = (
+            placement.source
+            if placement.source == WEAPON_SOURCE
+            else f"{placement.source} (weapon slots)"
+        )
+        grouped.setdefault(source, []).append(placement.decoration.name)
     return grouped
+
+
+def _own_weapon_slots(gear_set: GearSet) -> list[SlotAssignment]:
+    return [p for p in gear_set.weapon_placements if p.source == WEAPON_SOURCE]
+
+
+def _free_weapon_line(gear_set: GearSet) -> list[str]:
+    """The weapon-side counterpart of "Free slots", or nothing without any."""
+    if not gear_set.weapon_placements:
+        return []
+    free = gear_set.weapon_free_slots
+    if not free:
+        return ["  Free weapon slots: none"]
+    sizes = ", ".join(str(s) for s in free)
+    return [f"  Free weapon slots: [{sizes}] (nothing worth slotting)"]
 
 
 def render_set(gear_set: GearSet, rank: int, scoring: Scoring) -> str:
@@ -84,18 +110,15 @@ def render_set(gear_set: GearSet, rank: int, scoring: Scoring) -> str:
             f"{_pin_marker(gear_set, piece)}{piece.piece_type:<6} {piece.name:<26}"
             f" {piece.set:<18} def {piece.defense.max:>3}  slots [{slots}]"
         )
+    own = _own_weapon_slots(gear_set)
+    if own:
+        slots = ", ".join(str(p.size) for p in own)
+        lines.append(f"  {'weapon':<6} {'':<26} {'':<18}          slots [{slots}]")
     talisman_skills = ", ".join(
         f"{s.name} {s.level}" for s in gear_set.talisman.skills
     )
     lines.append(f"  {'charm':<6} {gear_set.talisman.name:<26} {talisman_skills}")
-    lines.append(
-        f"  Total defence {gear_set.defense_total}"
-        + (
-            f"   |   weapon slots on charm: {gear_set.weapon_slots}"
-            if gear_set.weapon_slots
-            else ""
-        )
-    )
+    lines.append(f"  Total defence {gear_set.defense_total}")
 
     lines.append("")
     lines.append("  Skills:")
@@ -143,6 +166,7 @@ def render_set(gear_set: GearSet, rank: int, scoring: Scoring) -> str:
         lines.append(f"  Free slots: [{sizes}]{note}")
     else:
         lines.append("  Free slots: none")
+    lines.extend(_free_weapon_line(gear_set))
 
     return "\n".join(lines)
 
@@ -156,10 +180,16 @@ def _placements_by_source(gear_set: GearSet) -> dict[str, list[SlotAssignment]]:
 
 
 def _slot_brackets(placements: list[SlotAssignment]) -> str:
+    """'[3: Attack Jewel III] [1: empty]'; weapon slots read 'W3:'.
+
+    The W marks the one line where both kinds meet - a talisman with armour
+    and weapon slots - and costs nothing on the lines where only one can.
+    """
     if not placements:
         return ""
     parts = [
-        f"[{p.size}: {p.decoration.name if p.decoration else 'empty'}]"
+        f"[{'W' if p.weapon else ''}{p.size}: "
+        f"{p.decoration.name if p.decoration else 'empty'}]"
         for p in placements
     ]
     return "  " + " ".join(parts)
@@ -186,22 +216,21 @@ def render_set_inline(gear_set: GearSet, rank: int, total: int, scoring: Scoring
             f"{_pin_marker(gear_set, piece)}{piece.piece_type:<6} {piece.name:<26}"
             f" {piece.set:<18} def {piece.defense.max:>3}{brackets}"
         )
+    own = _own_weapon_slots(gear_set)
+    if own:
+        lines.append(f"  {'weapon':<6} {'':<26} {'':<18}        {_slot_brackets(own)}")
 
     talisman_skills = ", ".join(
         f"{s.name} {s.level}" for s in gear_set.talisman.skills
     )
-    talisman_brackets = _slot_brackets(by_source.get(gear_set.talisman.name, []))
+    talisman_slots = by_source.get(gear_set.talisman.name, []) + [
+        p for p in gear_set.weapon_placements if p.source == gear_set.talisman.name
+    ]
+    talisman_brackets = _slot_brackets(talisman_slots)
     lines.append(
         f"  {'charm':<6} {gear_set.talisman.name:<26} {talisman_skills}{talisman_brackets}"
     )
-    lines.append(
-        f"  Total defence {gear_set.defense_total}"
-        + (
-            f"   |   weapon slots on charm: {gear_set.weapon_slots}"
-            if gear_set.weapon_slots
-            else ""
-        )
-    )
+    lines.append(f"  Total defence {gear_set.defense_total}")
 
     lines.append("")
     lines.append("  Skills:")
@@ -239,6 +268,7 @@ def render_set_inline(gear_set: GearSet, rank: int, total: int, scoring: Scoring
         lines.append(f"  Free slots: [{sizes}]{note}")
     else:
         lines.append("  Free slots: none")
+    lines.extend(_free_weapon_line(gear_set))
 
     return "\n".join(lines)
 
@@ -346,11 +376,13 @@ def gear_set_to_dict(gear_set: GearSet, rank: int, scoring: Scoring) -> dict:
                 "source": p.source,
                 "slot_size": p.size,
                 "decoration": p.decoration.name,
+                "weapon_slot": p.weapon,
             }
-            for p in gear_set.placements
+            for p in gear_set.placements + gear_set.weapon_placements
             if p.decoration is not None
         ],
         "free_slots": gear_set.free_slots,
+        "free_weapon_slots": gear_set.weapon_free_slots,
         "reserved_slots": gear_set.reserved_slots,
         "weapon_slots": gear_set.weapon_slots,
     }
