@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -1334,6 +1335,14 @@ def gear_set_filename(db_path: Path) -> str:
 
 
 def main() -> None:
+    # Piped or redirected, Python on Windows writes stdout and stderr in the
+    # ANSI code page, which has no α/β/γ, so the first armour name printed
+    # would raise UnicodeEncodeError: `optimiser.py ... > sets.txt` died
+    # mid-run, and a usage error naming a piece crashed instead of printing.
+    # Done first, before argparse can report an error of its own.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--skills-db",

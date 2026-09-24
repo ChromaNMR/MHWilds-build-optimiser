@@ -115,6 +115,16 @@ All game data was compiled by hand from the community wiki at [game8.co](https:/
 
 Need current record counts? Run `python load_data.py` rather than trusting any number written down; the data files get updated more often than this document does.
 
+## Tests
+
+```
+python -m unittest
+```
+
+Run from the repo root. It needs nothing beyond PyYAML and takes about ten seconds, most of it a handful of real searches. `tests/test_data.py` checks the data keeps the shape the code assumes without re-checking — no piece carries two set bonuses, for one, which is what lets the pre-search check add pieces up as a proof — so a hand edit to the YAML that breaks an assumption fails there rather than as a wrong answer later.
+
+The GUI tests never open a window: they call `SkillsGui` methods on stand-in objects with the message boxes patched out, so they cover what gets saved, refused or passed to the optimiser, but not layout or widget wiring. Where Tk is missing they fall back to a mocked tkinter, so the suite also runs on a bare Linux Python.
+
 ## Repository layout
 
 | File | Purpose |
@@ -127,6 +137,7 @@ Need current record counts? Run `python load_data.py` rather than trusting any n
 | `high_rank_armor.yaml` | All High Rank pieces with defense, resistances, skills, transcended slot values where applicable (`slots_source` says which are listed) and the set/group bonuses each piece participates in |
 | `craftable_talismans.yaml` | Smithy-crafted charms only. Craftables carry no decoration slots, but the schema keeps a placeholder for custom ones built in the GUI |
 | `decorations.yaml` | Armor and weapon jewels with their slot sizes and skills |
+| `tests/` | The `unittest` suite; see [Tests](#tests) |
 | `launch_gui.bat` | Windows launcher: runs `pythonw skills_gui.py` from the repo folder |
 | `gui_state.json` | Written by the GUI when dark mode is toggled and on close; holds only that setting. Gitignored |
 | `skills_outputs/`, `optimiser_outputs/`, `custom_talismans_outputs/` | Your generated files. Contents are gitignored, but each folder keeps a tracked `.keepempty` marker so they exist on clone |
