@@ -881,10 +881,34 @@ class SkillsGui:
         self.type_combo.pack(side=tk.LEFT, padx=(4, 0))
         self.type_combo.bind("<<ComboboxSelected>>", lambda _e: self._refresh_listbox())
 
+        search_row = ttk.Frame(skills)
+        search_row.pack(side=tk.TOP, anchor=tk.W, fill=tk.X, pady=(0, GAP))
+        ttk.Label(search_row, text="Find:").pack(side=tk.LEFT)
+        self.search_var = tk.StringVar()
+        ttk.Entry(search_row, textvariable=self.search_var, width=22).pack(
+            side=tk.LEFT, padx=(4, 0), fill=tk.X, expand=True
+        )
+        self.search_var.trace_add("write", lambda *_a: self._refresh_listbox())
+
+        weighted_row = ttk.Frame(skills)
+        weighted_row.pack(side=tk.TOP, anchor=tk.W, fill=tk.X, pady=(0, GAP))
+        self.weighted_only_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(
+            weighted_row,
+            text="Weighted only",
+            variable=self.weighted_only_var,
+            command=self._refresh_listbox,
+        ).pack(side=tk.LEFT)
+        self.weighted_count_var = tk.StringVar(value="")
+        ttk.Label(
+            weighted_row, textvariable=self.weighted_count_var, style="Hint.TLabel"
+        ).pack(side=tk.RIGHT)
+
         list_frame = ttk.Frame(skills)
         list_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        # Wide enough for the longest name plus its "  5/5" weight suffix.
         self.listbox = tk.Listbox(
-            list_frame, width=30, height=LIST_ROWS, exportselection=False
+            list_frame, width=36, height=LIST_ROWS, exportselection=False
         )
         self.listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar = ttk.Scrollbar(
@@ -893,6 +917,13 @@ class SkillsGui:
         scrollbar.pack(side=tk.LEFT, fill=tk.Y)
         self.listbox.config(yscrollcommand=scrollbar.set)
         self.listbox.bind("<<ListboxSelect>>", self._on_select)
+        # The names behind the rows, in order. Rows carry a weight suffix, so
+        # the row text is no longer the name and cannot be looked up by it.
+        self._listed_names: list[str] = []
+
+        ttk.Button(
+            skills, text="Clear All Weights...", command=self._clear_all_weights
+        ).pack(side=tk.TOP, anchor=tk.W, pady=(GAP, 0))
 
     def _build_weighting_section(self, body: ttk.Frame) -> None:
         detail = ttk.LabelFrame(body, text="Skill Weighting", padding=SECTION_PAD)
@@ -1465,24 +1496,102 @@ class SkillsGui:
         if self.gogma_group_var.get() not in group_names:
             self.gogma_group_var.set(NONE_OPTION)
 
+    def _is_weighted(self, name: str) -> bool:
+        """Non-zero weight in the (possibly unsaved) edits."""
+        try:
+            return float(self.cache[name]["weight"]) != 0
+        except ValueError:
+            return False
+
     def _filtered_skills(self) -> list[Skill]:
+        """Skills passing the type, text and weighted-only filters together.
+
+        Text matches anywhere in the name, ignoring case, so "resist" finds
+        every resistance skill without knowing how each is spelt.
+        """
         selected_type = self.type_var.get()
-        if selected_type == "All":
-            return self.skills
-        return [s for s in self.skills if s.type == selected_type]
+        needle = self.search_var.get().strip().lower()
+        weighted_only = self.weighted_only_var.get()
+        return [
+            s
+            for s in self.skills
+            if (selected_type == "All" or s.type == selected_type)
+            and needle in s.name.lower()
+            and (not weighted_only or self._is_weighted(s.name))
+        ]
+
+    def _row_text(self, name: str) -> str:
+        """'Weakness Exploit   5/0' for weighted skills, the bare name otherwise.
+
+        Showing the weight in the list is what makes a weighting reviewable
+        at a glance; before, checking it meant clicking every skill in turn.
+        """
+        if not self._is_weighted(name):
+            return name
+        cached = self.cache[name]
+        return f"{name}   {cached['weight']}/{cached['level_weight']}"
 
     def _refresh_listbox(self) -> None:
+        """Rebuild the rows, keeping the selection if it is still listed.
+
+        Typing in Find rebuilds on every key; dropping the selection each
+        time would clear the weighting panel under the user mid-search.
+        """
+        keep = self.selected_name
         self.listbox.delete(0, tk.END)
-        for skill in self._filtered_skills():
-            self.listbox.insert(tk.END, skill.name)
+        self._listed_names = [s.name for s in self._filtered_skills()]
+        for name in self._listed_names:
+            self.listbox.insert(tk.END, self._row_text(name))
+        self._update_weighted_count()
+        if keep in self._listed_names:
+            index = self._listed_names.index(keep)
+            self.listbox.selection_set(index)
+            self.listbox.see(index)
+            return
         self.selected_name = None
         self._show_details(None)
+
+    def _update_weighted_count(self) -> None:
+        count = sum(1 for s in self.skills if self._is_weighted(s.name))
+        self.weighted_count_var.set(f"{count} weighted" if count else "")
+
+    def _refresh_selected_row(self) -> None:
+        """Redraw one row after its weight changed, without a full rebuild."""
+        name = self.selected_name
+        if name not in self._listed_names:
+            return
+        index = self._listed_names.index(name)
+        self.listbox.delete(index)
+        self.listbox.insert(index, self._row_text(name))
+        self.listbox.selection_set(index)
+        self._update_weighted_count()
+
+    def _clear_all_weights(self) -> None:
+        """Every weight and level weight back to 0, after asking.
+
+        Only the edits are cleared; nothing is written until Save, so the
+        loaded file is untouched and reopening it undoes this.
+        """
+        if not any(self._is_weighted(s.name) for s in self.skills):
+            return
+        if not messagebox.askyesno(
+            "Clear All Weights",
+            "Set every skill's weight and level focus to 0? The file is not "
+            "changed until you save.",
+        ):
+            return
+        for entry in self.cache.values():
+            entry["weight"] = "0"
+            entry["level_weight"] = "0"
+        self._refresh_listbox()
+        if self.selected_name is not None:
+            self._show_details(self.selected_name)
 
     def _on_select(self, _event: object) -> None:
         selection = self.listbox.curselection()
         if not selection:
             return
-        name = self.listbox.get(selection[0])
+        name = self._listed_names[selection[0]]
         self.selected_name = name
         self._show_details(name)
 
@@ -1520,11 +1629,13 @@ class SkillsGui:
         if self._suppress_trace or self.selected_name is None:
             return
         self.cache[self.selected_name]["weight"] = self.weight_var.get()
+        self._refresh_selected_row()
 
     def _on_level_weight_change(self, *_args: object) -> None:
         if self._suppress_trace or self.selected_name is None:
             return
         self.cache[self.selected_name]["level_weight"] = self.level_weight_var.get()
+        self._refresh_selected_row()
 
     def _effective_skills(self) -> list[Skill]:
         """The skills list with every cached (possibly unsaved) edit applied."""
