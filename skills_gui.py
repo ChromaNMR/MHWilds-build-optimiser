@@ -39,6 +39,7 @@ from optimiser import (
     RESERVED_SLOTS,
     GearSet,
     Scoring,
+    SearchCancelled,
     bonus_base_name,
     optimise,
 )
@@ -403,6 +404,9 @@ class SkillsGui:
     def _on_close(self) -> None:
         if not self._discard_changes_ok():
             return
+        # The worker is a daemon thread and dies with the process anyway;
+        # asking it to stop first just saves it finishing work nobody reads.
+        self._cancel_optimiser()
         self._write_state()
         self.root.destroy()
 
@@ -683,6 +687,23 @@ class SkillsGui:
         ttk.Label(options, textvariable=self.status_var, style="Status.TLabel").pack(
             side=tk.RIGHT, anchor=tk.N, padx=(12, 12)
         )
+
+        # Its own row under the options, so a long progress message never
+        # pushes the Run button around.
+        progress_row = ttk.Frame(run)
+        progress_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, 0))
+        self.cancel_button = ttk.Button(
+            progress_row, text="Cancel", command=self._cancel_optimiser, state=tk.DISABLED
+        )
+        self.cancel_button.pack(side=tk.RIGHT)
+        self.progress_var = tk.DoubleVar(value=0.0)
+        ttk.Progressbar(
+            progress_row, variable=self.progress_var, maximum=1.0, mode="determinate"
+        ).pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(0, 8))
+        self.progress_text_var = tk.StringVar(value="")
+        ttk.Label(
+            progress_row, textvariable=self.progress_text_var, style="Hint.TLabel", width=48
+        ).pack(side=tk.LEFT)
 
         save = self._section(parent, "Save Weights", side=tk.BOTTOM, fill=tk.X)
         _hint(save, "output", wrap=900).pack(side=tk.TOP, anchor=tk.W)
@@ -1907,20 +1928,41 @@ class SkillsGui:
 
         self._optimiser_running = True
         self.run_button.config(state=tk.DISABLED, text="Working...")
-        self.status_var.set("Running optimiser - this can take up to a minute...")
+        self.cancel_button.config(state=tk.NORMAL)
+        self.status_var.set("")
+        self.progress_var.set(0.0)
+        self.progress_text_var.set("Starting...")
 
-        # Tkinter is not thread-safe: the worker only ever writes to this queue,
-        # never touches self.root, and the main thread polls it via after().
+        # Tkinter is not thread-safe: the worker only ever writes to this queue
+        # and reads this event, never touches self.root, and the main thread
+        # polls the queue via after().
         self._optimiser_queue: queue.Queue = queue.Queue()
+        self._cancel_event = threading.Event()
         thread = threading.Thread(
             target=self._optimiser_thread,
-            args=(request, self._optimiser_queue),
+            args=(request, self._optimiser_queue, self._cancel_event),
             daemon=True,
         )
         thread.start()
         self.root.after(100, self._poll_optimiser_queue)
 
-    def _optimiser_thread(self, request: RunRequest, result_queue: queue.Queue) -> None:
+    def _cancel_optimiser(self) -> None:
+        """Ask the worker to stop; it notices within a fraction of a second."""
+        event = getattr(self, "_cancel_event", None)
+        if event is not None and self._optimiser_running:
+            event.set()
+            self.cancel_button.config(state=tk.DISABLED)
+            self.progress_text_var.set("Cancelling...")
+
+    def _optimiser_thread(
+        self,
+        request: RunRequest,
+        result_queue: queue.Queue,
+        cancel: threading.Event | None = None,
+    ) -> None:
+        def progress(fraction: float, message: str) -> None:
+            result_queue.put(("progress", fraction, message, None))
+
         try:
             game_data = self.game_data
             if request.custom_talismans:
@@ -1939,6 +1981,8 @@ class SkillsGui:
                 excluded_sets=request.excluded_sets,
                 excluded_pieces=request.excluded_pieces,
                 weapon_slots=request.weapon_slots,
+                progress=progress,
+                should_stop=cancel.is_set if cancel is not None else None,
             )
             # Why nothing came back, gathered on this thread while the optimiser
             # is still in scope: impossible_requirements is a proof, so it wins
@@ -1951,19 +1995,41 @@ class SkillsGui:
                         "The search is a heuristic, so this is what it did not "
                         "find, not proof that nothing exists."
                     ]
+        except SearchCancelled:
+            result_queue.put(("cancelled", None, None, None))
+            return
         except Exception as exc:  # noqa: BLE001
             result_queue.put(("error", exc, None, None))
             return
         result_queue.put(("ok", sets, scoring, reasons))
 
     def _poll_optimiser_queue(self) -> None:
-        try:
-            kind, first, second, third = self._optimiser_queue.get_nowait()
-        except queue.Empty:
-            self.root.after(100, self._poll_optimiser_queue)
-            return
+        """Drain the worker's queue: progress updates, then at most one end.
 
-        if kind == "error":
+        Everything waiting is read at once, because the worker can post many
+        progress messages between two polls and drawing each in turn would
+        leave the bar trailing behind the search.
+        """
+        while True:
+            try:
+                kind, first, second, third = self._optimiser_queue.get_nowait()
+            except queue.Empty:
+                self.root.after(100, self._poll_optimiser_queue)
+                return
+            if kind == "progress":
+                self.progress_var.set(first)
+                self.progress_text_var.set(second)
+                continue
+            break
+
+        self.cancel_button.config(state=tk.DISABLED)
+        self.progress_var.set(0.0)
+        self.progress_text_var.set("")
+        if kind == "cancelled":
+            self._optimiser_running = False
+            self.run_button.config(state=tk.NORMAL, text="Run Optimiser")
+            self.status_var.set("Cancelled.")
+        elif kind == "error":
             self._optimiser_done(None, None, first, None)
         else:
             self._optimiser_done(first, second, None, third)

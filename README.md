@@ -22,7 +22,7 @@ The GUI (`launch_gui.bat`) launches it with `pythonw`, so no console window appe
    - rule armour out with **Exclude Gear…** — see [Excluding armour](#excluding-armour);
    - load custom talismans built on the other tab, so they join the optimiser's charm pool without touching `craftable_talismans.yaml`;
    - adjust *Reserved slots* (defaults to 2) for resistance jewels you plan to slot yourself. The smallest slots in the set are the ones held back, so they're size 1 unless the set runs out of those.
-5. Results open in a second window with Previous/Next navigation.
+5. While it runs, a progress bar under the Run button shows which phase the search is in, and **Cancel** stops it within a fraction of a second. Results open in a second window with Previous/Next navigation.
 
 ### Custom Talismans tab
 
@@ -50,7 +50,7 @@ python optimiser.py --skills-db skills_weighted.yaml --count 10
 
 **Always pass `--skills-db`.** The default points at a weighted file that isn't committed (everything under the output folders is gitignored), so a bare `python optimiser.py` dies with `FileNotFoundError`. Example: input `skills_weighted.yaml` writes results to `optimiser_outputs/weighted_gear_sets.yaml`. A `--count` or `--beam` below 1, or a negative `--reserve`, is rejected up front: each used to return an empty result with no reason given.
 
-The console render includes a header naming your mandatory skills and any pinned pieces. With `--relax` it also names the constraint tier it ended on and adds a "constraints were relaxed" note (see [How scoring works](#how-scoring-works)); without it there is nothing to relax, so a run either meets your requirements or says why it couldn't. Weighted skills that armour, talismans and jewels simply cannot supply (food skills, and weapon skills when no weapon slots are given) are ignored with a warning naming them; the GUI doesn't show this warning. A *required* one is not ignored: without `--relax` it empties the result, and the no-sets message names it as the reason, in the GUI too.
+Run in a terminal, the CLI redraws a one-line progress indicator on stderr as it goes; piped or redirected it stays quiet, so the carriage returns never end up in a file. The console render includes a header naming your mandatory skills and any pinned pieces. With `--relax` it also names the constraint tier it ended on and adds a "constraints were relaxed" note (see [How scoring works](#how-scoring-works)); without it there is nothing to relax, so a run either meets your requirements or says why it couldn't. Weighted skills that armour, talismans and jewels simply cannot supply (food skills, and weapon skills when no weapon slots are given) are ignored with a warning naming them; the GUI doesn't show this warning. A *required* one is not ignored: without `--relax` it empties the result, and the no-sets message names it as the reason, in the GUI too.
 
 ## How scoring works
 

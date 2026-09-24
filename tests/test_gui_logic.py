@@ -29,6 +29,14 @@ def gui_stub(**attributes) -> types.SimpleNamespace:
     return types.SimpleNamespace(**attributes)
 
 
+def last_message(results: queue.Queue):
+    """The worker's final message, skipping the progress updates before it."""
+    message = None
+    while not results.empty():
+        message = results.get_nowait()
+    return message
+
+
 class OptimiserCall(unittest.TestCase):
     def test_every_keyword_the_gui_passes_exists(self):
         # The bug this guards against: the GUI passed strict= to an optimise()
@@ -53,12 +61,12 @@ class OptimiserCall(unittest.TestCase):
         results: queue.Queue = queue.Queue()
         easy = weighted({"Antivirus": (5, 0), "Weakness Exploit": (5, 0)})
         G.SkillsGui._optimiser_thread(stub, G.RunRequest(skills=easy), results)
-        kind, sets, _scoring, reasons = results.get_nowait()
+        kind, sets, _scoring, reasons = last_message(results)
         self.assertEqual((kind, len(sets), reasons), ("ok", 10, []))
 
         impossible = weighted({"Airborne": (5, 0)})
         G.SkillsGui._optimiser_thread(stub, G.RunRequest(skills=impossible), results)
-        kind, sets, _scoring, reasons = results.get_nowait()
+        kind, sets, _scoring, reasons = last_message(results)
         self.assertEqual((kind, sets), ("ok", []))
         self.assertIn("Airborne", reasons[0])
 

@@ -70,6 +70,20 @@ TALISMAN_ARMOUR_SLOT_SIZE = 1
 BONUS_PROGRESS_CREDIT = 0.8
 
 PIECE_TYPES = ("head", "chest", "arms", "waist", "legs")
+
+# Rough share of a run spent in the armour beam search, the rest going to
+# evaluating the final pool (talismans and decorations for each set). Only
+# steers the progress bar, measured on a 30-skill weighting: 4.7 s against
+# 21.1 s.
+SEARCH_SHARE = 0.2
+# How many states or sets pass between progress reports and cancel checks.
+# Small enough that Cancel answers within a fraction of a second, large
+# enough that the checks cost nothing measurable.
+CHECK_EVERY = 64
+
+
+class SearchCancelled(Exception):
+    """Raised inside Optimiser.run when its should_stop callback says so."""
 SET_BONUS_SUFFIX = " Set Bonus"
 GROUP_SKILL_SUFFIX = " Group Skill"
 
@@ -931,6 +945,8 @@ class Optimiser:
         # Every complete set the last run() evaluated, kept so
         # unmet_requirements can say how close the search came.
         self._evaluated: list[GearSet] = []
+        self._progress = None
+        self._should_stop = None
 
     def weapon_fill(self, talisman_weapon_sizes=()) -> WeaponFill:
         """Best weapon jewels for the weapon's slots plus a talisman's.
@@ -1294,6 +1310,17 @@ class Optimiser:
         total += n1 * p1 + n2 * p2 + n3 * p3
         return total
 
+    def _report(self, fraction: float, message: str) -> None:
+        """Pass progress on, and stop the run if asked to.
+
+        Both happen at the same points, so a caller that only wants to cancel
+        still passes through here as often as one drawing a progress bar.
+        """
+        if self._should_stop is not None and self._should_stop():
+            raise SearchCancelled
+        if self._progress is not None:
+            self._progress(min(1.0, max(0.0, fraction)), message)
+
     def _search_armour(self) -> list[SearchState]:
         order = sorted(PIECE_TYPES, key=lambda t: len(self.context.candidates[t]))
         empty_levels = (0,) * len(self.context.relevant_skills)
@@ -1312,7 +1339,13 @@ class Optimiser:
         for stage, piece_type in enumerate(order, start=1):
             candidates = self.context.candidates[piece_type]
             expanded: list[SearchState] = []
-            for state in beam:
+            for position, state in enumerate(beam):
+                if position % CHECK_EVERY == 0:
+                    done = (stage - 1 + position / len(beam)) / len(order)
+                    self._report(
+                        SEARCH_SHARE * done,
+                        f"Searching armour: slot {stage} of {len(order)} ({piece_type})",
+                    )
                 for profile in candidates:
                     levels = tuple(
                         a + b for a, b in zip(state.levels, profile.skill_levels)
@@ -1614,7 +1647,13 @@ class Optimiser:
         active.sort(key=lambda b: (b.bonus_type, -b.level, b.name))
         return active
 
-    def run(self, tiers=DEFAULT_TIERS, strict: bool = True) -> tuple[list[GearSet], int]:
+    def run(
+        self,
+        tiers=DEFAULT_TIERS,
+        strict: bool = True,
+        progress=None,
+        should_stop=None,
+    ) -> tuple[list[GearSet], int]:
         """Search and pick the result bands.
 
         strict makes mandatory a hard filter: only sets meeting every
@@ -1622,6 +1661,10 @@ class Optimiser:
         or none. With strict off, the tier loosens until the bands can be
         filled, which is how the --relax option behaves.
         """
+        # progress(fraction, message) is called now and then from this
+        # thread; should_stop() is polled at the same points and raises
+        # SearchCancelled when it returns True. Both are optional.
+        self._progress, self._should_stop = progress, should_stop
         self._evaluated = []
         if strict and self.impossible_requirements():
             return [], 0
@@ -1629,7 +1672,12 @@ class Optimiser:
         states = self._search_armour()
 
         evaluated: list[GearSet] = []
-        for state in states:
+        for position, state in enumerate(states):
+            if position % CHECK_EVERY == 0:
+                self._report(
+                    SEARCH_SHARE + (1 - SEARCH_SHARE) * position / len(states),
+                    f"Evaluating sets: {position} of {len(states)}",
+                )
             gear_set = self._evaluate(state)
             if gear_set is not None:
                 evaluated.append(gear_set)
@@ -1715,6 +1763,8 @@ def optimise(
     excluded_sets: list[str] | set[str] | None = None,
     excluded_pieces: list[str] | set[str] | None = None,
     weapon_slots: tuple[int, ...] | list[int] | None = None,
+    progress=None,
+    should_stop=None,
 ) -> tuple[list[GearSet], int, Optimiser]:
     optimiser = Optimiser(
         game,
@@ -1728,7 +1778,9 @@ def optimise(
         excluded_pieces=excluded_pieces,
         weapon_slots=weapon_slots,
     )
-    sets, constraint_level = optimiser.run(tiers, strict=strict)
+    sets, constraint_level = optimiser.run(
+        tiers, strict=strict, progress=progress, should_stop=should_stop
+    )
     return sets, constraint_level, optimiser
 
 
@@ -1762,6 +1814,29 @@ def gear_set_filename(db_path: Path) -> str:
             stem = stem[len(prefix) :]
             break
     return f"{stem}_gear_sets.yaml"
+
+
+WIDTH_PROGRESS = 78
+
+
+def _terminal_progress():
+    """A progress callback that redraws one stderr line, for interactive use.
+
+    Only installed when stderr is a terminal: piped or redirected, the
+    carriage returns would land in the file as clutter.
+    """
+    last = [-1]
+
+    def show(fraction: float, message: str) -> None:
+        percent = int(fraction * 100)
+        if percent == last[0]:
+            return
+        last[0] = percent
+        line = f"{percent:3d}%  {message}"[:WIDTH_PROGRESS]
+        sys.stderr.write("\r" + line.ljust(WIDTH_PROGRESS))
+        sys.stderr.flush()
+
+    return show
 
 
 def main() -> None:
@@ -1888,7 +1963,10 @@ def main() -> None:
         excluded_sets=args.exclude_set,
         excluded_pieces=args.exclude_piece,
         weapon_slots=weapon_slots,
+        progress=_terminal_progress() if sys.stderr.isatty() else None,
     )
+    if sys.stderr.isatty():
+        sys.stderr.write("\r" + " " * WIDTH_PROGRESS + "\r")
 
     # impossible_requirements is a proof, so it wins over unmet_requirements,
     # which only reports what the search did not find.
