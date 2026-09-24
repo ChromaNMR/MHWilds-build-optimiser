@@ -24,6 +24,14 @@ The GUI (`launch_gui.bat`) launches it with `pythonw`, so no console window appe
    - adjust *Reserved slots* (defaults to 2) for resistance jewels you plan to slot yourself. The smallest slots in the set are the ones held back, so they're size 1 unless the set runs out of those.
 5. While it runs, a progress bar under the Run button shows which phase the search is in, and **Cancel** stops it within a fraction of a second. Results open in a second window with Previous/Next navigation. **Copy This Set** puts the set on screen on the clipboard; **Save All Sets…** writes every set to `optimiser_outputs/` — as YAML, the same structure the CLI writes, or with a `.txt` name as the CLI's console text, header included. The header records which skills file the weights came from, and says so when the run used edits you hadn't saved yet, because otherwise the export names a file that doesn't hold those weights.
 
+### Search profiles
+
+**Load Profile…** / **Save Profile…** on the Skills File row keep a whole build goal in one file under `profiles/`: the weights, plus every setting on the tab — pins, exclusions, weapon slots, Gogma choices, reserve, relax and the loaded custom talisman file. The CLI reads the same file with `--profile`, and `--save-profile` writes one from any run, including a `--skills-db` one, so an existing weighted file converts in one command.
+
+A profile stores only the weights of weighted skills, against `skills_default.yaml`, not a copy of the skill data. That's the difference from a weighted skills file, which duplicates every skill's description and levels: after a data update a weighted file still holds the old text and lacks any new skills, while a profile picks up the new data the next time it loads. Paths inside the repo are stored relative to it, so the profile survives moving the checkout.
+
+A profile that names something the data doesn't have — a skill, a pinned or excluded piece, a Gogma bonus no armour carries, a missing talisman file — is refused whole, listing every mismatch at once, rather than half-applied. On the CLI, options given alongside `--profile` override it; exclusions add to the profile's rather than replace them, since an extra `--exclude-set` reads as "and also leave this out".
+
 ### Custom Talismans tab
 
 Build charms the game doesn't have: up to three skills plus up to three armour and three weapon decoration slots per talisman, saved under `custom_talismans_outputs/`. Only armor-type skills are offered, because every talisman in the data carries armour skills only; weapon slots on a custom talisman get weapon jewels like the weapon's own (see [Weapon slots](#weapon-slots)). Load them on the main tab when you want them considered (e.g. a charm equivalent of your best appraised one).
@@ -39,6 +47,7 @@ python optimiser.py --skills-db skills_weighted.yaml --count 10
 | Flag | Default | Meaning |
 | --- | --- | --- |
 | `--skills-db` | `skills_outputs/skills_DB_burst.yaml` | Weighted skills YAML to optimise against |
+| `--profile` | none | A [search profile](#search-profiles) instead of `--skills-db`: weights and settings in one file. Any option below also given overrides it |
 | `--count` | `10` | Number of sets returned (distributed round-robin across the diversity bands); at least 1 |
 | `--beam` | `5000` | Beam-search width; see [How it works](#how-it-works) for why that number; at least 1 |
 | `--reserve` | `2` | Slots held back for resistance jewels, smallest first; 0 or more |
@@ -46,9 +55,12 @@ python optimiser.py --skills-db skills_weighted.yaml --count 10
 | `--pin-head` … `--pin-legs` | none | Force that slot to a named armour piece; see [Pinning armour](#pinning-armour) |
 | `--weapon-slots` | none | Your weapon's decoration slot sizes, e.g. `3,2,1`; see [Weapon slots](#weapon-slots) |
 | `--exclude-set`, `--exclude-piece` | none | Leave an armour set or a single piece out of the search; repeatable. See [Excluding armour](#excluding-armour) |
+| `--gogma-set`, `--gogma-group` | none | Credit one piece toward this set bonus / group skill, as the GUI's Gogma selectors do |
+| `--talismans` | none | A custom talismans file to add to the talisman pool |
 | `--relax` | off | Allow sets that miss a mandatory skill rather than returning fewer |
+| `--save-profile` | none | Also write the weights and settings this run used as a profile |
 
-**Always pass `--skills-db`.** The default points at a weighted file that isn't committed (everything under the output folders is gitignored), so a bare `python optimiser.py` dies with `FileNotFoundError`. Example: input `skills_weighted.yaml` writes results to `optimiser_outputs/weighted_gear_sets.yaml`. A `--count` or `--beam` below 1, or a negative `--reserve`, is rejected up front: each used to return an empty result with no reason given.
+**Always pass `--skills-db` or `--profile`.** The default points at a weighted file that isn't committed (everything under the output folders is gitignored), so a bare `python optimiser.py` stops with a usage error naming the missing file. Example: input `skills_weighted.yaml` writes results to `optimiser_outputs/weighted_gear_sets.yaml`. A `--count` or `--beam` below 1, or a negative `--reserve`, is rejected up front: each used to return an empty result with no reason given.
 
 Run in a terminal, the CLI redraws a one-line progress indicator on stderr as it goes; piped or redirected it stays quiet, so the carriage returns never end up in a file. The console render includes a header naming your mandatory skills and any pinned pieces. With `--relax` it also names the constraint tier it ended on and adds a "constraints were relaxed" note (see [How scoring works](#how-scoring-works)); without it there is nothing to relax, so a run either meets your requirements or says why it couldn't. Weighted skills that armour, talismans and jewels simply cannot supply (food skills, and weapon skills when no weapon slots are given) are ignored with a warning naming them; the GUI doesn't show this warning. A *required* one is not ignored: without `--relax` it empties the result, and the no-sets message names it as the reason, in the GUI too.
 
@@ -150,6 +162,7 @@ The GUI tests never open a window: they call `SkillsGui` methods on stand-in obj
 | `skills_gui.py` | Tkinter GUI: skill weighting, custom talismans, optimiser runner with results window |
 | `optimiser.py` | Beam-search engine and scoring model (`Scoring`, `Optimiser`, `GearSet`) plus the CLI entry point. Deliberately print-free so the GUI reuses it directly |
 | `optimiser_report.py` | Rendering only: console text, inline result view for the GUI window, and YAML export of results |
+| `search_profile.py` | Search profile format: load with shape checks, `profile_problems` against the game data, save |
 | `load_data.py` | Typed dataclasses (`Skill`, `ArmorPiece`, `Talisman`, `Decoration`) and loaders with validation (e.g. refuses to treat a results file as a skills DB). Run it directly for record counts |
 | `skills_default.yaml` | Every skill: armor, weapon, set bonus, group and food — descriptions, max level, per-level effects, scaling class, per-source URLs. `weight`/`level_weight` start at 0 placeholders |
 | `high_rank_armor.yaml` | All High Rank pieces with defense, resistances, skills, transcended slot values where applicable (`slots_source` says which are listed) and the set/group bonuses each piece participates in |
@@ -158,7 +171,7 @@ The GUI tests never open a window: they call `SkillsGui` methods on stand-in obj
 | `tests/` | The `unittest` suite; see [Tests](#tests) |
 | `launch_gui.bat` | Windows launcher: runs `pythonw skills_gui.py` from the repo folder |
 | `gui_state.json` | Written by the GUI when dark mode is toggled and on close; holds only that setting. Gitignored |
-| `skills_outputs/`, `optimiser_outputs/`, `custom_talismans_outputs/` | Your generated files. Contents are gitignored, but each folder keeps a tracked `.keepempty` marker so they exist on clone |
+| `skills_outputs/`, `optimiser_outputs/`, `custom_talismans_outputs/`, `profiles/` | Your generated files. Contents are gitignored, but each folder keeps a tracked `.keepempty` marker so they exist on clone |
 
 ## License
 

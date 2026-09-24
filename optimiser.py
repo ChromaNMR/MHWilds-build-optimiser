@@ -1849,18 +1849,26 @@ def main() -> None:
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
+    weights_source = parser.add_mutually_exclusive_group()
+    weights_source.add_argument(
         "--skills-db",
-        default="skills_outputs/skills_DB_burst.yaml",
         help="weighted skills YAML to optimise against",
+    )
+    weights_source.add_argument(
+        "--profile",
+        metavar="FILE",
+        help="search profile holding the weights and every setting; any "
+        "option also given on the command line overrides it",
     )
     parser.add_argument("--count", type=int, default=10, help="number of sets to return")
     parser.add_argument("--beam", type=int, default=BEAM_WIDTH, help="beam width")
+    # None rather than the real default, for this and the options below, so
+    # a profile's value is only overridden when the option is actually given.
     parser.add_argument(
         "--reserve",
         type=int,
-        default=RESERVED_SLOTS,
-        help="slots to hold back for resistance jewels",
+        default=None,
+        help=f"slots to hold back for resistance jewels (default {RESERVED_SLOTS})",
     )
     parser.add_argument("--output", help="YAML file to write the sets to")
     for piece_type in PIECE_TYPES:
@@ -1885,15 +1893,31 @@ def main() -> None:
     )
     parser.add_argument(
         "--weapon-slots",
-        default="",
+        default=None,
         metavar="SIZES",
         help="your weapon's decoration slot sizes, e.g. 3,2,1; weapon jewels "
         "are then placed for weighted weapon skills",
     )
     parser.add_argument(
+        "--gogma-set", metavar="BONUS", help="credit one piece toward this set bonus"
+    )
+    parser.add_argument(
+        "--gogma-group", metavar="SKILL", help="credit one piece toward this group skill"
+    )
+    parser.add_argument(
+        "--talismans",
+        metavar="FILE",
+        help="custom talismans file to add to the talisman pool",
+    )
+    parser.add_argument(
         "--relax",
         action="store_true",
         help="allow sets that miss a mandatory skill rather than returning fewer",
+    )
+    parser.add_argument(
+        "--save-profile",
+        metavar="FILE",
+        help="also write the weights and settings this run used as a profile",
     )
     args = parser.parse_args()
     # Each of these otherwise fails quietly: a count or beam of 0, or a
@@ -1903,43 +1927,117 @@ def main() -> None:
         parser.error("--count must be at least 1")
     if args.beam < 1:
         parser.error("--beam must be at least 1")
-    if args.reserve < 0:
+    if args.reserve is not None and args.reserve < 0:
         parser.error("--reserve cannot be negative")
-    try:
-        weapon_slots = parse_weapon_slots(args.weapon_slots)
-    except ValueError as exc:
-        parser.error(f"--weapon-slots: {exc}")
 
+    from dataclasses import replace as updated
+
+    from load_data import load_talismans
     from optimiser_report import render_console, write_yaml
+    from search_profile import (
+        SearchProfile,
+        apply_weights,
+        load_profile,
+        profile_problems,
+        save_profile,
+        stored_path,
+        weights_of,
+    )
 
-    db_path = Path(args.skills_db)
     game = load_game_data()
-    scoring = Scoring(load_skills(db_path))
 
-    pinned_pieces = {
-        piece_type: getattr(args, f"pin_{piece_type}")
-        for piece_type in PIECE_TYPES
-        if getattr(args, f"pin_{piece_type}")
-    }
-    # Built here only to validate pins and exclusions before a search starts,
-    # so a typo is a usage error rather than a traceback.
+    # Everything the run uses is gathered into one profile - the loaded one,
+    # or an empty one - with each option given on the command line laid over
+    # it. One validation pass then covers both sources alike.
+    if args.profile:
+        db_path = Path(args.profile)
+        try:
+            profile = load_profile(db_path)
+        except (OSError, ValueError) as exc:
+            parser.error(f"--profile: {exc}")
+        skills = apply_weights(game.skills, profile.weights)
+    else:
+        db_path = Path(args.skills_db or "skills_outputs/skills_DB_burst.yaml")
+        if not db_path.exists():
+            parser.error(
+                f"{db_path} does not exist; pass --skills-db FILE or --profile FILE"
+            )
+        try:
+            skills = load_skills(db_path)
+        except ValueError as exc:
+            parser.error(f"--skills-db: {exc}")
+        profile = SearchProfile(weights=weights_of(skills))
+
+    pins = dict(profile.pins)
+    for piece_type in PIECE_TYPES:
+        if getattr(args, f"pin_{piece_type}"):
+            pins[piece_type] = getattr(args, f"pin_{piece_type}")
+    weapon_slots = list(profile.weapon_slots)
+    if args.weapon_slots is not None:
+        try:
+            weapon_slots = list(parse_weapon_slots(args.weapon_slots))
+        except ValueError as exc:
+            parser.error(f"--weapon-slots: {exc}")
+    profile = updated(
+        profile,
+        pins=pins,
+        # Exclusions add to the profile's rather than replace them: a
+        # command-line exclusion reads as "and also leave this out".
+        exclude_sets=sorted(set(profile.exclude_sets) | set(args.exclude_set)),
+        exclude_pieces=sorted(set(profile.exclude_pieces) | set(args.exclude_piece)),
+        weapon_slots=weapon_slots,
+        gogma_set_bonus=args.gogma_set or profile.gogma_set_bonus,
+        gogma_group_skill=args.gogma_group or profile.gogma_group_skill,
+        reserve=profile.reserve if args.reserve is None else args.reserve,
+        relax=profile.relax or args.relax,
+        custom_talismans=(
+            stored_path(Path(args.talismans)) if args.talismans else profile.custom_talismans
+        ),
+    )
+    # A skills file's weights need no name check: they are that file's own
+    # skill rows. A profile's are names typed against some version of the
+    # data, and may not match this one.
+    problems = profile_problems(
+        profile if args.profile else updated(profile, weights={}), game
+    )
+    if problems:
+        parser.error("; ".join(problems))
+
+    talismans_path = profile.custom_talismans_path()
+    if talismans_path is not None:
+        try:
+            extra_talismans = load_talismans(talismans_path)
+        except Exception as exc:  # noqa: BLE001 - any malformed file is a usage error
+            parser.error(f"custom talismans {talismans_path}: {exc}")
+        game = updated(game, talismans=list(game.talismans) + extra_talismans)
+
+    scoring = Scoring(skills)
+    strict = not profile.relax
+    # Built here only to validate pins and exclusions together before a
+    # search starts - pinned-and-excluded is a conflict between two valid
+    # names that profile_problems cannot see - so it is a usage error rather
+    # than a traceback.
     try:
         context = Context(
             game,
             scoring,
-            pinned_pieces=pinned_pieces,
-            excluded_sets=args.exclude_set,
-            excluded_pieces=args.exclude_piece,
-            weapon_slots=weapon_slots,
+            pinned_pieces=profile.pins,
+            excluded_sets=profile.exclude_sets,
+            excluded_pieces=profile.exclude_pieces,
+            weapon_slots=tuple(profile.weapon_slots),
         )
     except ValueError as exc:
         parser.error(str(exc))
     pinned = context.pinned
 
+    if args.save_profile:
+        save_profile(profile, Path(args.save_profile))
+        print(f"Saved profile to {args.save_profile}")
+
     unreachable = context.unreachable_weighted_skills()
     # A required one is not ignored under the hard filter: it empties the
     # result, and the no-sets message below names it as the reason.
-    if not args.relax:
+    if strict:
         unreachable = [n for n in unreachable if n not in scoring.mandatory]
     if unreachable:
         hint = (
@@ -1956,13 +2054,14 @@ def main() -> None:
         game,
         scoring,
         beam_width=args.beam,
-        reserved_slots=args.reserve,
+        reserved_slots=profile.reserve,
         tiers=build_tiers(args.count),
-        pinned_pieces=pinned_pieces,
-        strict=not args.relax,
-        excluded_sets=args.exclude_set,
-        excluded_pieces=args.exclude_piece,
-        weapon_slots=weapon_slots,
+        extra_bonus_pieces=profile.extra_bonus_pieces(),
+        pinned_pieces=profile.pins,
+        strict=strict,
+        excluded_sets=profile.exclude_sets,
+        excluded_pieces=profile.exclude_pieces,
+        weapon_slots=tuple(profile.weapon_slots),
         progress=_terminal_progress() if sys.stderr.isatty() else None,
     )
     if sys.stderr.isatty():
@@ -1986,9 +2085,9 @@ def main() -> None:
             constraint_level,
             db_path,
             pinned=pinned,
-            strict=not args.relax,
+            strict=strict,
             reasons=reasons,
-            excluded=args.exclude_set + args.exclude_piece,
+            excluded=profile.exclude_sets + profile.exclude_pieces,
         )
     )
 

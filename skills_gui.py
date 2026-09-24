@@ -45,6 +45,16 @@ from optimiser import (
     optimise,
 )
 from optimiser_report import render_console, render_set_inline, write_yaml
+from search_profile import (
+    PROFILES_DIR,
+    SearchProfile,
+    apply_weights,
+    load_profile,
+    profile_problems,
+    save_profile,
+    stored_path,
+    weights_of,
+)
 
 NONE_OPTION = "(None)"
 CUSTOM_TALISMANS_DIR = DATA_DIR / "custom_talismans_outputs"
@@ -150,6 +160,12 @@ HINTS = {
     "output": (
         "Filename for Save. Written beside the skills file you loaded, not "
         "into skills_outputs/."
+    ),
+    "profile": (
+        "Open reads a weighted skills file. A profile instead holds the "
+        "weights and every setting on this tab - pins, exclusions, weapon "
+        "slots, Gogma, reserve, relax and custom talismans - in one file, "
+        "applied to the current skill data."
     ),
     "talismans": (
         "Talismans from a file, added to this run's pool only. "
@@ -637,9 +653,16 @@ class SkillsGui:
         primary action sits at the very bottom edge.
         """
         files = self._section(parent, "Skills File", side=tk.TOP, fill=tk.X)
+        _hint(files, "profile", wrap=900).pack(side=tk.TOP, anchor=tk.W)
         file_row = ttk.Frame(files)
-        file_row.pack(side=tk.TOP, fill=tk.X)
+        file_row.pack(side=tk.TOP, fill=tk.X, pady=(GAP, 0))
         ttk.Button(file_row, text="Open...", command=self._open_file).pack(side=tk.LEFT)
+        ttk.Button(file_row, text="Load Profile...", command=self._load_profile).pack(
+            side=tk.LEFT, padx=(8, 0)
+        )
+        ttk.Button(file_row, text="Save Profile...", command=self._save_profile).pack(
+            side=tk.LEFT, padx=(4, 0)
+        )
         self.file_label_var = tk.StringVar(value="")
         ttk.Label(
             file_row, textvariable=self.file_label_var, style="Hint.TLabel"
@@ -1385,7 +1408,10 @@ class SkillsGui:
         except Exception as exc:  # noqa: BLE001
             messagebox.showerror("Failed to load file", f"Could not load {path}:\n{exc}")
             return
+        self._use_skills(skills, path)
 
+    def _use_skills(self, skills: list[Skill], path: Path) -> None:
+        """Make these skills the ones being edited, as if read from path."""
         self.current_path = path
         self.output_dir = path.parent
         self.skills = skills
@@ -1735,6 +1761,131 @@ class SkillsGui:
         self.output_name_var.set(output_path.name)
         self.status_var.set(f"Saved to {output_path.name}")
         messagebox.showinfo("Saved", f"Saved weights to {output_path}")
+
+    # --- search profiles ------------------------------------------------------
+
+    def _current_profile(self) -> SearchProfile:
+        """Everything on the tab as a profile. Raises ValueError on a bad reserve."""
+        reserve = int(self.reserved_slots_var.get())
+        if reserve < 0:
+            raise ValueError
+        gogma_set = self.gogma_set_var.get()
+        gogma_group = self.gogma_group_var.get()
+        return SearchProfile(
+            weights=weights_of(self._effective_skills()),
+            pins=self._pinned_pieces(),
+            exclude_sets=sorted(self.excluded_sets),
+            exclude_pieces=sorted(self.excluded_pieces),
+            weapon_slots=list(self._weapon_slots()),
+            gogma_set_bonus=None if gogma_set in ("", NONE_OPTION) else gogma_set,
+            gogma_group_skill=None if gogma_group in ("", NONE_OPTION) else gogma_group,
+            reserve=reserve,
+            relax=bool(self.relax_var.get()),
+            custom_talismans=stored_path(self.custom_talismans_source),
+        )
+
+    def _save_profile(self) -> None:
+        try:
+            profile = self._current_profile()
+        except ValueError:
+            messagebox.showerror(
+                "Save Profile", "Reserved slots must be a non-negative integer."
+            )
+            return
+        PROFILES_DIR.mkdir(parents=True, exist_ok=True)
+        path_str = filedialog.asksaveasfilename(
+            title="Save search profile",
+            initialdir=str(PROFILES_DIR),
+            initialfile="my_build.yaml",
+            defaultextension=".yaml",
+            filetypes=[("YAML files", "*.yaml *.yml"), ("All files", "*.*")],
+        )
+        if not path_str:
+            return
+        self._write_profile(profile, Path(path_str))
+
+    def _write_profile(self, profile: SearchProfile, path: Path) -> None:
+        save_profile(profile, path)
+        # The weights are now kept somewhere, so they stop counting as
+        # unsaved: closing afterwards should not ask to discard them.
+        self.skills = self._effective_skills()
+        self.skills_by_name = {s.name: s for s in self.skills}
+        self.file_label_var.set(f"Profile: {path}")
+        self.status_var.set(f"Saved profile {path.name}")
+
+    def _load_profile(self) -> None:
+        if not self._discard_changes_ok():
+            return
+        PROFILES_DIR.mkdir(parents=True, exist_ok=True)
+        path_str = filedialog.askopenfilename(
+            title="Load search profile",
+            initialdir=str(PROFILES_DIR),
+            filetypes=[("YAML files", "*.yaml *.yml"), ("All files", "*.*")],
+        )
+        if not path_str:
+            return
+        self._read_profile(Path(path_str))
+
+    def _read_profile(self, path: Path) -> bool:
+        """Load a profile into the tab; False, having said why, if refused.
+
+        Refused whole rather than applied in part: a profile whose pins
+        loaded but whose exclusions did not would run a search nobody asked
+        for, with nothing on screen saying which half is missing.
+        """
+        try:
+            profile = load_profile(path)
+        except Exception as exc:  # noqa: BLE001
+            messagebox.showerror("Load Profile", f"Could not load {path}:\n{exc}")
+            return False
+        problems = profile_problems(profile, self.game_data)
+        talismans: list[Talisman] = []
+        talismans_path = profile.custom_talismans_path()
+        if talismans_path is not None and not problems:
+            try:
+                talismans = load_talismans(talismans_path)
+            except Exception as exc:  # noqa: BLE001
+                problems.append(f"Custom talisman file {talismans_path}: {exc}")
+        if problems:
+            messagebox.showerror(
+                "Load Profile",
+                f"{path.name} does not match the current data:\n\n"
+                + "\n".join(f"\u2022 {p}" for p in problems),
+            )
+            return False
+
+        # game_data.skills is skills_default.yaml, freshly read at start-up,
+        # which is the point: the profile's weights land on current data.
+        self._use_skills(apply_weights(self.game_data.skills, profile.weights), Path(SKILLS_PATH))
+        self.file_label_var.set(f"Profile: {path}")
+
+        by_name = {p.name: p for p in self.game_data.armor}
+        for piece_type in PIECE_TYPES:
+            name = profile.pins.get(piece_type)
+            self.pin_vars[piece_type].set(by_name[name].set if name else NONE_OPTION)
+        self.excluded_sets = set(profile.exclude_sets)
+        self.excluded_pieces = set(profile.exclude_pieces)
+        self.exclusion_summary_var.set(self._exclusion_summary())
+        window = self.exclusions_window
+        if window is not None and window.winfo_exists():
+            self._refresh_exclusion_states()
+        sizes = list(profile.weapon_slots) + [0] * MAX_WEAPON_SLOTS
+        for var, size in zip(self.weapon_slot_vars, sizes):
+            var.set(str(size))
+        self.gogma_set_var.set(profile.gogma_set_bonus or NONE_OPTION)
+        self.gogma_group_var.set(profile.gogma_group_skill or NONE_OPTION)
+        self.reserved_slots_var.set(str(profile.reserve))
+        self.relax_var.set(profile.relax)
+        if talismans_path is None:
+            self._clear_loaded_custom_talismans()
+        else:
+            self.custom_talismans_loaded = talismans
+            self.custom_talismans_source = talismans_path
+            self.custom_talismans_status_var.set(
+                f"Custom talismans: {len(talismans)} loaded from {talismans_path.name}"
+            )
+        self.status_var.set(f"Loaded profile {path.name}")
+        return True
 
     # --- custom talismans: loading a file for the optimiser to use ---------
 

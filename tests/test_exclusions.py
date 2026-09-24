@@ -185,7 +185,7 @@ class Cli(unittest.TestCase):
     def test_unknown_set_is_a_usage_error(self):
         result = run_cli("--skills-db", "skills_weighted.yaml", "--exclude-set", "Nope")
         self.assertEqual(result.returncode, 2)
-        self.assertIn("No armour set is named", result.stderr)
+        self.assertIn("Excluded set 'Nope' does not exist", result.stderr)
 
     def test_pinned_and_excluded_is_a_usage_error(self):
         result = run_cli(

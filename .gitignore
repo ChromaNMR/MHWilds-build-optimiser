@@ -3,3 +3,5 @@
 /custom_talismans_outputs/*
 *__pycache__/*
 /gui_state.json
+/profiles/*
+!/profiles/.keepempty

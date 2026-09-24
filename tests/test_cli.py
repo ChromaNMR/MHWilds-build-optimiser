@@ -41,7 +41,7 @@ class Arguments(unittest.TestCase):
     def test_bad_pin_is_rejected(self):
         result = run_cli("--skills-db", "skills_weighted.yaml", "--pin-head", "Nope")
         self.assertEqual(result.returncode, 2)
-        self.assertIn("No armour piece is named", result.stderr)
+        self.assertIn("Pinned piece 'Nope' does not exist", result.stderr)
 
 
 class Header(unittest.TestCase):
